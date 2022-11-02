@@ -1,0 +1,152 @@
+Chapters
+  Topics (Issues)
+    Task Group (optional)
+      Task
+        Subtask (optional)
+          Step
+
+
+
+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   repos
+
+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   admin
+
+
+gh config set -h github.com git_protocol ssh
+? Configured git protocol
+? Uploaded the SSH key to your GitHub account: C:\Users\robin\.ssh\Robin.Mattern@Any-Host_a210714_key.pub
+? Logged in as robinmattern
+
+
+
+
+robinmattern/FRApps_basic-training-robin         public        1d
+robinmattern/FRApps_basic-training-1             public, fork  9d
+robinmattern/FRDocs_dev01-robin                  public, fork  9d
+robinmattern/FRApps_basic-training_v20615        public        11d
+robinmattern/docsify-open-publishing-starter-kit public        13d
+robinmattern/FRApps_dev01-robin                  public        16d
+robinmattern/FRApps_dev02-robin                  public        May 16, 2022
+robinmattern/simpleApp                           public, fork  Mar 10, 2022
+robinmattern/FRApps_prod1-robin                  public, fork  Mar  7, 2022
+robinmattern/FRApps_dev01-robin_v20511           public        Dec 23, 2021
+robinmattern/FRER_dev01-robin                    public        Dec 22, 2021
+robinmattern/docsify-js-tutorial                 public, fork  Dec 19, 2021 Build a Markdown-based docs site using DocsifyJS and GH Pages ??? ? ? ?
+robinmattern/FRTools_ubuntu-master               public        Dec  3, 2021
+robinmattern/MTReact_dev03-robin                 public        Dec  1, 2021
+robinmattern/FRTools_test1-robin                 public        Nov 29, 2021
+robinmattern/FormR_test1-robin                   public        Oct  6, 2021
+robinmattern/FormR_dev03-bruce_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev05-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev04-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev03-robin_v10927            public        Sep 28, 2021
+robinmattern/MyProject                           public        Aug 25, 2021
+robinmattern/FormR_dev02-robin_v10724            public        Jul 29, 2021
+robinmattern/FormR_dev01-robin_v10115            public        Jul 28, 2021
+robinmattern/React-Admin-Blog                    public        Mar 20, 2021 Created with CodeSandbox
+robinmattern/RScrs1                              private       Mar  2, 2021
+robinmattern/FormR_dev01-robin_v10116            public        Jan 17, 2021 FormR Refactored with React-Admin, Formik, AdminLTE & Material-UI
+robinmattern/New123                              public        Nov  5, 2020 sdf gfdf
+robinmattern/New                                 public        Nov  5, 2020 A new Test
+robinmattern/test-repo                           public        Nov  5, 2020
+robinmattern/Glitch-App1                         public        May 16, 2018
+robinmattern/CDS-101                             public        Oct  2, 2017
+robinmattern/CDS-Lab02                           public        Sep 19, 2017
+robinmattern/CDS-Lab01                           public        Sep 18, 2017 Lab One for Computational Data Sciences
+robinmattern/CDS                                 public        Sep 10, 2017 Computational Data Sciences class
+robinmattern/docker-tutorial                     public, fork  Aug  2, 2016 For use with the accompanying blog post: https://nodesource.com/blog/dockerizing-your-nodejs-applications
+
+
+
+robinmattern/FormR_dev01-robin_v10115            public        Jul 28, 2021
+robinmattern/FormR_dev01-robin_v10116            public        Jan 17, 2021 FormR Refactored with React-Admin, Formik, AdminLTE & Material-UI
+robinmattern/FormR_dev02-robin_v10724            public        Jul 29, 2021
+robinmattern/FormR_dev03-bruce_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev03-robin_v10927            public        Sep 28, 2021
+robinmattern/FormR_dev04-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev05-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_test1-robin                   public        Oct  6, 2021
+
+robinmattern/FRApps_basic-training_v20615        public        11d
+robinmattern/FRApps_basic-training-1             public, fork  9d
+robinmattern/FRApps_basic-training-robin         public        1d
+robinmattern/FRApps_dev01-robin                  public        16d
+robinmattern/FRApps_dev01-robin_v20511           public        Dec 23, 2021
+robinmattern/FRApps_dev02-robin                  public        May 16, 2022
+robinmattern/FRApps_prod1-robin                  public, fork  Mar  7, 2022
+
+robinmattern/FRDocs_dev01-robin                  public, fork  9d
+
+robinmattern/FRER_dev01-robin                    public        Dec 22, 2021
+
+robinmattern/FRTools_test1-robin                 public        Nov 29, 2021
+robinmattern/FRTools_ubuntu-master               public        Dec  3, 2021
+
+
+
+
+Specify one or more comma-separated fields for `--json`:
+  assignableUsers
+  codeOfConduct
+  contactLinks
+  createdAt
+  defaultBranchRef
+  deleteBranchOnMerge
+  description
+  diskUsage
+  forkCount
+  fundingLinks
+  hasIssuesEnabled
+  hasProjectsEnabled
+  hasWikiEnabled
+  homepageUrl
+  id
+  isArchived
+  isBlankIssuesEnabled
+  isEmpty
+  isFork
+  isInOrganization
+  isMirror
+  isPrivate
+  isSecurityPolicyEnabled
+  isTemplate
+  isUserConfigurationRepository
+  issueTemplates
+  issues
+  labels
+  languages
+  latestRelease
+  licenseInfo
+  mentionableUsers
+  mergeCommitAllowed
+  milestones
+  mirrorUrl
+  name
+  nameWithOwner
+  openGraphImageUrl
+  owner
+  parent
+  primaryLanguage
+  projects
+  pullRequestTemplates
+  pullRequests
+  pushedAt
+  rebaseMergeAllowed
+  repositoryTopics
+  securityPolicyUrl
+  squashMergeAllowed
+  sshUrl
+  stargazerCount
+  templateRepository
+  updatedAt
+  url
+  usesCustomOpenGraphImage
+  viewerCanAdminister
+  viewerDefaultCommitEmail
+  viewerDefaultMergeMethod
+  viewerHasStarred
+  viewerPermission
+  viewerPossibleCommitEmails
+  viewerSubscription
+
+  --json owner, name, updatedAt, homepageUrl

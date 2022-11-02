@@ -1,0 +1,10 @@
+#!/bin/bash
+#  FRT gitR Launch Script on rm212p-w10p
+
+#  frt gitr "$@"
+
+   aFldr="/C/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/dev01-robin/._2/FRTs"
+   export aJFns="${aFldr}/JPT12_Main2Fns_u1.06.sh"
+
+   FRT22_gitR1_p2.04.sh  "$@"
+

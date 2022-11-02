@@ -1,0 +1,12 @@
+
+{ "FRApps"       : { "Domain": "formr-cbt-01.com", "Svr": "",       "RDir": "/webs/FRApps/5c-my-react-app" , "App": "my-react-app"       , "Bld": "build", "Project": "none"   , "Ver": "", "NoS": 0 }
+, "my-react-app" : { "Domain": "formr-cbt-01.com", "Svr": "",       "RDir": "/webs/FRApps/5c-my-react-app" , "App": ""                   , "Bld": "build", "Project": "FRApps" , "Ver": "", "NoS": 0 }
+, "custom-app"   : { "Domain": "formr-cbt-01.com", "Svr": "",       "RDir": "/webs/FRApps/5c-my-react-app" , "App": "custom-app"         , "Bld": "build", "Project": ""       , "Ver": "", "NoS": 0 }
+, "FRApps/5c"    : { "Domain": "formr-cbt-01.com", "Svr": "",       "RDir": "/webs/FRApps/5c-my-react-app" , "App": "5c-my-react-app"    , "Bld": "build", "Project": "none"   , "Ver": "", "NoS": 1 }
+, "FRApps/6c"    : { "Domain": "formr-cbt-01.com", "Svr": "",       "RDir": "/webs/FRApps/6c-my-react-app" , "App": "frapps/my-react-app", "Bld": "build", "Project": "" }
+, "Nginx2"       : { "Domain": "vpn3.sicomm.net",  "Svr": "sc178p", "RDir": "/var/www/html" }
+, "iCat15"       : { "Domain": "vpn3.sicomm.net",  "Svr": "sc178p", "Port": 0                              , "App": "none"               , "Bld": ""     , "Project": ""       , "Ver": "_u1.6_ngx-http"  }
+, "PrMo31"       : { "Domain": "vpn3.sicomm.net",  "Svr": "sc178p", "Port": 1001                           , "App": "none"               , "Bld": ""     , "Project": "Protest", "Ver": "_u1.6_ngx-http"  }
+  }
+
+

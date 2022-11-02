@@ -1,0 +1,25 @@
+  cp -p  'JPT10_Main0_p1.06.sh' 'JPT10_Main0_v1.06`20922-1353.sh'
+
+aFle: 'JPT10_Main0.sh',                      aVer: 'p1.06                               -20922-1357'
+aFle: 'JPT10_Main0.sh',                      aVer: 'p1.06                               -20922-1432'
+
+aFle: 'rm601-11_Tucker-Carlson_u4.json.njs', aVer: 'rm601-11_Tucker-Carlson_u4.json.njs -20922-1359'
+aFle: 'rm601-11_Tucker-Carlson_u4.json.njs', aVer: 'rm601-11_Tucker-Carlson_u4.json.njs -20922-1417'
+aFle: 'rm601-11_Tucker-Carlson_u4.json.njs', aVer: 'u4on.njs                            -20922-1419'
+aFle: 'rm601-11_Tucker-Carlson_u4.json.njs', aVer: 'u4.njs                              -20922-1420'
+aFle: 'rm601-11_Tucker-Carlson.json.njs',    aVer: 'u4                                  -20922-1421'
+
+
+aFle: 'fmtCarousel_v20922-JSCs.njs',         aVer: 'fmtCarousel_v20922-JSCs.njs         -20922-1413'
+aFle: 'fmtCarousel_v20922-JSCs.njs',         aVer: 'fmtCarousel_v20922-JSCs.njs         -20922-1422'
+aFle: 'fmtCarousel-Scripts.njs',             aVer: 'v20922                              -20922-1426'
+aFle: 'fmtCarousel-Scripts.njs',             aVer: 'u1                                  -20922-1431'
+aFle: 'rm601-11_Tucker-Carlson.json.njs',    aVer: 'u4                                  -20922-1431'
+aFle: 'rm601-11_Tucker-Carlson_u4a.json.njs',aVer: 'rm601-11_Tucker-Carlson_u4a.json.njs-20922-1433'
+aFle: 'rm601-11_Tucker-Carlsona.json.njs',   aVer: 'u4-20922-1447'
+aFle: 'rm601-11_Tucker-Carlson.json.njs',    aVer: 'u4a-20922-1449'
+
+
+aFle: 'rm601-11_Tucker-Carlson.html',        aVer: 'u4a-20922-1450'
+
+

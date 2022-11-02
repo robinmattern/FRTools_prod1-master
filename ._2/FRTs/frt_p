@@ -1,0 +1,12 @@
+#!/bin/bash
+#  FRTools Launch Script on rm212p-w10p
+
+#        RSS_Scr=._2/FRTs/FRT00_frt_p1.sh
+         RSS_Scr=._2/FRTs/FRT01_Main0.sh
+
+         RSS_Dir=/C/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/
+
+#  if [ "$1" == "-v" ]; then echo ""; echo "  FRT00_frt_p1.sh  ($( date "+%b %-d %Y %H:%M" ))" ; exit; fi
+
+#echo "${RSS_Dir}${RSS_Scr}" "$@"
+      "${RSS_Dir}"${RSS_Scr} "$@"

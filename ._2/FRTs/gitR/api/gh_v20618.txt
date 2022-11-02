@@ -1,0 +1,268 @@
+Chapters
+  Topics (Issues)
+    Task Group (optional)
+      Task
+        Subtask (optional)
+          Step
+
+
+
+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   repos
+
+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   admin
+
+
+gh config set -h github.com git_protocol ssh
+? Configured git protocol
+? Uploaded the SSH key to your GitHub account: C:\Users\robin\.ssh\Robin.Mattern@Any-Host_a210714_key.pub
+? Logged in as robinmattern
+
+
+/*
+curl \
+  -H "Accept: application/vnd.github.v3+json" \
+  -H "Authorization: token <TOKEN>" \
+  https://api.github.com/orgs/ORG/repos
+*/
+
+
+gh api -H "Accept: application/vnd.github.v3+json" /orgs/robinmattern/repos
+gh api -H "Accept: application/vnd.github.v3+json" /user/repos
+
+curl -H "Accept: application/vnd.github.v3+json" -H "Authorization: token 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" https://api.github.com/user/repos
+
+
+
+robinmattern/FRApps_basic-training-robin         public        1d
+robinmattern/FRApps_basic-training-1             public, fork  9d
+robinmattern/FRDocs_dev01-robin                  public, fork  9d
+robinmattern/FRApps_basic-training_v20615        public        11d
+robinmattern/docsify-open-publishing-starter-kit public        13d
+robinmattern/FRApps_dev01-robin                  public        16d
+robinmattern/FRApps_dev02-robin                  public        May 16, 2022
+robinmattern/simpleApp                           public, fork  Mar 10, 2022
+robinmattern/FRApps_prod1-robin                  public, fork  Mar  7, 2022
+robinmattern/FRApps_dev01-robin_v20511           public        Dec 23, 2021
+robinmattern/FRER_dev01-robin                    public        Dec 22, 2021
+robinmattern/docsify-js-tutorial                 public, fork  Dec 19, 2021 Build a Markdown-based docs site using DocsifyJS and GH Pages ??? ? ? ?
+robinmattern/FRTools_ubuntu-master               public        Dec  3, 2021
+robinmattern/MTReact_dev03-robin                 public        Dec  1, 2021
+robinmattern/FRTools_test1-robin                 public        Nov 29, 2021
+robinmattern/FormR_test1-robin                   public        Oct  6, 2021
+robinmattern/FormR_dev03-bruce_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev05-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev04-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev03-robin_v10927            public        Sep 28, 2021
+robinmattern/MyProject                           public        Aug 25, 2021
+robinmattern/FormR_dev02-robin_v10724            public        Jul 29, 2021
+robinmattern/FormR_dev01-robin_v10115            public        Jul 28, 2021
+robinmattern/React-Admin-Blog                    public        Mar 20, 2021 Created with CodeSandbox
+robinmattern/RScrs1                              private       Mar  2, 2021
+robinmattern/FormR_dev01-robin_v10116            public        Jan 17, 2021 FormR Refactored with React-Admin, Formik, AdminLTE & Material-UI
+robinmattern/New123                              public        Nov  5, 2020 sdf gfdf
+robinmattern/New                                 public        Nov  5, 2020 A new Test
+robinmattern/test-repo                           public        Nov  5, 2020
+robinmattern/Glitch-App1                         public        May 16, 2018
+robinmattern/CDS-101                             public        Oct  2, 2017
+robinmattern/CDS-Lab02                           public        Sep 19, 2017
+robinmattern/CDS-Lab01                           public        Sep 18, 2017 Lab One for Computational Data Sciences
+robinmattern/CDS                                 public        Sep 10, 2017 Computational Data Sciences class
+robinmattern/docker-tutorial                     public, fork  Aug  2, 2016 For use with the accompanying blog post: https://nodesource.com/blog/dockerizing-your-nodejs-applications
+
+
+
+robinmattern/FormR_dev01-robin_v10115            public        Jul 28, 2021
+robinmattern/FormR_dev01-robin_v10116            public        Jan 17, 2021 FormR Refactored with React-Admin, Formik, AdminLTE & Material-UI
+robinmattern/FormR_dev02-robin_v10724            public        Jul 29, 2021
+robinmattern/FormR_dev03-bruce_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev03-robin_v10927            public        Sep 28, 2021
+robinmattern/FormR_dev04-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_dev05-robin_v10928            public        Sep 28, 2021
+robinmattern/FormR_test1-robin                   public        Oct  6, 2021
+
+robinmattern/FRApps_basic-training_v20615        public        11d
+robinmattern/FRApps_basic-training-1             public, fork  9d
+robinmattern/FRApps_basic-training-robin         public        1d
+robinmattern/FRApps_dev01-robin                  public        16d
+robinmattern/FRApps_dev01-robin_v20511           public        Dec 23, 2021
+robinmattern/FRApps_dev02-robin                  public        May 16, 2022
+robinmattern/FRApps_prod1-robin                  public, fork  Mar  7, 2022
+
+robinmattern/FRDocs_dev01-robin                  public, fork  9d
+
+robinmattern/FRER_dev01-robin                    public        Dec 22, 2021
+
+robinmattern/FRTools_test1-robin                 public        Nov 29, 2021
+robinmattern/FRTools_ubuntu-master               public        Dec  3, 2021
+
+
+
+|28. | IMADE3D/awesome-docs                                         | 2021-03-15 01:51 | N |
+|29. | IMADE3D/Cura                                                 | 2018-12-06 21:10 | Y |
+|30. | IMADE3D/cura-build                                           | 2019-02-08 12:36 | Y |
+|31. | IMADE3D/Cura-PrimingSpeedPlugin                              | 2019-06-20 18:34 | Y |
+|32. | IMADE3D/CustomPiOS                                           | 2019-06-07 13:33 | Y |
+|33. | IMADE3D/Docs                                                 | 2017-04-23 19:12 | N |
+|34. | IMADE3D/fdm_materials                                        | 2019-07-17 14:00 | Y |
+|35. | IMADE3D/grid-apps                                            | 2022-04-10 13:22 | Y |
+|36. | IMADE3D/JellyBox                                             | 2022-02-04 14:24 | N |
+|37. | IMADE3D/JellyBOX-Essentials                                  | 2019-02-27 23:34 | N |
+|38. | IMADE3D/JellyBOX-Notes                                       | 2017-02-09 19:47 | N |
+|39. | IMADE3D/lulzbot-enclosure                                    | 2018-09-19 22:28 | N |
+|40. | IMADE3D/magento2-affiliate                                   | 2021-05-21 14:15 | N |
+|41. | IMADE3D/Marlin                                               | 2020-08-11 03:20 | Y |
+|42. | IMADE3D/Marlin-intheMaking                                   | 2019-03-20 19:47 | N |
+|43. | IMADE3D/MatterControl                                        | 2018-02-17 18:26 | Y |
+|44. | IMADE3D/OctoPi                                               | 2019-06-07 14:01 | Y |
+|45. | IMADE3D/OctoPrint-TouchUI                                    | 2019-03-30 13:09 | Y |
+|46. | IMADE3D/Prusa-Firmware                                       | 2017-03-29 20:04 | Y |
+|47. | IMADE3D/Slicing-Profiles                                     | 2019-06-01 20:23 | N |
+|48. | IMADE3D/Uranium                                              | 2018-11-28 14:24 | Y |
+
+
+
+
+  current_user_url                      : 'https://api.github.com/user',
+  current_user_authorizations_html_url  : 'https://github.com/settings/connections/applications{/client_id}',
+  authorizations_url                    : 'https://api.github.com/authorizations',
+  code_search_url                       : 'https://api.github.com/search/code?q={query}{&page,per_page,sort,order}',
+  commit_search_url                     : 'https://api.github.com/search/commits?q={query}{&page,per_page,sort,order}',
+  emails_url                            : 'https://api.github.com/user/emails',
+  emojis_url                            : 'https://api.github.com/emojis',
+  events_url                            : 'https://api.github.com/events',
+  feeds_url                             : 'https://api.github.com/feeds',
+  followers_url                         : 'https://api.github.com/user/followers',
+  following_url                         : 'https://api.github.com/user/following{/target}',
+  gists_url                             : 'https://api.github.com/gists{/gist_id}',
+  hub_url                               : 'https://api.github.com/hub',
+  issue_search_url                      : 'https://api.github.com/search/issues?q={query}{&page,per_page,sort,order}',
+  issues_url                            : 'https://api.github.com/issues',
+  keys_url                              : 'https://api.github.com/user/keys',
+  label_search_url                      : 'https://api.github.com/search/labels?q={query}&repository_id={repository_id}{&page,per_page}',
+  notifications_url                     : 'https://api.github.com/notifications',
+  organization_url                      : 'https://api.github.com/orgs/{org}',
+  organization_repositories_url         : 'https://api.github.com/orgs/{org}/repos{?type,page,per_page,sort}',
+  organization_teams_url                : 'https://api.github.com/orgs/{org}/teams',
+  public_gists_url                      : 'https://api.github.com/gists/public',
+  rate_limit_url                        : 'https://api.github.com/rate_limit',
+  repository_url                        : 'https://api.github.com/repos/{owner}/{repo}',
+  repository_search_url                 : 'https://api.github.com/search/repositories?q={query}{&page,per_page,sort,order}',
+  current_user_repositories_url         : 'https://api.github.com/user/repos{?type,page,per_page,sort}',
+  starred_url                           : 'https://api.github.com/user/starred{/owner}{/repo}',
+  starred_gists_url                     : 'https://api.github.com/gists/starred',
+  topic_search_url                      : 'https://api.github.com/search/topics?q={query}{&page,per_page}',
+  user_url                              : 'https://api.github.com/users/{user}',
+  user_organizations_url                : 'https://api.github.com/user/orgs',
+  user_repositories_url                 : 'https://api.github.com/users/{user}/repos{?type,page,per_page,sort}',
+  user_search_url                       : 'https://api.github.com/search/users?q={query}{&page,per_page,sort,order}'
+
+
+  archive_url                           : 'https://api.github.com/repos/{owner}/{repo}/{archive_format}{/ref}',
+  assignees_url                         : 'https://api.github.com/repos/{owner}/{repo}/assignees{/user}',
+  blobs_url                             : 'https://api.github.com/repos/{owner}/{repo}/git/blobs{/sha}',
+  branches_url                          : 'https://api.github.com/repos/{owner}/{repo}/branches{/branch}',
+  collaborators_url                     : 'https://api.github.com/repos/{owner}/{repo}/collaborators{/collaborator}',
+  comments_url                          : 'https://api.github.com/repos/{owner}/{repo}/comments{/number}',
+  commits_url                           : 'https://api.github.com/repos/{owner}/{repo}/commits{/sha}',
+  compare_url                           : 'https://api.github.com/repos/{owner}/{repo}/compare/{base}...{head}',
+  contents_url                          : 'https://api.github.com/repos/{owner}/{repo}/contents/{+path}',
+  contributors_url                      : 'https://api.github.com/repos/{owner}/{repo}/contributors',
+  deployments_url                       : 'https://api.github.com/repos/{owner}/{repo}/deployments',
+  downloads_url                         : 'https://api.github.com/repos/{owner}/{repo}/downloads',
+  events_url                            : 'https://api.github.com/repos/{owner}/{repo}/events',
+  forks_url                             : 'https://api.github.com/repos/{owner}/{repo}/forks',
+  git_commits_url                       : 'https://api.github.com/repos/{owner}/{repo}/git/commits{/sha}',
+  git_refs_url                          : 'https://api.github.com/repos/{owner}/{repo}/git/refs{/sha}',
+  git_tags_url                          : 'https://api.github.com/repos/{owner}/{repo}/git/tags{/sha}',
+  hooks_url                             : 'https://api.github.com/repos/{owner}/{repo}/hooks',
+  issue_comment_url                     : 'https://api.github.com/repos/{owner}/{repo}/issues/comments{/number}',
+  issue_events_url                      : 'https://api.github.com/repos/{owner}/{repo}/issues/events{/number}',
+  issues_url                            : 'https://api.github.com/repos/{owner}/{repo}/issues{/number}',
+  keys_url                              : 'https://api.github.com/repos/{owner}/{repo}/keys{/key_id}',
+  labels_url                            : 'https://api.github.com/repos/{owner}/{repo}/labels{/name}',
+  languages_url                         : 'https://api.github.com/repos/{owner}/{repo}/languages',
+  merges_url                            : 'https://api.github.com/repos/{owner}/{repo}/merges',
+  milestones_url                        : 'https://api.github.com/repos/{owner}/{repo}/milestones{/number}',
+  notifications_url                     : 'https://api.github.com/repos/{owner}/{repo}/notifications{?since,all,participating}',
+  pulls_url                             : 'https://api.github.com/repos/{owner}/{repo}/pulls{/number}',
+  releases_url                          : 'https://api.github.com/repos/{owner}/{repo}/releases{/id}',
+  stargazers_url                        : 'https://api.github.com/repos/{owner}/{repo}/stargazers',
+  statuses_url                          : 'https://api.github.com/repos/{owner}/{repo}/statuses/{sha}',
+  subscribers_url                       : 'https://api.github.com/repos/{owner}/{repo}/subscribers',
+  subscription_url                      : 'https://api.github.com/repos/{owner}/{repo}/subscription',
+  tags_url                              : 'https://api.github.com/repos/{owner}/{repo}/tags',
+  teams_url                             : 'https://api.github.com/repos/{owner}/{repo}/teams',
+  trees_url                             : 'https://api.github.com/repos/{owner}/{repo}/git/trees{/sha}',
+  url                                   : 'https://api.github.com/repos/{owner}/{repo}',
+
+
+
+
+
+
+Specify one or more comma-separated fields for `--json`:
+  assignableUsers
+  codeOfConduct
+  contactLinks
+  createdAt
+  defaultBranchRef
+  deleteBranchOnMerge
+  description
+  diskUsage
+  forkCount
+  fundingLinks
+  hasIssuesEnabled
+  hasProjectsEnabled
+  hasWikiEnabled
+  homepageUrl
+  id
+  isArchived
+  isBlankIssuesEnabled
+  isEmpty
+  isFork
+  isInOrganization
+  isMirror
+  isPrivate
+  isSecurityPolicyEnabled
+  isTemplate
+  isUserConfigurationRepository
+  issueTemplates
+  issues
+  labels
+  languages
+  latestRelease
+  licenseInfo
+  mentionableUsers
+  mergeCommitAllowed
+  milestones
+  mirrorUrl
+  name
+  nameWithOwner
+  openGraphImageUrl
+  owner
+  parent
+  primaryLanguage
+  projects
+  pullRequestTemplates
+  pullRequests
+  pushedAt
+  rebaseMergeAllowed
+  repositoryTopics
+  securityPolicyUrl
+  squashMergeAllowed
+  sshUrl
+  stargazerCount
+  templateRepository
+  updatedAt
+  url
+  usesCustomOpenGraphImage
+  viewerCanAdminister
+  viewerDefaultCommitEmail
+  viewerDefaultMergeMethod
+  viewerHasStarred
+  viewerPermission
+  viewerPossibleCommitEmails
+  viewerSubscription
+
+  --json owner,name,updatedAt,homepageUrl
+  gh repo -L 99 --json url,updatedAt
