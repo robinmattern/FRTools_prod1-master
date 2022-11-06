@@ -54,14 +54,14 @@
 
  if [ "${bHelp}" == "1" ]; then
     echo ""
-    echo "  Syntax: gitr clone {Project} [-all] [-doit]"
+    echo "  Syntax: gitr clone {Project}|{GitHub URL} [-all] [-doit]"
     echo ""
     echo "    Clone a GitHub Repository for {Project}, partially or fully"
     echo "      if -all  is  provided, then clone all repository files"
     echo "      If -doit not provided, then show contents of the Git {project} Config File "
     echo "      If {Project} is a GitHub URL, then parse it and save a Config File"
     echo ""
-    echo "    Uses a Config File, \"gitr_{project}-config.sh\", in the current {WebsDir} folder"
+    echo "    Uses a Config File, \"gitr_{project}_config.sh\", in the current {WebsDir} folder"
     echo "    It contains the following variables, for example: (no spaces before or after = )"
     echo ""
     echo "      Project=\"FRApps\""
@@ -79,6 +79,7 @@
     echo "      Apps[2]=\"/server3/1c3_my-react-custom-api/\""
     echo ""
     echo "      WebsDir=\"C:\\Repos\", or \"/webs\""
+    echo ""
     exit
     fi
 #   -----------------------------------------------------------------
@@ -400,7 +401,7 @@ if [ "${bSSH}" == "0" ]; then
 
 #   -----------------------------------------------------------------
 
-    bCpy=0; bZip=1
+    bCpy=1; bZip=0
 
  if [ -d "${aRepoDir}/.git" ] && [ "${bCpy}" == "1" ]; then                     # .(21029.01.1 RAM Beg Copy repo to ${aRepoDir}_v${aTS})
     aTS=$( date '+%y%m%d.%H%M' ); aTS=${aTS:1}
