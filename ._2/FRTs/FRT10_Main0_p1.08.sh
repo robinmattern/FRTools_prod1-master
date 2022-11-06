@@ -127,47 +127,47 @@ function Help() {
 #    echo "  FormR Tools ${aVer}   ($( date "+%b %-d %Y %H:%M" ))"                      ##.(20429.04.2)
      echo "  Useful FRTools  (${aVer})               (${aVdt})"                         # .(20429.04.2 RAM).(21031.03.1 RAM)
      echo "  ------------------------------------  ---------------------------------"
-     echo "    frt [help]"                                                              # .(20620.01.1 RAM)
+     echo "     frt [help]"                                                             # .(20620.01.1 RAM)
      echo ""                                                                            #
-     echo "    frt keys [ host ] [ help ]          Manage SSH Key files"
-     echo "        keys list [ ssh hosts ]"                                             # .(20429.02.1 Beg RAM Added)
-#    echo "        keys make ssh key  {KeyOwner}  {Host} {HostUser} {Resource}"
-#    echo "        keys delete ssh key  {KNo} [au[thorized_keys]]"
-#    echo "        keys copy ssh key  {KNo}"
-#    echo "        keys list ssh hosts keys"
-#    echo "        keys set  ssh host {KNo}       {Host} {HostUser} {Resource}"
-#    echo "        keys test ssh host {HostAliasName}"                                  # .(20429.02.1 End)
+   # echo "     frt keys [ host ] [ help ]          Manage SSH Key files"
+   # echo "         keys list [ ssh hosts ]"                                            # .(20429.02.1 Beg RAM Added)
+#  # echo "         keys make ssh key  {KeyOwner}  {Host} {HostUser} {Resource}"
+#  # echo "         keys delete ssh key  {KNo} [au[thorized_keys]]"
+#  # echo "         keys copy ssh key  {KNo}"
+#  # echo "         keys list ssh hosts keys"
+#  # echo "         keys set  ssh host {KNo}       {Host} {HostUser} {Resource}"
+#  # echo "         keys test ssh host {HostAliasName}"                                 # .(20429.02.1 End)
+   # echo ""
+     echo "     frt gitr [ help ]                   Manage Git Local and Remote Repos"  # .(20429.03.1 Beg RAM Added)
+     echo "         gitr init"                                                          # .(20429.03.1 End)
+     echo "         gitr clone"                                                         # .(21027.04.1 RAM Added)
      echo ""
-     echo "    frt gitr [ help ]                   Manage Git Local and Remote Repos"  # .(20429.03.1 Beg RAM Added)
-     echo "        gitr init"                                                           # .(20429.03.1 End)
-     echo "        gitr clone"                                                          # .(21027.04.1 RAM Added)
-     echo ""
-     echo "    frt prox [ help ]                   Manage Proxy files on server"
-     echo "        prox [ list | restart ]"
-     echo "        prox log"
-     echo "        prox config"
-     echo ""
-     echo "    frt appr [ help ]                   Manage FormR Apps"
-#    echo "        appr set domain {domain}"                                            # .(20407.03.1 RAM Added)
-#    echo "        appr set homepage {homepage}"                                        # .(20407.01.1 RAM Added).(20410.03.1 RAM)
-#    echo "        appr set port {port}"                                                # .(20407.02.1 RAM Added)
-#    echo "        appr set title {app title}"                                          # .(20409.03.1 RAM Added)
-#    echo "        appr set ssh_host {ssh login alias}"                                 # .(20411.03.1 RAM Added)
-     echo "        appr list [ files | styles ]"
-#    echo "        appr list files"                                                     # .(20410.02.1 RAM Added)
-#    echo "        appr list styles"                                                    # .(20601.01.3 RAM Added)
-#    echo "        appr rename styles"                                                  # .(20601.01.4 RAM Added)
-#    echo "        appr save files"                                                     # .(20415.01.1 RAM Added)
-#    echo "        appr save backup"                                                    # .(204xx.xx.x RAM Added)
-#    echo "        appr doc"                                                            # .(20415.02.1 RAM Added)
-#    echo ""
-     echo "        appr [ start | build | deploy ]"
-#    echo "        appr build"
-#    echo "        appr run prod"
-#    echo "        appr deploy"                                                         # .(20411.08.1 RAM Added)
-     echo ""
-     echo "        ssh [ {ssh login alias} ]"                                           # .(20412.02.1 RAM Added)
-     echo ""
+   # echo "     frt prox [ help ]                   Manage Proxy files on server"
+   # echo "         prox [ list | restart ]"
+   # echo "         prox log"
+   # echo "         prox config"
+   # echo ""
+   # echo "     frt appr [ help ]                   Manage FormR Apps"
+#  # echo "         appr set domain {domain}"                                           # .(20407.03.1 RAM Added)
+#  # echo "         appr set homepage {homepage}"                                       # .(20407.01.1 RAM Added).(20410.03.1 RAM)
+#  # echo "         appr set port {port}"                                               # .(20407.02.1 RAM Added)
+#  # echo "         appr set title {app title}"                                         # .(20409.03.1 RAM Added)
+#  # echo "         appr set ssh_host {ssh login alias}"                                # .(20411.03.1 RAM Added)
+   # echo "         appr list [ files | styles ]"
+#  # echo "         appr list files"                                                    # .(20410.02.1 RAM Added)
+#  # echo "         appr list styles"                                                   # .(20601.01.3 RAM Added)
+#  # echo "         appr rename styles"                                                 # .(20601.01.4 RAM Added)
+#  # echo "         appr save files"                                                    # .(20415.01.1 RAM Added)
+#  # echo "         appr save backup"                                                   # .(204xx.xx.x RAM Added)
+#  # echo "         appr doc"                                                           # .(20415.02.1 RAM Added)
+#  # echo ""
+   # echo "         appr [ start | build | deploy ]"
+#  # echo "         appr build"
+#  # echo "         appr run prod"
+#  # echo "         appr deploy"                                                        # .(20411.08.1 RAM Added)
+   # echo ""
+   # echo "        ssh [ {ssh login alias} ]"                                           # .(20412.02.1 RAM Added)
+   # echo ""
      echo "  Notes: Only 3 lowercase letters are needed for each command, separated by spaces"
      echo "         One or more command options follow. Help for the command is dispayed if no options are given"
      echo "         The options, debug, doit and quietly, can follow anywhere after the command"

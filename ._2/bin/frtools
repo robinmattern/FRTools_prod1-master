@@ -1,9 +1,5 @@
 #!/bin/bash
-#  FRTools Launch Script on rm212p-w10p
+# FRTools Launch Script
 
-   aCmd="/c/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/dev01-robin/._2/FRTs/FRT00_frt_p1.sh"
+  frt "$@"
 
-   if [ "$1" == "-v" ]; then echo ""; echo "  FRT00_frt_p1.sh  ($( date "+%b %-d %Y %H:%M" ))" ; exit; fi
-
-  "${aCmd}" "$@"
-   

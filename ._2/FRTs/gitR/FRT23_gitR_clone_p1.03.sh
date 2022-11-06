@@ -256,6 +256,8 @@ if [ "${bDir}" == "1" ]; then aWebsDir=$( builtin cd ..; pwd ); fi              
     echo "    Apps=(  \"/._2/\" )"                                                      >>"${aConfigFile}"
     echo "    Apps[1]=\"/client1/\""                                                    >>"${aConfigFile}"
     echo "    Apps[2]=\"/server1/\""                                                    >>"${aConfigFile}"
+    echo "    Apps[2]=\"/README.md\""                                                   >>"${aConfigFile}"
+    echo "    Apps[2]=\"/code-workspace\""                                              >>"${aConfigFile}"
 #   echo "    Apps[1]=\"/client1/1c1_my-html-custom-app/\""                             >>"${aConfigFile}"
 #   echo "    Apps[2]=\"/client1/2c1_my-html-remote-app/\""                             >>"${aConfigFile}"
     echo ""                                                                             >>"${aConfigFile}"

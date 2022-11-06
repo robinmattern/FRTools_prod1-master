@@ -1,9 +1,5 @@
 #!/bin/bash
-#  JPTools Launch Script on rm212p-w10p
+# JPTools Launch Script
 
-   aCmd="/C/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/dev01-robin/._2/JPTs/JPT00_jpt_p1.sh"
+  jpt "$@"
 
-   if [ "$1" == "-v" ]; then echo ""; echo "  JPT00_jpt_p1.sh  ($( date "+%b %-d %Y %H:%M" ))" ; exit; fi
-
-  "${aCmd}" "$@"
-   
