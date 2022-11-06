@@ -56,7 +56,7 @@
     echo ""
     echo "  Syntax: gitr clone {Project}|{GitHub URL} [-all] [-doit]"
     echo ""
-    echo "    Clone a GitHub Repository for {Project}, partially or fully"
+    echo "    Clone a GitHub Repository for {Project} or {GitHub URL}, partially or fully"
     echo "      if -all  is  provided, then clone all repository files"
     echo "      If -doit not provided, then show contents of the Git {project} Config File "
     echo "      If {Project} is a GitHub URL, then parse it and save a Config File"
