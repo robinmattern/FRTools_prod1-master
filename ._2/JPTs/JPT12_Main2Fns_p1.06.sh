@@ -243,7 +243,7 @@ function setLv() {
                              fi
 
     sayMsg    "JPFns[245]  aCmd:  '${aCmd}', nLv: $1, aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7' "
-    sayMsg    "JPFns[246]  aCmd:  '${aCmd}', nLv: $1, aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}' " 1
+#   sayMsg    "JPFns[246]  aCmd:  '${aCmd}', nLv: $1, aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}' " 1
 
     return
     } # eof setLv

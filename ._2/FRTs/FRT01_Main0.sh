@@ -8,7 +8,7 @@
 #   aCmd="$( dirname $0)/FRT10_frt_p1.06.sh"
 #   aCmd="$( dirname $0)/FRT10_Main0_p1.06.sh"
 #   aCmd="$( dirname $0)/FRT10_Main0_u1.07.sh"
-    aCmd="$( dirname $0)/FRT10_Main0_d1.09.sh"
+    aCmd="$( dirname $0)/FRT10_Main0_p1.08.sh"
 
    "${aCmd}" "$@"
 

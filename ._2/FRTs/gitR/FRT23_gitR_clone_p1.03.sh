@@ -4,7 +4,8 @@
 ##RD         gitr clone         | Git Clone {Project}
 ##RFILE    +====================+=======+===============+======+=================+
 ##FD   FRT23_gitR_clone.sh      |  24859| 11/01/22 15:58|   474| p1.03-21101-1558
-
+##FD   FRT23_gitR_clone.sh      |  27579| 11/05/22 18:00|   507| p1.03-21105-1800
+##FD   FRT23_gitR_clone.sh      |  28520| 11/05/22 19:00|   515| p1.03-21105-1900
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run gitr clone {Project}
 #
@@ -17,6 +18,11 @@
 # .(21029.01 10/29/22 RAM 12:00p| Copy/Zip repo to ${aRepoDir}_v${aTS})
 # .(21030.01 10/30/22 RAM  6:00p| Don't remove _ from Backup folder/zipfile name
 # .(21101.01 11/01/22 RAM  5:58p| Doit if config file is created or updated
+# .(21105.01 11/05/22 RAM  4:29p| If no {Stage}, then aStage == "", not {stg1}-{ownr}
+# .(21105.02 11/05/22 RAM  5:00p| Show config after update
+# .(21105.03 11/05/22 RAM  5:43p| If Github URL parsed, then modify RepoDir
+# .(21105.04 11/05/22 RAM  6:00p| Always set aWebsDir to aPDir, and fix
+# .(21105.05 11/05/22 RAM  7:00p| Set c1 if parsing and in Project_ folder
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -82,7 +88,7 @@
     aGitHub_Acct_var="{robinmattern}"
     aGitHub_SSH_var="{yes}"
 
-#   -----------------------------------------
+#   -------------------------------------- GitHub URL arg -----
 
 #if [ "${aPrj/-/}" != "${aPrj}" ] || [ "${aPrj/:/}" != "${aPrj}" ] || [ "${aPrj/-/}" != "${aPrj}" ]; then
 
@@ -97,6 +103,8 @@ if [ "${bParse}" == "1" ]; then
 
 #       {GitHub_Cert}:{GitHub_Acct}/{Project}_{stg1}-{ownr}"
 #       {GitHub_Acct}              /{Project}_{stg1}-{ownr}"
+
+#   -------------------------------- Parse GitHub URL arg -----
 
 awkPgm='
 BEGIN { bDebug = 0;                               aSSH = "yes" }
@@ -134,17 +142,21 @@ END   { }'
     aGitHub_Cert_arg="$( echo "${aURL}" | awk '{ print $5 }' )"
 
 if [ "${aProj_arg}"        != "{Project}"     ]; then aPrj="${aProj_arg}"; fi
-if [ "${aStage_arg}"       != "{stg1}-{ownr}" ]; then aStage_var="${aStage_arg}"; fi
+
+#f [ "${aStage_arg}"       == "{stg1}-{ownr}" ]; then aStage_var="${aStage_var}"; fi   ##.(21105.01.11)
+#f [ "${aStage_arg}"       != "{stg1}-{ownr}" ]; then aStage_var="${aStage_arg}"; fi   ##.(21105.01.11)
+                                                      aStage_var="${aStage_arg}"       # .(21105.01.11)
+
 if [ "${aGitHub_Cert_arg}" != "n/a"           ]; then aGitHub_Cert_var="${aGitHub_Cert_arg}"; fi
 if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHub_Acct_arg}"; fi
                                                       aGitHub_SSH_var="${aGitHub_SSH_arg}";
-    fi
-#   -----------------------------------------
+    fi  # eif "${bParse}" == "1"
+#   -----------------------------------------------------------
 
     aProj="$( echo "${aPrj}" | tr '[:upper:]' '[:lower:]' )"
 #   echo -e "   aRepo: '${aPrj/_}_${aStage_var}', aCert: '${aGitHub_Cert_var}', aAcct: '${aGitHub_Acct_var}', aSSH: '${aGitHub_SSH_var}'"; # exit
 
-#   -----------------------------------------------------------------
+#   -----------------------------------------
 
          aDir="$( basename $( pwd ) )";        # echo "-- aPDir: ${aPDir}"
          aPDir=$( basename $( cd ..; pwd ) );  # echo "-- aPDir: ${aPDir}, aPrj: ${aPrj}"
@@ -183,15 +195,14 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 #   echo "   Setting aWebsDir: '${aWebsDir}', aCurDir: ${aCurDir}"
     fi
 #   -----------------------------------------
-                                                aConfigFile="${aConfigFile/_-/_}"
+                                                 aConfigFile="${aConfigFile/_-/_}"
 
  if [ "${aConfigFile}" == "" ]; then
          aConfigFile=gitr_${aProj}-config.sh;    aConfigFile="${aConfigFile/_-/_}"
 
     if [ "${bDoit}" != "1" ]; then                                                          # .(21101.02.1)
-
-    echo ""
-    echo "   Syntax: gitr clone {Project} [-all] [-doit]"
+#   echo ""
+#   echo "   Syntax: gitr clone {Project} [-all] [-doit]"
     echo ""
     echo "     ** Config file, '${aConfigFile}', not found."
     echo ""
@@ -199,19 +210,33 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 
 #   -----------------------------------------------------------------
 
-                                              bDir=1;             c1="#"; c2="#"       # 1 /webs/prj  or /webs/prj_
-    if [ "${aDir/_}"  != "${aPrj/_}"  ]; then bDir=0;                                  # 0 /webs
-    if [ "${aPrj/_}"  == "${aPDir/_}" ]; then bDir=3; fi; else                         # 3 /webs/prj/stg
-    if [ "${aDir/_}"  == "${aDir}"    ]; then bDir=2; fi; fi;     c3="#"; c4="#"       # 2 /webs/prj
+                                              bDir=1;              c1="#"; c2="#"       # 1 /webs/prj  or /webs/prj_
+    if [ "${aDir/_}"  != "${aPrj/_}"  ]; then bDir=0;                                   # 0 /webs
+    if [ "${aPrj/_}"  == "${aPDir/_}" ]; then bDir=3; fi; else                          # 3 /webs/prj/stg
+    if [ "${aDir/_}"  == "${aDir}"    ]; then bDir=2; fi; fi;      c3="#"; c4="#"       # 2 /webs/prj
+
+#   echo "aPrj: ${aPrj}, aStage_var: '${aStage_var}', aDir: ${aDir}, aPDir: ${aPDir}, bDir: ${bDir}; '${c1}${c2}${c3}${c4}'"
 
     if [ "${bDir}" == "0" ] && [ "${aPrj/_}_" == "${aPrj}" ]; then c1=" "; fi;          # 1 /webs/prj_stg     # 1 gitr_{Project}_config.sh
     if [ "${bDir}" == "3" ] && [ "${aPrj/_}_" == "${aPrj}" ]; then c2=" "; c1="#"; fi;  # 2 /webs/prj_/stg    # 2 gitr_{Project}_stg-config.sh
     if [ "${bDir}" == "1" ] && [ "${aPrj/_}_" == "${aPrj}" ]; then c2=" "; fi;          # 2 /webs/prj_/stg    # 2 gitr_{Project}_stg-config.sh
-    if [ "${bDir}" == "0" ] && [ "${aPrj/_}"  == "${aPrj}" ]; then c3=" "; fi;          # 3 /webs/prj         # 3 gitr_{Project}-config.sh
+
+#   if [ "${bDir}" == "0" ] && [ "${aPrj/_}"  == "${aPrj}" ]; then c3=" "; fi;          # 3 /webs/prj         # 3 gitr_{Project}-config.sh
+    if [ "${bDir}" == "0" ] && [ "${aPrj/_}"  == "${aPrj}" ]; then c1=" "; fi;          # 3 /webs/prj         # 3 gitr_{Project}-config.sh
     if [ "${bDir}" == "2" ] && [ "${aPrj/_}"  == "${aPrj}" ]; then c3=" "; c1="#"; fi;  # 3 /webs/prj         # 3 gitr_{Project}-config.sh
     if [ "${bDir}" == "1" ] && [ "${aPrj/_}"  == "${aPrj}" ]; then c4=" "; fi;          # 4 /webs/prj/stg     # 4 gitr_{Project}-stg-config.sh
 
-#   echo "aPrj: ${aPrj}, aDir: ${aDir}, aPDir: ${aPDir}, bDir: ${bDir}; '${c1}${c2}${c3}${c4}', aConfigFile: '${aConfigFile}'" ; exit
+#   echo "aPrj: ${aPrj}, aStage_var: '${aStage_var}', aDir: ${aDir}, aPDir: ${aPDir}, bDir: ${bDir}; '${c1}${c2}${c3}${c4}', aConfigFile: '${aConfigFile}'" ; # exit
+
+#   if [ "${bDir}" == "1" ] && [ "${bParse}"      == "1 "  ]; then c1=" "; c4="#"; fi;  # 1 /webs/prj_stg     # 1 gitr_{Project}_config.sh  ##.(21105.05.1)
+    if [ "${bDir}" == "1" ] && [ "${bParse}${c4}" == "1 "  ]; then c1=" "; c4="#"; fi;  # 1 /webs/prj_stg     # 1 gitr_{Project}_config.sh  # .(21105.05.1 RAM Set c1 only if c4 was set)
+    if [ "${bDir}" == "1" ] && [ "${bParse}${c4}" == "1#"  ]; then c2=" "; c1="#"; fi;  # 1 /webs/prj_stg     # 1 gitr_{Project}_config.sh  ##.(21105.05.2 RAM Set c2, if c4 was not set, or just keep it set to c2)
+
+if [ "${aStage_var}"     == "{stg1}-{ownr}" ]; then aStage_var=""; c3=" "; c1="#"; c2="#"; c4="#"; fi      # .(21105.01.1 RAM If no ${aStage}).(21105.04.2)
+
+#   echo "aPrj: ${aPrj}, aStage_var: '${aStage_var}', aDir: ${aDir}, aPDir: ${aPDir}, bDir: ${bDir}; '${c1}${c2}${c3}${c4}', aConfigFile: '${aConfigFile}'" ;  exit
+
+if [ "${bDir}" == "1" ]; then aWebsDir=$( builtin cd ..; pwd ); fi                                         # .(21105.04.1 RAM Always set to /webs)
 
     echo "#!/bin/bash"                                                                  > "${aConfigFile}"
     echo ""                                                                             >>"${aConfigFile}"
@@ -269,22 +294,34 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 
 if [ "${bParse}" == "1" ]; then
 
-    aTS=$( date '+%y%m%d.%M%S' ); aTS=${aTS:1}
+    aTS=$( date '+%y%m%d.%H%M' ); aTS=${aTS:1}
     cp -p "${aConfigFile}" "${aConfigFile/.sh}_v${aTS}.sh"
+
+                                                    aRepoDir_arg="\${Project}_/\${Stage}";   # .(21105.03.1)
+    if [ "${aPrj/_}_" != "${aDir}" ];          then aRepoDir_arg="\${Project}_\${Stage}"; fi # .(21105.03.2)
+    if [ "${aStage_arg}" == "{stg1}-{ownr}" ]; then aRepoDir_arg="\${Project}"; fi           # .(21105.03.3)
+    if [ "${aStage_arg}" == "{stg1}-{ownr}" ]; then aStage_arg=""; fi                        # .(21105.01.2 RAM Here too)
+
 awkPgm='
 BEGIN { }
-    /  Stage=/                                           { print "    Stage=\"'${aStage_arg}'\""            ; next }
-    /  GitHub_Cert=/ && "'${aGitHub_Cert_arg}'" != "n/a" { print "    GitHub_Cert=\"'${aGitHub_Cert_arg}'\""; next }
-    /  GitHub_Acct=/ && "'${aGitHub_Acct_arg}'" != "n/a" { print "    GitHub_Acct=\"'${aGitHub_Acct_arg}'\""; next }
-    /  GitHub_SSH=/                                      { print "    GitHub_SSH=\"'${aGitHub_SSH_arg}'\""  ; next }
-                                                         { print }
+    /    Stage=/                                           { print "    Stage=\"'${aStage_arg}'\""            ; next }
+    /    GitHub_Cert=/ && "'${aGitHub_Cert_arg}'" != "n/a" { print "    GitHub_Cert=\"'${aGitHub_Cert_arg}'\""; next }
+    /    GitHub_Acct=/ && "'${aGitHub_Acct_arg}'" != "n/a" { print "    GitHub_Acct=\"'${aGitHub_Acct_arg}'\""; next }
+    /    GitHub_SSH=/                                      { print "    GitHub_SSH=\"'${aGitHub_SSH_arg}'\""  ; next }
+    /    RepoDir=/                                         { print "#   " substr( $0, 5)                                # .(21105.03.4)
+                                                             print "    RepoDir=\"'${aRepoDir_arg}'\""        ; next }  # .(21105.03.5)
+                                                           { print }
       { }
 END   { }'
+
     cat "${aConfigFile/.sh}_v${aTS}.sh" | awk "${awkPgm}" >"${aConfigFile}"
+
     echo -e "\n * Config file, '${aConfigFile}', updated."
 #   echo -e "\n-------------------------------------"; cat "${aConfigFile}"; echo -e "-------------------------------------\n"
 
     if [ "${bDoit}" != "1" ]; then                                                          # .(21101.02.5)
+
+       $0 ${aPrj}                                                                           # .(21105.02.1 RAM Show update config)
        echo ""; exit
     fi                                                                                      # .(21101.02.6)
     fi
@@ -315,6 +352,8 @@ if [ "${bSSH}" == "0" ]; then
  if [ "${aWebsDir:0:2}" == "/C" ]; then bCone=1; fi  # Get files in root folder
  for (( i=0; i<=$(( ${#Apps[*]}  - 1 )); i++ )); do mApps[$i]=${Apps[$i]}; done
 
+    aRepo=${aProject}_${aStage}; if [ "${aStage}" == "" ]; then aRepo=${aProject}; fi                       # .(21105.01.3 RAM Get rid of _)
+
 #   -----------------------------------------------------------------
 
  if [ "${bDoit}" == "0" ]; then
@@ -332,12 +371,13 @@ if [ "${bSSH}" == "0" ]; then
     for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
     echo "        [${i}]: ${mApps[$i]}"
     done
-         aAll="";          aCone="only those files in {Apps[i]} folders in Repo: ${aProject}_${aStage}"
+#        aAll="";          aCone="only those files in {Apps[i]} folders in Repo: ${aProject}_${aStage}"     ##.(21105.01.4)
+         aAll="";          aCone="only those files in {Apps[i]} folders in Repo: ${aRepo}"                  # .(21105.01.4 RAM Was: ${aProject}_${aStage})
  if [ "${bCone}" == "1" ]; then aCone="all files in Repo root (i.e. bCone=1), and\n         ${aCone:5} "; fi
- if [ "${bAll}"  == "1" ]; then aCone="all files in all folders in Repo : ${aProject}_${aStage}"; aAll="-all "; fi
+ if [ "${bAll}"  == "1" ]; then aCone="all files in all folders in Repo : ${aRepo}"; aAll="-all "; fi       # .(21105.01.5)
 
-    echo "    Git Cmd: git clone ${aGitHub_URL}/${aProject}_${aStage}.git  ${aRepoDir}"
-    echo "    Git URL: http://gitHub.com/${aGitHub_Acct}/${aProject}_${aStage}"
+    echo "    Git Cmd: git clone ${aGitHub_URL}/${aRepo}.git  ${aRepoDir}"                                  # .(21105.01.6)
+    echo "    Git URL: http://gitHub.com/${aGitHub_Acct}/${aRepo}"                                          # .(21105.01.7)
     echo "    GitHub_Cert: ${aGitHub_Cert}"
     echo "    GitHub_Acct: ${aGitHub_Acct}"
     echo "    bCone: ${bCone}, bAll: ${bAll}; bSSH: ${bSSH}"
@@ -385,11 +425,12 @@ if [ "${bSSH}" == "0" ]; then
 
 #   exit
     echo ""
-    echo "Cloning ${aGitHub_URL}/${aProject}_${aStage}.git"
+    echo "Cloning ${aGitHub_URL}/${aRepo}.git"                                                  # .(21105.01.8)
 
  if [ "${bAll}" == "1" ]; then
 
-    git clone               "${aGitHub_URL}/${aProject}_${aStage}.git"  "${aRepoDir}"; nErr=$?
+#   git clone               "${aGitHub_URL}/${aProject}_${aStage}.git"  "${aRepoDir}"; nErr=$?  ##.(21105.01.9)
+    git clone               "${aGitHub_URL}/${aRepo}.git"               "${aRepoDir}"; nErr=$?  # .(21105.01.9)
 #   git clone               "https://github.com/8020data/FRApps_prod-master.git"
 
     if [ "${nErr}" != "0" ]; then exit; fi
@@ -397,8 +438,8 @@ if [ "${bSSH}" == "0" ]; then
     cd "${aRepoDir}"
 
   else
-    git clone --no-checkout "${aGitHub_URL}/${aProject}_${aStage}.git"  "${aRepoDir}"; nErr=$?
-#   git clone --no-checkout "github-ram:robinmattern/FRApps_prod-robin.git"  FRApps;    nErr=$?
+    git clone --no-checkout "${aGitHub_URL}/${aRepo}.git"               "${aRepoDir}"; nErr=$?  # .(21105.01.10)
+#   git clone --no-checkout "github-ram:robinmattern/FRApps_prod-robin.git" FRApps;    nErr=$?
 
     if [ "${nErr}" != "0" ]; then exit; fi
 
