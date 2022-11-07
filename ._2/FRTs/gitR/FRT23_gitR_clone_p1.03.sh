@@ -6,6 +6,7 @@
 ##FD   FRT23_gitR_clone.sh      |  24859| 11/01/22 15:58|   474| p1.03-21101-1558
 ##FD   FRT23_gitR_clone.sh      |  27579| 11/05/22 18:00|   507| p1.03-21105-1800
 ##FD   FRT23_gitR_clone.sh      |  28520| 11/05/22 19:00|   515| p1.03-21105-1900
+##FD   FRT23_gitR_clone.sh      |  29196| 11/07/22 08:45|   528| p1.03-21107-0845
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run gitr clone {Project}
 #
@@ -23,12 +24,14 @@
 # .(21105.03 11/05/22 RAM  5:43p| If Github URL parsed, then modify RepoDir
 # .(21105.04 11/05/22 RAM  6:00p| Always set aWebsDir to aPDir, and fix
 # .(21105.05 11/05/22 RAM  7:00p| Set c1 if parsing and in Project_ folder
+# .(21107.01 11/07/22 RAM  8:45a| Check if RepoDir is completely removed
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
 #========================================================================================================== #  ===============================  #
+
                                bHelp=0
  if [ "$1" ==  "help"  ]; then bHelp=1; shift; fi
  if [ "$1" == "-help"  ]; then bHelp=1; shift; fi
@@ -91,7 +94,7 @@
 
 #   -------------------------------------- GitHub URL arg -----
 
-#if [ "${aPrj/-/}" != "${aPrj}" ] || [ "${aPrj/:/}" != "${aPrj}" ] || [ "${aPrj/-/}" != "${aPrj}" ]; then
+#if [ "${aPrj/-/}" != "${aPrj}" ] || [ "${aPrj/:/}" != "${aPrj}" ] || [ "${aPrj/-/}" != "${aPrj}" ]; then bParse=1; else bParse=0; fi
 
         bParse=$( echo "${aPrj}" | awk '/^[a-zA-Z0-9]+_?$/ { print 0; exit }; { print 1 }' ); # echo -e "\n  bParse: ${bParse}"; exit
 if [ "${bParse}" == "1" ]; then
@@ -132,6 +135,7 @@ BEGIN { bDebug = 0;                               aSSH = "yes" }
                     { print  aAcct " " aProj " " aStge""aOwnr " " aSSH " " aCert }
 
 END   { }'
+#   -----------------------------------------
 
     aURL="$( echo "${aPrj}" | awk "${awkPgm}" )";  # echo "${aURL}"; exit
 #   echo -e "   Parsed URL: '${aURL}'"; # exit
@@ -387,7 +391,7 @@ if [ "${bSSH}" == "0" ]; then
     echo ""
     echo -e "  To clone ${aCone}"
     echo ""
-    echo "    Run: gitr clone ${aProject} ${aAll}-doit"
+    echo "    Run: gitr clone ${aProj} ${aAll}-doit"
     echo ""
     exit
     fi
@@ -423,13 +427,13 @@ if [ "${bSSH}" == "0" ]; then
 
     rm -fr "${aRepoDir}"/*  2>/dev/null                                         # .(21026.01.1 RAM Delete all files in RepoDir)
     rm -fr "${aRepoDir}"/.* 2>/dev/null
-    nCnt = $( ls -1 | awk '/total/ { print $2 }' )
-    
- if [ "${nCnt}" != "0" ]; then 
-    echo -s "\n * The repo folder, ${aRepoDir} was not completey removed"
-    rdir "${aRepoDir}" 
+    nCnt=$( ls -la "${aRepoDir}" | awk '/total/ { print $2 }' )                 # .(21107.01.1 RAM Check if RepoDir contains files)
+
+ if [ "${nCnt}" != "0" ]; then
+    echo -e "\n * The repo folder, ${aRepoDir} was not completey removed"
+    rdir "${aRepoDir}"
     exit
-    fi 
+    fi
 #   -----------------------------------------------------------------
 
 #   exit
