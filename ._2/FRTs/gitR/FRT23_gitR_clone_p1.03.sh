@@ -423,7 +423,13 @@ if [ "${bSSH}" == "0" ]; then
 
     rm -fr "${aRepoDir}"/*  2>/dev/null                                         # .(21026.01.1 RAM Delete all files in RepoDir)
     rm -fr "${aRepoDir}"/.* 2>/dev/null
-
+    nCnt = $( ls -1 | awk '/total/ { print $2 }' )
+    
+ if [ "${nCnt}" != "0" ]; then 
+    echo -s "\n * The repo folder, ${aRepoDir} was not completey removed"
+    rdir "${aRepoDir}" 
+    exit
+    fi 
 #   -----------------------------------------------------------------
 
 #   exit
