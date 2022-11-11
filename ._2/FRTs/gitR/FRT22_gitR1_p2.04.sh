@@ -920,7 +920,7 @@ END{ }
         git reset --hard | awk '{ print "  " $0 }'
         git pull | awk '/changed|Already/ { print "  "$0 }'
         chmod 755 "${aProjDir}"
-        echo -e "\n  * Reset FRTools script permissions"
+        echo -e "\n  * FRTools script permissions have been reset"
 
       else                                                                                                  # .(21111.02.1 RAM End)
         git pull | awk '/changed|Already/ { print "  "$0 }'
