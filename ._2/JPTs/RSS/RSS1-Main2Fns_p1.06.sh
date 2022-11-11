@@ -126,6 +126,7 @@ function  Run() {
      aWhat=" Script for"
                                          aDrv1="${aDrv}"; aSRC=""
                                          aVOL1="${aVOL}"; aVOL2="${aNFS}"
+                                         aVOL3=""
 
   if [ "${aAct}"     == "r"      ]; then aDrv1=""    ; fi
   if [ "${aAct}"     == "c"      ]; then aDrv1="C:"  ; fi
@@ -133,6 +134,10 @@ function  Run() {
 # if [ "${aAct}"     == "m"      ]; then aDrv1="M:"  ; fi                                  ##.(80925.02.1 Added M).(90321.01.1 Don't ever use "m")
 # if [ "${aAct}"     == "n"      ]; then aDrv1="N:"  ; fi                                  ##.(90315.01.1 Added N).(90321.01.1 "n" always means NFS)
   if [ "${aAct}"     == "n"      ]; then aDrv1="${aNFS/\\*}"; aDrv1="${aDrv1/\/*/}"; fi    # .(90321.01.1 either Windows Drive "N:" or "")
+
+  if [ "${aAct}"     == "j"      ]; then aDrv1="${aNFS/\\*}";  aDrv1="${aDrv1/\/*/}"; fi    # .(90321.01.1 either Windows Drive "N:" or "")
+  if [ "${aAct}"     == "j"      ]; then aDrv1="${aDrv1/\\*}"; aDrv1="${aDrv1/\/*/}"; fi    # .(90321.01.1 either Windows Drive "N:" or "")
+
   if [ "${nLv}"      == "0"      ]; then aDrv1="C:"  ; fi
   if [ "${nLv}"      == "7"      ]; then aVOL1="${aDrv1}/VOLs/U06"  ; fi
   if [ "${aAct}"     == "v"      ]; then aVOL1="${aDrv1}/VOLs/U06"  ; fi                   # .(80925.02.1 Added v)

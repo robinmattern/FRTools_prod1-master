@@ -90,76 +90,45 @@ function Help() {
 
 # ----------------------------------------------------------------
 
-  if [ "${aCmd}" == "dir" ]; then
-                               LIB_FileList=FileList/${LIB}21-FileList
-     Run  0x ""                         rdir-v1.3.80119          #  {Drv1}/Home/_0/bin/rdir-v1.3.80119
+#    JPTdir="WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/ ._2/JPTs/RSS" 
+#        "C:/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/ ._2/JPTs/RSS/ _1/RSSs /FileList/RSS21-FileList_v1.5.80923.sh"
+#                                                                      "_1/RSSs              /FileList/RSS21-FileList_v1.5.80923.sh"
+#        "C:/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/ ._2/JPTs/RSS/" 
+#                                                                     "._2/JPTs/RSS          /FileList/RSS21-FileList_v1.5.80923.sh"
 
-#    Run  1c "home/SCN2"     ${LIB_FileList}_v1.5.80923.sh       #  {Drv1}/home/robin/_1/RSSs/fileList/RSS21-fileList_v1.4.80916.sh
-#    Run  1c "home/SCN2"     ${LIB_FileList}_v1.6.10707.sh       #  {Drv1}/home/robin/_1/RSSs/fileList/RSS21-fileList_v1.6.10707.sh
-#    Run  1c "home/SCN2"     ${LIB_FileList}_v1.7.10826.sh       #  {Drv1}/home/robin/_1/RSSs/fileList/RSS21-fileList_v1.7.10826.sh  # .(10826.01.1 RAM Use this one)
-     Run  1c "home/SCN2"     ${LIB_FileList}.sh                  #  {Drv1}/home/robin/_1/RSSs/fileList/RSS21-fileList.sh             # .(11010.02.1 RAM Use script with no version number)
+         JPTdi=$( dirname $0 )                                                  # .(21111.01.2) 
 
-     Run  1r "home/Robin"    ${LIB_FileList}_v1.4r.80916.sh      #  {Drv1}/home/robin/_1/RSSs/fileList/RSS21-fileList_v1.4r.80916.sh
-     Run  1d "home/SCN2"     ${LIB_FileList}_v1.5.80923.sh       #  {Drv1}/home/SCN2/ _1/RSSs/fileList/RSS21-fileList_v1.5.80923.sh  # .(80923.03.1)
-     Run  1d "home/Robin"    ${LIB_FileList}_v1.5.80923.sh       #  {Drv1}/home/robin/_1/RSSs/fileList/RSS21-fileList_v1.5.80923.sh  # .(80923.03.1)
-     Run  1m "U06/SCN2"      ${LIB_FileList}_v1.5.80923.sh       #  {Drv2}/U06/SCN2/  _1/RSSs/fileList/RSS21-fileList_v1.5.80923.sh  # .(80923.03.1)
-     Run  7  "robin"         ${LIB_FileList}_v1.4.80916.sh       #       {VOL1}/robin/_1/RSSs/fileList/RSS21-fileList_v1.4.80916.sh
-#    Run  8  "robin"         ${LIB_FileList}_v1.4.80916.sh       #       {VOL2}/robin/_1/RSSs/fileList/RSS21-fileList_v1.4.80916.sh  ##.(80923.03.3)
-     Run  8  "SCN2"          ${LIB_FileList}.sh                  #       {VOL2}/SCN2/ _1/RSSs/fileList/JPT21-fileList_v1.5.80923.sh  # .(80923.03.3)
-     Run  9x "home"          ${LIB_FileList}_v1.4.80916.sh       #       {VOL2}/home/ _0/RSSs/fileList/RSS21-fileList_v1.4.80916.sh
+  if [ "${aCmd}" == "dir" ] || [ "${aCmd}" == "rdir" ]; then                    # .(21111.01.1 RAM Beg Replace Run with direct call)
 
-#    Run  0  ""                bin/rdir                          #  {Drv1}/Home/_0/bin/rdir
-#    Run  0  ""                bin/rdir-v1.3.80119               #  {Drv1}/Home/_0/bin/rdir-v1.3.80119
-#    Run  1  "home/robin"       RSS_Dir.sh                       #  {Drv1}/home/robin/_1/RSSs/RSS_Dir.sh
-#    Run  1  "home/robin"      bin/rdir-v1.4.80730.sh            #  {Drv1}/home/robin/_1/JSHs/bin/rdir-v1.4.80730.sh
-#    Run  1r "home/robin"      RSS21_fileList-v1.4r.80916.sh     #  {Drv1}/home/robin/_1/RSSs/RSS21_fileList-v1.4r.80916.sh
-#    Run  1d "home/JSW"        RSS_FileList-v1.4.80916.sh        #  {Drv1}/home/JSW/  _1/RSSs/RSS_FileList-v1.4.80916.sh
-#    Run  7  "robin"           RSS_FileList-v1.4.80916.sh        #  {VOL1}/robin/     _1/RSSs/RSS_FileList-v1.4.80916.sh
-#    Run  7  "home/robin"      bin/rdir-v1.4.80730.sh            #  {VOL1}/home/robin/_1/JSHs/bin/rdir-v1.4.80730.sh
+          LIB_FileList=${JPTdir}/FileList/${LIB}21-FileList
+        ${LIB_FileList}.sh; if [ "$?" == "0" ]; then exit; fi        
      fi
 # ----------------------------------------------------------------
 
   if [ "${aCmd}" == "dirlist" ]; then
-                                        LIB_DirList=DirList/${LIB}22-DirList
-     Run  0  ""                       ${LIB_DirList}
-#    Run  1c "home/SCN2"              ${LIB_DirList}_v1.2.81007.sh
-#    Run  1d "home/SCN2"              ${LIB_DirList}_v1.2.81007.sh
-     Run  1r "home/Robin"             ${LIB_DirList}_v1.2.81007.sh
-     Run  1m "U06/SCN2"               ${LIB_DirList}_v1.2.81007.sh
-     Run  7  "robin"                  ${LIB_DirList}_v1.2.81007.sh
-     Run  8  "SCN2"                   ${LIB_DirList}_v1.2.81007.sh
-     Run  9  "home"                   ${LIB_DirList}_v1.2.81007.sh
 
-     Run  1c "home/SCN2"              ${LIB_DirList}.sh
-#    Run  1d "home/SCN2"              ${LIB_DirList}.sh
+          LIB_DirList=${JPTdir}/DirList/${LIB}22-DirList
+        ${LIB_DirList}.sh       
      fi
 # ----------------------------------------------------------------
 
-  if [ "${aCmd:0:2}" == "ed" ]; then
-                                        LIB_Edit=${LIB}23-EditFile
-     Run  0  ""                       ${LIB_Edit}
-     Run  1  "home/robin"             ${LIB_Edit}.njs
-     Run  1  "WEBs/SCN2"              ${LIB_Edit}_v80912.njs
-     Run  2  "WEBs/SCN2/BASEC3"       ${LIB_Edit}_v80808.njs
-     Run  3  "WEBs/SCN2/BASEC3/Buyer" ${LIB_Edit}_v80808.njs
-     Run  7  "robin"                  ${LIB_Edit}_v80912.njs
-     Run  8  "SCN2"                   ${LIB_Edit}_v80912.njs
-     Run  9  "home"                   ${LIB_Edit}
-     fi
+# if [ "${aCmd:0:2}" == "ed" ]; then
+#
+#         LIB_Edit=${JPTdir}/${LIB}23-EditFile
+#       ${LIB_Edit}.sh       
+#    fi
 # ----------------------------------------------------------------
-
+#
   if [ "${aCmd:0:2}" == "in" ]; then
-                                        LIB_Info=Info/${LIB}22-Info
-     Run  1c "home/SCN2"              ${LIB_Info}_v0.7.80923.sh
-     Run  1d "home/SCN2"              ${LIB_Info}_v0.7.80923.sh
-     Run  1m "U06/SCN2"               ${LIB_Info}_v0.7.80923.sh
-     Run  8  "SCN2"                   ${LIB_Info}_v0.7.80923.sh
-     fi
+ 
+          LIB_Info=${JPTdir}/Info/${LIB}22-Info
+        ${LIB_Info}.sh       
+     fi                                                                         # .(21101.01.1 RAM End)
 # ----------------------------------------------------------------
 
-  if [ "${aCmd:0:2}" == "ne" ]; then  Run  1  "home/robin"  "Config/rh70/bin/rnet-v80914.sh"; fi
-  if [ "${aCmd:0:2}" == "sh" ]; then  Run  1  "home/robin"  "Config/rh70/bin/rsho.sh"; fi
-  if [ "${aCmd:0:2}" == "ma" ]; then  Run  1  "home/robin"  "bin/makSH.sh"; fi
+# if [ "${aCmd:0:2}" == "ne" ]; then  Run  1  "home/robin"  "Config/rh70/bin/rnet-v80914.sh"; fi
+# if [ "${aCmd:0:2}" == "sh" ]; then  Run  1  "home/robin"  "Config/rh70/bin/rsho.sh"; fi
+# if [ "${aCmd:0:2}" == "ma" ]; then  Run  1  "home/robin"  "bin/makSH.sh"; fi
 
 # ----------------------------------------------------------------------------------------------------
 

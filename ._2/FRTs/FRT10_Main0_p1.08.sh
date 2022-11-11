@@ -52,6 +52,7 @@
 # .(20620.04  6/20/22 RAM  5:45p| Reworked sayMsg sp functionality
 # .(21027.04 10/27/22 RAM 10:59a| Update gitr with sparse and clone
 # .(21031.01 10/31/22 RAM  7:45a| Allow version _d1.09
+# .(21107.02 11/07/22 RAM 12:45a| Add RSS Commands
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -166,8 +167,13 @@ function Help() {
 #  # echo "         appr run prod"
 #  # echo "         appr deploy"                                                        # .(20411.08.1 RAM Added)
    # echo ""
-   # echo "        ssh [ {ssh login alias} ]"                                           # .(20412.02.1 RAM Added)
+   # echo "         ssh [ {ssh login alias} ]"                                          # .(20412.02.1 RAM Added)
    # echo ""
+     echo "         jpt {Cmd}"                                                          # .(21107.02.1)
+     echo "         jpt rss {Cmd}"                                                      # .(21107.02.2)
+     echo "         jpt rss dir (rdir)"                                                 # .(21107.02.3)
+     echo "         jpt rss dirlist (dirlist)"                                          # .(21107.02.4)
+     echo ""
      echo "  Notes: Only 3 lowercase letters are needed for each command, separated by spaces"
      echo "         One or more command options follow. Help for the command is dispayed if no options are given"
      echo "         The options, debug, doit and quietly, can follow anywhere after the command"
@@ -219,11 +225,15 @@ function Help() {
 #    Help
 
 #    getCmd    "he"            "Help"
-     getCmd1   "proxy" ""      "proX"                                                                       # .(20620.03.1 RAM).(20620.10.1 RAM was Proxy)(20622.2.5 RAM Beg Use getCmd1)
-     getCmd1   "gitr"  ""      "gitR"  # 1                                                                  # .(20620.10.2 RAM was GitR)
-     getCmd1   "keys"  ""      "keyS"  1                                                                    # .(20620.10.3 RAM was Keys)
-     getCmd1   "appr"  "run"   "appR"                                                                       # .(20508.01.1 RAM)(20620.10.4 RAM was App)(20622.2.5 RAM End)
-#    getCmd    "run"   "ap"    "appR"                                                                       # .(20508.01.2 RAM)(20620.10.5 RAM was App)
+     getCmd1   "proxy"  ""     "proX"                                                                       # .(20620.03.1 RAM).(20620.10.1 RAM was Proxy)(20622.2.5 RAM Beg Use getCmd1)
+     getCmd1   "gitr"   ""     "gitR"  # 1                                                                  # .(20620.10.2 RAM was GitR)
+     getCmd1   "keys"   ""     "keyS"  1                                                                    # .(20620.10.3 RAM was Keys)
+     getCmd1   "appr"   "run"  "appR"                                                                       # .(20508.01.1 RAM)(20620.10.4 RAM was App)(20622.2.5 RAM End)
+#    getCmd    "run"    "ap"   "appR"                                                                       # .(20508.01.2 RAM)(20620.10.5 RAM was App)
+     getCmd1   "jpt"    ""     "JPT"   1                                                                    # .(21107.02.5)
+     getCmd1   "rss"    ""     "JPT_RSS"      1                                                             # .(21107.02.6)
+     getCmd1   "rdir"   ""     "JPT_RDIR"     1                                                             # .(21107.02.7)
+     getCmd1   "dirlist" ""    "JPT_DIRLIST"  1                                                             # .(21107.02.8)
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -233,6 +243,36 @@ function Help() {
      Help ${aCmd0}
 
      sayMsg    "FRT10[237]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" sp -1
+
+#====== =================================================================================================== #  ===========
+
+# ------------------------------------------------------------------------------------                      # .(21107.02.9 Beg RAM Added)
+#
+#       JPT Commands
+#
+#====== =================================================================================================== #
+
+#       sayMsg "FRT10[247]  JPT Commands (${aArg1:0:3}) aCmd: '${aCmd}'" 1
+
+     if [ "${aCmd:0:3}" == "JPT" ]; then
+
+#       sayMsg "FRT10[251]  jpt: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" -1
+
+        if [ "${aCmd}" ==  "JPT" ];         then aSubCmd=""; fi
+        if [ "${aCmd}" ==  "JPT_RSS" ];     then aSubCmd="rss"; fi
+        if [ "${aCmd}" ==  "JPT_RDIR" ];    then aSubCmd="rss rdir"; fi
+        if [ "${aCmd}" ==  "JPT_DIRLIST" ]; then aSubCmd="rss dirlist"; fi
+
+        shift;
+#       sayMsg "FRT10[251]  JPT: JPT00_Main0.sh \"$@\"" 2
+        echo   "FRT10[251]  JPT: JPT00_Main0.sh \"${aSubCmd}\" \"$@\""; # exit
+
+        "$( dirname $0 )/../JPTs/JPT00_Main0.sh"  "${aSubCmd}"  "$@"
+
+        ${aLstSp}
+        exit
+     fi # eoc JPT Commands
+#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- # .(21107.02.9 End)
 
 #====== =================================================================================================== #  ===========
 
