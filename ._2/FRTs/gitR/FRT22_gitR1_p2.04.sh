@@ -400,7 +400,7 @@ function setProjVars( ) {
   if [ "${aVM}" == ""      ]; then aVM="???"; fi
   if [ "${aOS}" == "linux" ]; then aVM=${aServer:0:5}; fi
 
-        sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'" 1 # 1 # 2
+        sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'" # 1 # 2
 
         aRoot=${aVMs}/${aVM}                     # or "" if linux
   if [ "${aOS}"  == "linux" ]; then aRoot=""; fi
@@ -447,7 +447,7 @@ function setProjVars( ) {
         sayMsg "setProjVars[ 9 ]  aProject: '${aProject}', aBranch: '${aBranch}', aStage: '${aStage}', aApp: '${aApp}'" # 1
 
 #       aDir="${aRoot}/webs${aApps}/${aProject}/${aBranch}"; # echo "aDir: ${aDir}"
-        aProjDir="${aRoot}/webs${aApps}/${aProject}";        sayMsg "setProjVars[ 21]  aProjDir: ${aProjDir}" 2
+        aProjDir="${aRoot}/webs${aApps}/${aProject}";        sayMsg "setProjVars[ 21]  aProjDir: ${aProjDir}"
 
  if [ "${aWebs}" == "FormR_I" ]; then
 #       aProjDir="${aRoot}${aProject}";                      sayMsg "setProjVars[ 22]  aProjDir: ${aProjDir}"
@@ -915,12 +915,12 @@ END{ }
         setProjVars
 
         echo ""
-        echo "   pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'"                      # .(21111.02.1 RAM Beg)
-    if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then
+        sayMsg "GitR1[918]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" 1
+    if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
         git reset --hard
         git pull | awk '/changed|Already/ { print "  "$0 }'
         chmod 755 "${aProjDir}"
-        echo " * Reset FRTools script permissions"
+        echo -e "\n * Reset FRTools script permissions"
 
       else                                                                                                  # .(21111.02.1 RAM End)
         git pull | awk '/changed|Already/ { print "  "$0 }'
