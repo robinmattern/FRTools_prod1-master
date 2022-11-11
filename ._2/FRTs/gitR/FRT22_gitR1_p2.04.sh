@@ -917,7 +917,7 @@ END{ }
         echo ""
         sayMsg "GitR1[918]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
-        git reset --hard | awk '{ print "  " $0 }'
+        git reset --hard | awk '{ print "   " $0 }'
         git pull | awk '/changed|Already/ { print "   "$0 }'
         chmod -R 755 "${aProjDir}"
         echo -e "\n * FRTools script permissions have been reset"
