@@ -78,6 +78,7 @@
 # .(21027.01 10/27/22 RAM  9:04a| Add clone
 # .(21027.02 10/27/22 RAM  9:25a| Chop single command to 4 letters
 # .(21027.03 10/27/22 RAM 10:20a| Add "*" as optional getCmd
+# .(21111.02 10/27/22 RAM  2:30p| Special case for gitr pull FRTools 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -85,7 +86,7 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 5, 2022 9:00p"
+        aVdt="Nov 11, 2022 4:00p"
 
 #       aVer="$( echo $0 | awk '{    sub( /.+_p/,           "p"    ); sub( /\.sh/, ""); print }' )"
         aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.01.1 RAM Add [d...)
@@ -904,11 +905,21 @@ END{ }
         sayMsg "GitR1[905]  Pull"
 
   if [ "${aCmd}" ==  "Pull" ]; then
+        setProjVars
 
         echo ""
+        echo "   pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'"                     # .(21111.02.1 RAM Beg) 
+    if [ "${aOS}" != "windows" ] && [ "${aProject} == "FRTools" ]; then 
+        git reset --hard
         git pull | awk '/changed|Already/ { print "  "$0 }'
+        chmod 755 "${aProjDir}"
+        echo " * Reset FRTools script permissions"
 
-#       echo ""
+      else                                                                                                 # .(21111.02.1 RAM End) 
+        git pull | awk '/changed|Already/ { print "  "$0 }'
+        fi 
+
+        ${aLstSp}
      fi # eif Pull
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 

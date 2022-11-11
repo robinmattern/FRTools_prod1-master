@@ -90,12 +90,6 @@ function Help() {
 
 # ----------------------------------------------------------------
 
-#    JPTdir="WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/ ._2/JPTs/RSS" 
-#        "C:/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/ ._2/JPTs/RSS/ _1/RSSs /FileList/RSS21-FileList_v1.5.80923.sh"
-#                                                                      "_1/RSSs              /FileList/RSS21-FileList_v1.5.80923.sh"
-#        "C:/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/ ._2/JPTs/RSS/" 
-#                                                                     "._2/JPTs/RSS          /FileList/RSS21-FileList_v1.5.80923.sh"
-
          JPTdir=$( dirname $0 )                                                 # .(21111.01.2) 
 
   if [ "${aCmd}" == "dir" ] || [ "${aCmd}" == "rdir" ]; then                    # .(21111.01.1 RAM Beg Replace Run with direct call)
