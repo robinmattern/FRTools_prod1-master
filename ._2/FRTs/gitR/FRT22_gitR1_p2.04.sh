@@ -17,6 +17,7 @@
 ##FD   FRT22_gitR1.sh           |  77248| 10/25/22 19:43|  1332| p2.03-21025-1943
 ##FD   FRT22_gitR1.sh           |  79863| 10/27/22 10:20|  1361| p2.04-21027-1020
 ##FD   FRT22_gitR1.sh           |  80647| 11/03/22 16:05|  1370| p2.04-21103-1605
+##FD   FRT22_gitR1.sh           |  81638| 11/11/22 17:09|  1387| p2.04-21111-1709
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run git commands with helpfull
 #            output.
@@ -55,6 +56,8 @@
 #            shoGitRemotes2     |
 #
 ##CHGS     .--------------------+----------------------------------------------+
+
+# .(10822.01 08/22/21 RAM 12:00p| ???
 # .(10824.01 08/24/21 RAM  9:35a| Created
 # .(11127.01 11/27/21 RAM  8:40a| Changed 'remove remote' to 'delete remote'
 # .(11127.02 11/27/21 RAM 10:25a| Changed width of Remote name
@@ -78,7 +81,8 @@
 # .(21027.01 10/27/22 RAM  9:04a| Add clone
 # .(21027.02 10/27/22 RAM  9:25a| Chop single command to 4 letters
 # .(21027.03 10/27/22 RAM 10:20a| Add "*" as optional getCmd
-# .(21111.02 10/27/22 RAM  2:30p| Special case for gitr pull FRTools 
+# .(21111.02 11/11/22 RAM  2:30p| Special case for gitr pull FRTools
+# .(21111.03 11/11/22 RAM  5:09p| FormR_U is in /webs not /webs/nodeapps
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -86,7 +90,7 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 11, 2022 4:00p"
+        aVdt="Nov 11, 2022 5:09p"
 
 #       aVer="$( echo $0 | awk '{    sub( /.+_p/,           "p"    ); sub( /\.sh/, ""); print }' )"
         aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.01.1 RAM Add [d...)
@@ -102,7 +106,7 @@
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
      if [ "${aJFns}" != "" ];  then source ${aJFns};
-   else echo  " ** GitR1[105]  Unable to load Script Fns, 'JPT12_Main2Fns_p*.sh'"; exit; fi;                # .(20501.01.2 RAM)
+   else echo  " ** GitR1[109]  Unable to load Script Fns, 'JPT12_Main2Fns_p*.sh'"; exit; fi;                # .(20501.01.2 RAM)
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -110,10 +114,10 @@
         aLstSp="echo "; if [ "${aOSv:0:1}" == "w" ]; then aLstSp=""; fi                                     # .(10706.09.1 RAM Windows returns an extra blank line)
 
 #       bDoit=0                                                                                             ##.(20501.01.5 RAM !Important don't reset in Sub script)
-#       bQuiet=0                                                                                            ##.(20501.01.6 RAM)
+        bQuiet=0                                                                                            ##.(20501.01.6 RAM)
 #       bDebug=0                                                                                            ##.(20501.01.7 RAM)
 
-#       sayMsg    "GitR1[116]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
+#       sayMsg    "GitR1[120]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
 
 # ------------------------------------------------------------------------------------
 #
@@ -123,7 +127,7 @@
 
 function Help( ) {
 
-        sayMsg    "GitR1[126]  aCmd:  '${aCmd}', aCmd0: '$1'" #1
+        sayMsg    "GitR1[130]  aCmd:  '${aCmd}', aCmd0: '$1'" #1
 
      if [ "${aCmd}" != "Help" ] && [ "help" != "$1" ]; then return; fi
 
@@ -221,9 +225,9 @@ function Help( ) {
         getOpts "bdqgl"
         setCmds                                    # ${dBg}   # 1 # dBug
 
-#       sayMsg sp "GitR1[224]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'" 1
-        sayMsg    "GitR1[225]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', dBug: '$dBug', bQuiet: '$bQuiet' " sp -1
-#       sayMsg    "GitR1[226]  aCmd:  '$aCmd',   aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' "
+#       sayMsg sp "GitR1[228]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'" 1
+        sayMsg    "GitR1[229]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', dBug: '$dBug', bQuiet: '$bQuiet' " sp -1
+#       sayMsg    "GitR1[230]  aCmd:  '$aCmd',   aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' "
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -290,9 +294,9 @@ function Help( ) {
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-        sayMsg    "GitR1[293]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'" -1
-#       sayMsg    "GitR1[294]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aCmd0: '$aCmd0', bGlobal: '${bGlobal}'" -1 # 2
-        sayMsg    "GitR1[295]  aCmd:  '${aCmd}', '$aCmd1', '$aCmd2', '$aCmd3', '$aCmd0', '$c1', '$c2', '$c3', '${aArg1}' " -1 # -1 or 2
+        sayMsg    "GitR1[297]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'" -1
+#       sayMsg    "GitR1[298]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aCmd0: '$aCmd0', bGlobal: '${bGlobal}'" -1 # 2
+        sayMsg    "GitR1[299]  aCmd:  '${aCmd}', '$aCmd1', '$aCmd2', '$aCmd3', '$aCmd0', '$c1', '$c2', '$c3', '${aArg1}' " -1 # -1 or 2
 
      if [ "${aCmd}" == "" ]; then aCmd="Help"; fi                                       # .(20625.05.2 RAM A little help with help)
 
@@ -378,10 +382,13 @@ function setProjVars( ) {
   if [ "${aWebs}" == "iCat"    ]; then                aApps="/icatapps"; fi
   if [ "${aWebs}" == "FormR_I" ]; then                aApps="/P09"     ; fi
 # if [ "${aWebs}" == "FormR_U" ]; then                aApps="/nodeapps"; fi
-  if [ "${aWebs}" == "FormR_U" ]; then aApps=""; fi
+# if [ "${aWebs}" == "FormR_U" ]; then                aApps=""         ; fi                                 ##.(21111.03.1)
+
   if [ "${aWebs}" == "Repos"   ]; then                aApps="/Repos";    fi                                 # .(20615.01.2)
 
-  if [ "${aDir/nodeapps/}" != "" ]; then              aApps="/nodeapps"; fi                                 # .(10821.01.2 RAM)
+  if [ "${aDir/nodeapps/}" != "" ]; then              aApps="/nodeapps"; fi                                 # .(10821.01.3 RAM).(21103.2 RAM ??)
+
+  if [ "${aWebs}" == "FormR_U" ]; then                aApps=""         ; fi                                 # .(21111.03.1 RAM)
 
         sayMsg "setProjVars[ 1 ]  aOS:   '${aOS}', aWebs: ${aWebs}, aApps: '${aApps}', aVMs: '${aVMs}', aServer: '${aServer}'" # 1 # 2
 #       sayMsg "setProjVars[ 2 ]  aDir: '${aDir}', aWebs: ${aWebs}, aDir: '${aDir}' match '${aVMs}/(.*)/webs/'" 1 # 2
@@ -393,7 +400,7 @@ function setProjVars( ) {
   if [ "${aVM}" == ""      ]; then aVM="???"; fi
   if [ "${aOS}" == "linux" ]; then aVM=${aServer:0:5}; fi
 
-        sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'"   #  1 # 2
+        sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'" 1 # 1 # 2
 
         aRoot=${aVMs}/${aVM}                     # or "" if linux
   if [ "${aOS}"  == "linux" ]; then aRoot=""; fi
@@ -410,7 +417,7 @@ function setProjVars( ) {
   if [ "${aWebs}" == "SCN2"    ]; then aPath1="${aPath/nodeapps\//}"; aPath1="${aPath1/nodeapps/}"; fi
   if [ "${aWebs}" == "iCat"    ]; then aPath1="${aPath/icatapps\//}"; aPath1="${aPath1/icatapps/}"; fi
   if [ "${aWebs}" == "8020"    ]; then aPath1="${aPath/\/webs\//}";   aPath1="${aPath1/webs/}"; fi
-# if [ "${aWebs}" == "8020_N"  ]; then aPath1="${aPath/\/webs\//}";   aPath1="${aPath1/webs/nodeapps}"; fi  # .(10821.01.3)
+# if [ "${aWebs}" == "8020_N"  ]; then aPath1="${aPath/\/webs\//}";   aPath1="${aPath1/webs/nodeapps}"; fi  # .(10821.01.4)
   if [ "${aWebs}" == "SCN2_U"  ]; then aPath1="${aPath/\/webs/}";     aPath1="${aPath1/\/nodeapps\//}"; fi
   if [ "${aWebs}" == "FormR_U" ]; then aPath1="${aPath/\/webs\//}";   aPath1="${aPath1/webs/}"; fi
   if [ "${aWebs}" == "FormR_I" ]; then aPath1="FormR${aPath}"; fi   # aPath1='{Project}/{Branch}/{Stage}/{App}' for split below
@@ -426,12 +433,12 @@ function setProjVars( ) {
         aApp=$(    echo "${aPath1}" | awk '{ split( $0, a, /\// ); print a[4] }' )
         a5=$(      echo "${aPath1}" | awk '{ split( $0, a, /\// ); print a[5] }' )                        # .(10821.01.5)
 
-  if [ "${aProject}" == "nodeapps" ]; then                                                                # .(10821.01.4 Beg)
+  if [ "${aProject}" == "nodeapps" ]; then                                                                # .(10821.01.6 Beg)
         aProject=${aBranch}
         aBranch=${aStage}
         aStage=${aApp}
         aApp=${aApp}
-        fi                                                                                                # .(10821.01.4 End)
+        fi                                                                                                # .(10821.01.6 End)
 
 #       sayMsg "setProjVars[ 8 ]  aProject: '${aProject}', aBranch: '${aBranch}', aStage: '${aStage}', aApp: '${aApp}'" 1
 
@@ -440,7 +447,7 @@ function setProjVars( ) {
         sayMsg "setProjVars[ 9 ]  aProject: '${aProject}', aBranch: '${aBranch}', aStage: '${aStage}', aApp: '${aApp}'" # 1
 
 #       aDir="${aRoot}/webs${aApps}/${aProject}/${aBranch}"; # echo "aDir: ${aDir}"
-        aProjDir="${aRoot}/webs${aApps}/${aProject}";        sayMsg "setProjVars[ 21]  aProjDir: ${aProjDir}"
+        aProjDir="${aRoot}/webs${aApps}/${aProject}";        sayMsg "setProjVars[ 21]  aProjDir: ${aProjDir}" 2
 
  if [ "${aWebs}" == "FormR_I" ]; then
 #       aProjDir="${aRoot}${aProject}";                      sayMsg "setProjVars[ 22]  aProjDir: ${aProjDir}"
@@ -677,14 +684,14 @@ function shoGitRemotes3( ) {                                                    
 #       GIT COMMANDS
 #====== =================================================================================================== #  ===========
 
-        sayMsg "GitR1[680]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" -1 # 2
+        sayMsg "GitR1[687]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" -1 # 2
 
 #====== =================================================================================================== #  ===========
 #       GIT INIT                                                                                            # .(20430.01.3 Beg RAM Added)
 #====== =================================================================================================== #
 
   if [ "${aCmd}" == "Init" ]; then
-        sayMsg "GitR1[687]  Git Init"
+        sayMsg "GitR1[694]  Git Init"
 
         echo ""
         echo "git init"
@@ -699,7 +706,7 @@ function shoGitRemotes3( ) {                                                    
 #====== =================================================================================================== #
 
   if [ "${aCmd}" == "List Vars" ]; then
-        sayMsg "GitR1[702]  Git List Vars"
+        sayMsg "GitR1[709]  Git List Vars"
 #       echo "git list vars"
 
         aAWK='
@@ -732,7 +739,7 @@ END{ }
 #====== =================================================================================================== #
 
   if [ "${aCmd}" == "Set Var" ]; then
-        sayMsg "GitR1[735]  Git Set Var"
+        sayMsg "GitR1[742]  Git Set Var"
 
         echo ""
         echo "git set var"
@@ -747,8 +754,8 @@ END{ }
 #====== =================================================================================================== #
 
   if [ "${aCmd}" ==  "Create Remote" ]; then
-        sayMsg "GitR1[750]  Create Remote" 1
-        sayMsg "GitR1[751]  aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'. bGlobal: '${bGlobal}'" 1
+        sayMsg "GitR1[757]  Create Remote" 1
+        sayMsg "GitR1[758]  aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'. bGlobal: '${bGlobal}'" 1
 
         echo ""
         echo "  git checkout -B '${aArg1}' '${aArg2}'"
@@ -762,7 +769,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       CLONE                                                                                               # .(21027.01.4 RAM Beg Added Clone command)
 #====== =================================================================================================== #
-        sayMsg "GitR1[765]  ${aCmd}" # 1
+        sayMsg "GitR1[772]  ${aCmd}" # 1
 
   if [ "${aCmd}" ==  "Clone" ]; then
 #       sayMsg       "Clone Command not implemented yet" 2
@@ -783,12 +790,12 @@ END{ }
 #       setBranch $1; if [ "${aBranch}" != "" ]; then shift; fi
 #       setBranch ${aArg1}
 #
-#       sayMsg "GitR1[786]  Begin GitR Commands"                                                            ##.(20623.13.1 RAM End Move from here to below)
+#       sayMsg "GitR1[793]  Begin GitR Commands"                                                            ##.(20623.13.1 RAM End Move from here to below)
 
 #====== =================================================================================================== #  ===========
 #        LIST ALL REMOTES                                                                                   # .(20623.13.13)
 #====== =================================================================================================== # .(20623.13.2 RAM Beg Move to here from below)
-#        sayMsg "GitR1[791]  List All Remotes" 1                                                            # .(20623.13.14)
+#       sayMsg "GitR1[798]  List All Remotes" 1                                                             # .(20623.13.14)
 
   if [ "${aCmd}" ==  "List All Remotes" ]; then                                                             # .(20623.13.15)
 
@@ -868,14 +875,14 @@ END{ }
 #       setBranch $1; if [ "${aBranch}" != "" ]; then shift; fi
         setBranch ${aArg1}
 
-#       sayMsg "GitR1[871]  Begin GitR Commands: aCmd: ${aCmd}" 1                                           # .(20623.13.3 RAM End Move to here from above)
+#       sayMsg "GitR1[878]  Begin GitR Commands: aCmd: ${aCmd}" 1                                           # .(20623.13.3 RAM End Move to here from above)
 
 #====== =================================================================================================== #  ===========
 #       ADD COMMIT                                                                                          #
 #====== =================================================================================================== #
 
   if [ "${aCmd}" ==  "Add Commit" ]; then
-        sayMsg "GitR1[878]  Add Commit"
+        sayMsg "GitR1[885]  Add Commit"
 
         echo ""
 #       echo "git commit -a -m \"${aArg1}\""
@@ -889,7 +896,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       PUSH                                                                                                #
 #====== =================================================================================================== #
-        sayMsg "GitR1[892]  Push"
+        sayMsg "GitR1[899]  Push"
 
   if [ "${aCmd}" ==  "Push" ]; then
 
@@ -902,31 +909,31 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       PULL                                                                                                #
 #====== =================================================================================================== #
-        sayMsg "GitR1[905]  Pull"
+        sayMsg "GitR1[912]  Pull"
 
   if [ "${aCmd}" ==  "Pull" ]; then
         setProjVars
 
         echo ""
-        echo "   pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'"                     # .(21111.02.1 RAM Beg) 
-    if [ "${aOS}" != "windows" ] && [ "${aProject} == "FRTools" ]; then 
+        echo "   pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'"                      # .(21111.02.1 RAM Beg)
+    if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then
         git reset --hard
         git pull | awk '/changed|Already/ { print "  "$0 }'
         chmod 755 "${aProjDir}"
         echo " * Reset FRTools script permissions"
 
-      else                                                                                                 # .(21111.02.1 RAM End) 
+      else                                                                                                  # .(21111.02.1 RAM End)
         git pull | awk '/changed|Already/ { print "  "$0 }'
-        fi 
+        fi
 
-        ${aLstSp}
+#       ${aLstSp}
      fi # eif Pull
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== =================================================================================================== #  ===========
 #       FETCH                                                                                               #
 #====== =================================================================================================== #
-        sayMsg "GitR1[919]  Fetch"
+        sayMsg "GitR1[936]  Fetch"
 
   if [ "${aCmd}" ==  "Fetch" ]; then
 
@@ -940,7 +947,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       FETCH ALL                                                                                           #
 #====== =================================================================================================== #
-        sayMsg "GitR1[933]  Fetch All"
+        sayMsg "GitR1[950]  Fetch All"
 
   if [ "${aCmd}" ==  "Fetch All" ]; then
 
@@ -954,7 +961,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       ADD REMOTE                                                                                          #
 #====== =================================================================================================== #
-        sayMsg "GitR1[947]  Add Remote"
+        sayMsg "GitR1[964]  Add Remote"
 
   if [ "${aCmd}" ==  "Add Remote" ]; then
 #       sayMsg       "Add Remote not implemented yet" 2
@@ -971,7 +978,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       RENAME REMOTE                                                                                       #
 #====== =================================================================================================== #
-        sayMsg "GitR1[964]  Rename Remote"
+        sayMsg "GitR1[981]  Rename Remote"
 
   if [ "${aCmd}" ==  "Rename Remote" ]; then
 
@@ -993,7 +1000,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       DELETE REMOTE                                                                                       #  # .(11127.01.5)
 #====== =================================================================================================== #
-        sayMsg "GitR1[986]  Delete Remote"                                                                # .(11127.01.6)
+        sayMsg "GitR1[1003]  Delete Remote"                                                                # .(11127.01.6)
 
   if [ "${aCmd}" ==  "Delete Remote" ]; then                                                             # .(11127.01.7)
 
@@ -1009,7 +1016,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       LIST REMOTES                                                                                  #
 #====== =================================================================================================== #
-        sayMsg "GitR1[1002]  List Remotes"
+        sayMsg "GitR1[1019]  List Remotes"
 
   if [ "${aCmd}" ==  "List Remotes" ]; then
 
@@ -1025,7 +1032,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       LIST REMOTE BRANCHES                                                                                #
 #====== =================================================================================================== #
-        sayMsg "GitR1[1018]  List Remote Branches";
+        sayMsg "GitR1[1035]  List Remote Branches";
 
   if [ "${aCmd}" ==  "List Remote Branches" ]; then
 
@@ -1067,7 +1074,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       CHECKOUT BRANCH                                                                                     #
 #====== =================================================================================================== #
-        sayMsg "GitR1[1060]  Checkout Branch"
+        sayMsg "GitR1[1077]  Checkout Branch"
 
      if [ "${aCmd}" ==  "Checkout Branch" ]; then
         bDebug=1
@@ -1090,7 +1097,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #        LIST REMOTES ALL                                                                                   #
 #====== =================================================================================================== #
-#       sayMsg "GitR1[1083]  List Remotes All"                                                              ##.(20623.13.4 RAM Beg Move from here to above)
+#       sayMsg "GitR1[1100]  List Remotes All"                                                              ##.(20623.13.4 RAM Beg Move from here to above)
 #
 # if [ "${aCmd}" ==  "List Remotes All" ]; then
 #
@@ -1135,7 +1142,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       LIST REMOTE COMMITS xx
 #====== =================================================================================================== #
-        sayMsg "GitR1[1128]  List Remote Commits xx"
+        sayMsg "GitR1[1145]  List Remote Commits xx"
 
   if [ "${aCmd}" ==  "List Remote Commits xx" ]; then
 
@@ -1165,7 +1172,7 @@ END{ }
         exit
         fi
 
-#       sayMsg "GitR1[1158]  mResults: ${mResults}" 1
+#       sayMsg "GitR1[1175]  mResults: ${mResults}" 1
   if [ "${mResults}" == "" ]; then
           echo "  * No Commits found for Repo, ${aGit_Repo}, for Account, ${aGit_User}, using SSH_Key, ${SSH_Key}."
        else
@@ -1181,7 +1188,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       LIST REMOTE COMMITS
 #====== =================================================================================================== #
-        sayMsg "GitR1[1174]  ${aCmd}, nDays: '${nDays}'"  # 1
+        sayMsg "GitR1[1191]  ${aCmd}, nDays: '${nDays}'"  # 1
 
   if [ "${aCmd}" ==  "List All Commits"    ]; then aCmd="List Remote Commits"; fi                                           # .(20623.03.1)
   if [ "${aCmd}" ==  "List Local Commits"  ]; then aCmd="List Remote Commits"; fi                                           # .(20122.04.2)
@@ -1201,8 +1208,8 @@ END{ }
 #       aStage=$(  echo "${aPath1}" | awk '{ n = split( $0, a, /\// ); print a[n] }' )                                      # .(20122.01.2)
         aStage=$(  echo "${aPath1}" | awk '{     split( $0, a, /\// ); print a[3] }' )                                      # .(20122.01.2 RAM Assumes path: "nodeapps/{Project}/{Stage}")
 
-#       sayMsg "GitR1[1194]  nDays: '${nDays}', bLocal: '${bLocal}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 2
-#       sayMsg "GitR1[1195]  aStage: ${aStage}; aPath1: '${aPath1}'" 2
+#       sayMsg "GitR1[1211]  nDays: '${nDays}', bLocal: '${bLocal}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 2
+#       sayMsg "GitR1[1212]  aStage: ${aStage}; aPath1: '${aPath1}'" 2
 
         mResults=$( bash -c "( git branch )" 2>&1 );
   if [ "${mResults:0:5}" == "fatal" ]; then
@@ -1211,17 +1218,17 @@ END{ }
         exit
         fi
                                                                getCurRemote;  # sayMsg "aRemote: ${aRemote}" 2
-#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=Bruce_FormR-test; fi                             ##.(10821.01.1)
-#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=$( git remote );  fi                             ##.(10821.01.1)
-        aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=${aRemote};       fi                             # .(10822.01.1)
+#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=Bruce_FormR-test; fi                             ##.(10821.01.7)
+#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=$( git remote );  fi                             ##.(10821.01.7)
+        aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=${aRemote};       fi                             # .(10822.01.7)
 
                                                                getCurBranch ${aGit_Remote}; # sayMsg "aBranch: ${aBranch}" 2
-#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=$( git branch | awk '/\*/ { print $2 }' ); fi    ##.(10821.01.2)
-#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=main; fi                                         ##.(10821.01.2)
-        aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=${aBranch}; fi
+#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=$( git branch | awk '/\*/ { print $2 }' ); fi    ##.(10821.01.8)
+#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=main; fi                                         ##.(10821.01.8)
+        aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=${aBranch}; fi                                   # .(10822.01.8)
 
         aPath=${aGit_Remote}; if [ "${aGit_Branch}" != "" ]; then aPath=${aPath}/${aGit_Branch}; fi; # sayMsg "aPath: ${aPath}" 2
-#       sayMsg "GitR1[1214]  aPath: ${aPath}" 2
+#       sayMsg "GitR1[1231]  aPath: ${aPath}" 2
 
      if [ "${aGit_Remote}" == "" ] && [ "${bLocal}" == "0" ] ; then bLocal=1;                                               # .(10827.01.1 Beg RAM If no remote)
            echo ""; echo "  * No Remotes are defined for this Repository."
@@ -1283,7 +1290,7 @@ if [ "${bLocal}" == "1" ]; then
 #====== =================================================================================================== #  ===========
 #       COUNT REMOTE COMMITS
 #====== =================================================================================================== #
-        sayMsg "GitR1[1276]  Count Remote Commits";
+        sayMsg "GitR1[1293]  Count Remote Commits";
 
   if [ "${aCmd}" ==  "Count Remote Commits" ]; then
 
@@ -1306,7 +1313,7 @@ if [ "${bLocal}" == "1" ]; then
 #====== =================================================================================================== #  ===========
 #       COUNT LOCAL COMMITS                                                                                 #
 #====== =================================================================================================== #
-        sayMsg "GitR1[1299]  Count Local Commits";
+        sayMsg "GitR1[1316]  Count Local Commits";
 
   if [ "${aCmd}" ==  "Count Local Commits" ]; then
 
@@ -1329,7 +1336,7 @@ if [ "${bLocal}" == "1" ]; then
 #====== =================================================================================================== #  ===========
 #       SPARSE ON / OFF                                                                                     # .(21025.01.4 RAM Beg Added )
 #====== =================================================================================================== #
-#       sayMsg "GitR1[1322]  ${aCmd}" # 1
+#       sayMsg "GitR1[1339]  ${aCmd}" # 1
 
   if [ "${aCmd}" ==  "Sparse" ]; then
 #       sayMsg       "Sparse not implemented yet. aCmd2: ${aCmd2}, ${aArg1}" 2
@@ -1360,7 +1367,7 @@ if [ "${bLocal}" == "1" ]; then
 #====== =================================================================================================== #  ===========
 #       NEXT COMMAND                                                                                        # .(ymmdd.nn.4 USR Beg Added NEXT command)
 #====== =================================================================================================== #
-        sayMsg "GitR1[1353]  ${aCmd}" # 1
+        sayMsg "GitR1[1370]  ${aCmd}" # 1
 
   if [ "${aCmd}" ==  "Next Command" ]; then
         sayMsg       "Next Command not implemented yet" 2
