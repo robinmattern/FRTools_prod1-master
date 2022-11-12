@@ -21,8 +21,6 @@
 #            Help               | List of JPT commands
 #            RSS                | Robin's Shell Scripts                                                     # .(21103.03.1)
 #                               |
-#                               |
-#                               |
 ##CHGS     .--------------------+-------+-------------------+------+-----------+
 # .(01001.01 10/01/20 RAM 10:00p| Created
 # .(10706.09 10/01/20 RAM 10:00p| Windows returns an extra blank line)

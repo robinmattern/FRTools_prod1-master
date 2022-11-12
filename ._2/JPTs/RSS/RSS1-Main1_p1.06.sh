@@ -28,7 +28,7 @@
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-     aVdt="Nov 5, 2022 9:00p"
+     aVdt="Nov 11, 2022 6:00p"
 
      aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
@@ -91,32 +91,33 @@ function Help() {
 # ----------------------------------------------------------------
 
          JPTdir=$( dirname $0 )                                                 # .(21111.01.2) 
-
-  if [ "${aCmd}" == "dir" ] || [ "${aCmd}" == "rdir" ]; then                    # .(21111.01.1 RAM Beg Replace Run with direct call)
-
-          LIB_FileList=${JPTdir}/FileList/${LIB}21-FileList
-        ${LIB_FileList}.sh; if [ "$?" == "0" ]; then exit; fi        
+ 
+  if [ "${aCmd}" == "dir" ] || [ "${aCmd}" == "rdir" ]; then                    # .(21111.01.1 RAM Beg Replace Run with direct call).(21111.03.1)
+          shift
+          LIB_FileList="${JPTdir}/FileList/${LIB}21-FileList"
+        ${LIB_FileList}.sh "$@"; if [ "$?" == "0" ]; then exit; fi              # .(21111.03.2 RAM Exit if successful)
      fi
 # ----------------------------------------------------------------
 
   if [ "${aCmd}" == "dirlist" ]; then
-
-          LIB_DirList=${JPTdir}/DirList/${LIB}22-DirList
-        ${LIB_DirList}.sh       
+          shift
+          LIB_DirList="${JPTdir}/DirList/${LIB}22-DirList"
+        ${LIB_DirList}.sh "$@";  if [ "$?" == "0" ]; then exit; fi              # .(21111.03.3)       
      fi
 # ----------------------------------------------------------------
 
 # if [ "${aCmd:0:2}" == "ed" ]; then
-#
+#         shift
 #         LIB_Edit=${JPTdir}/${LIB}23-EditFile
-#       ${LIB_Edit}.sh       
+#       ${LIB_Edit}.sh "$@";     if [ "$?" == "0" ]; then exit; fi              # .(21111.03.4)       
 #    fi
 # ----------------------------------------------------------------
 #
   if [ "${aCmd:0:2}" == "in" ]; then
- 
-          LIB_Info=${JPTdir}/Info/${LIB}22-Info
-        ${LIB_Info}.sh       
+          shift
+          LIB_Info="${JPTdir}/Info/${LIB}22-Info"
+#         echo -e "\n LIB_Iinfo: '${LIB_Info}.sh'" "$@"
+        ${LIB_Info}.sh "$@";     if [ "$?" == "0" ]; then exit; fi              # .(21111.03.5)  
      fi                                                                         # .(21101.01.1 RAM End)
 # ----------------------------------------------------------------
 
