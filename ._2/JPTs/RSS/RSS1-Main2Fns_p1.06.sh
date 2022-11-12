@@ -5,6 +5,7 @@
 ##RFILE    +====================+=======+===================+======+=============+
 ##FD   RSS1-Main2Fns.sh         |  10833|  3/15/18 21:00|   198| v1.05.90315.2100
 ##FD   RSS1-Main2Fns.sh         |  15109| 11/12/22 15:56|   246| p1.06-21112-1556
+##FD   RSS1-Main2Fns.sh         |  16988| 11/12/22 18:20|   265| p1.06-21112-1820
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #
 #
@@ -28,6 +29,8 @@
 # .(90326.01  3/26/19 RAM 13:45p| Add aVars = {Lib}-Parms.sh and source it
 # .(90326.02  3/26/19 RAM  1:45p| Set NFS & VOLs in {Lib}1-Parms.sh
 # .(21112.02 11/12/22 RAM 11:50a| Export useful variables
+# .(21112.04 11/12/22 RAM  4:30p| Change SCN_SERVER to THE_SERVER
+# .(21112.05 11/12/22 RAM  6:20p| Set THE_SERVER if not set
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -43,7 +46,7 @@
 function  logIt() {                                                                         # .(80920.02.1)
           aFncLine="$1[$2]             "; aFncLine="${aFncLine:0:17} $3";
 #         aFncLine="${aFncLine/ \//\/}";  aFncLine="${aFncLine/ C:/C:}";  aFncLine="${aFncLine/ D:/D:}";  aFncLine="${aFncLine/ M:/M:}";
- if [ -f "$LIB_LOG" ]; then echo "$( date '+%Y%m%d-%H%M%S%z')  ${SCN_SERVER:0:11} ${LIB_USER:0:8}  ${aFncLine}" >>"$LIB_LOG"; fi
+ if [ -f "$LIB_LOG" ]; then echo "$( date '+%Y%m%d-%H%M%S%z')  ${THE_SERVER:0:11} ${LIB_USER:0:8}  ${aFncLine}" >>"$LIB_LOG"; fi   # .(21112.04.1)
           }
           aLFdr=$( echo $0 | awk '{ gsub( /[//\\][^//\\]*$/, ""    ); print }' ); aNFS="_"  # .(90326.01.4 RAM)
           aVars=${aLFdr}/${LIB}1-Parms.sh; if [ -f "${aVars}" ]; then source "${aVars}"; fi # .(90326.01.5 RAM)
@@ -53,20 +56,33 @@ function  logIt() {                                                             
 
 function  setOS() {
 
-  if [ "${SCN_SERVER}" == "" ]; then echo ""; echo "* \$SCN_SERVER NOT DEFINED; OS will probably be incorrect"; exit; fi
-# if [ "${SCN_DRIVES}" == "" ]; then echo ""; echo "* \$SCN_DRIVES NOT DEFINED; NFS Vol won't be correct";      exit; fi  # .(90321.02.1)
+     if [ "${OS:0:7}"     == "Windows" ]; then aOSv="w10p"; aName="Windows"; fi                                                 # .(21112.05.1 RAM Is it Windows)
+     if [ "${OSTYPE:0:5}" == "linux"   ]; then aOSv="linx"; aName="Linux";   fi                                                 # .(21112.05.2 RAM Is it Linux)
+     if [ -f "/etc/issue" ]; then aOSv=$( cat "/etc/issue" | awk '/Ubuntu/ { print "ub" substr($0,8,2) }' ); fi                 # .(21112.05.3 RAM Is it Ubuntu)
+     if [ "${aOSv:0:2}"   == "ub"      ]; then              aName="Ubuntu";  fi                                                 # .(21112.05.4)
 
-     aSCN_SERVER=$( echo $SCN_SERVER | tr '[:upper:]' '[:lower:]' )
-     aIP=${aSCN_SERVER##* (}; aIP=${aIP//)/}
+# if [ "${THE_DRIVES}" == "" ]; then echo ""; echo "* \$THE_DRIVES is NOT DEFINED; NFS Vol won't be correct";  exit; fi         # .(90321.02.1)
+  if [ "${THE_SERVER}" == "" ]; then echo ""; echo "* \$THE_SERVER is NOT Defined; OS will probably be incorrect"
+        THE_SERVER="${HOSTNAME:0:6}-${aOSv}_${aName}-Prod1 (127.0.0.1)";  echo "  Setting it to \"${THE_SERVER}\""              # .(21112.05.5)
+#                               echo "Info/RSS22-Info.sh vars set THE_SERVER   ${THE_SERVER}"
+        export aOSv                                                                                                             # .(21112.05.6 RAM Needed for set vars)
+        $( dirname "${BASH_SOURCE}" )/Info/RSS22-Info.sh vars set THE_SERVER  "${THE_SERVER}"
+        exit
+        fi
+        # exit; fi  # .(21112.04.2)
 
-     aSvr=${aSCN_SERVER%%_*}
+     aTHE_SERVER=$( echo $THE_SERVER | tr '[:upper:]' '[:lower:]' )                                                             # .(21112.04.3 RAM BEG)
+     aIP=${aTHE_SERVER##* (}; aIP=${aIP//)/}
+
+     aSvr=${aTHE_SERVER%%_*}
      aOSv=${aSvr##*-}   # Delete everything before -
      aSvr=${aSvr%%-*}   # Delete everything after -
-     aSCN_SERVER=${aSCN_SERVER// (*}                                                        # .(90326.04.1 Delete everything after " (")
+     aTHE_SERVER=${aTHE_SERVER// (*}                                                  # .(90326.04.1 Delete everything after " (").(21112.04.3 RAM End)
 #    echo "setOS[1]  bTest: ${bTest}, bQuiet: ${bQuiet}, aSvr: ${aSvr}, aOSv: ${aOSv}, aIP: ${aIP}"; exit
 
-  if [ "${ConEmuTask}" != "" ]; then
-     aOSv=gfw1
+     bGFW1=$( echo $PATH | awk '/\/(git|Git)\/usr\// { print 1 }' )                                                             # .(21112.05.7 RAM Check if /git/usr/bin in path)
+  if [ "${bGFW1}" == "1" ]; then                                                                                                # .(21112.05.8 RAM Was if [ "${ConEmuTask}" != "" ])
+     aOSv="gfw1"
      fi
                                          aDrv=""
   if [ "${aOSv:0:1}" == "g"      ]; then aDrv="/c"  ; fi
@@ -82,12 +98,15 @@ function  setOS() {
 # if [ "${aOSv}"     == "w08s"   ]; then aVOL="D:/VOLs/U06" ; aNFS="M:/U06"   ; fi          ##.(90315.01.4 M: is now N:)
   if [ "${aOSv}"     == "w08s"   ]; then aVOL="D:/VOLs/U06" ; aNFS="N:/U06"   ; fi          # .(90315.01.4 M: is now N:)
      fi                                                                                     # .(90326.02.2)
-        export aOSv                                                                         # .(21112.02.1 RAM Export aOSv)
 
-  if [ "${bQuiet}"   == "0"      ]; then
+     export aOSv                                                                                                                # .(21112.02.1 RAM Export aOSv)
+
+  if [ "${bQuiet}"   == "0"      ] || [ "1" == "0" ]; then
      aCmd0="${aCmd}                       "; aCmd0="${aCmd0:0:23}";
-     echo "  SCN_SERVER: ${aSCN_SERVER}; aSvr: ${aSvr}, aOSv: ${aOSv}, aIP: ${aIP}"
-     echo "        aCmd: ${aCmd0};  aDrv=${aDrv} aVOL=${aVOL};            aNFS=${aNFS};  Main2Fns Lib=${Lib}"; fi
+     echo "  THE_SERVER: ${aTHE_SERVER}; aSvr: ${aSvr}, aOSv: ${aOSv}, aIP: ${aIP}"                                             # .(21112.04.4)
+     echo "        aCmd: ${aCmd0};  aDrv=${aDrv} aVOL=${aVOL}; aNFS=${aNFS};  Main2Fns Lib=${Lib}";
+     fi
+#    exit
      }
 # ----------------------------------------------------------------
 
