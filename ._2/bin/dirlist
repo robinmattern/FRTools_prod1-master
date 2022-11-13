@@ -1,9 +1,6 @@
 #!/bin/bash
 
-
-#   echo -e "\n Folder Size     Files    Dirs  ${aRootDir} / ${aRepoDir}"
-#   rss dirlist "$@" | awk 'NR > 2 { print }'
-    rss dirlist "$@"
+   rss dirlist "$@"
 
 
 

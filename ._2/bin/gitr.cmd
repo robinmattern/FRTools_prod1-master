@@ -1,5 +1,9 @@
 @echo off
 : FRT gitR Launch Script
 
-  bash frt gitr "%*"
+  set aCmd="%~dp0..\FRTs\gitR\FRT22_gitR1.sh"
+
+bash %aCmd% "%*"
+
+
 

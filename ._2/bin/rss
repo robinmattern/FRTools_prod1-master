@@ -1,26 +1,7 @@
 #!/bin/sh
-#   RSS Launcher on rm212p-w10p (local)
+#   RSS Launcher
 
-#        RSS_Scr=_1/RSSs/RSS1-Main1.sh
-         RSS_Scr=._2/JPTs/RSS/RSS1-Main1.sh
+    aCmd="$( dirname "${BASH_SOURCE}" )/../JPTs/RSS/RSS1_Main1.sh"
+ "${aCmd}"  "$@"
 
-#        RSS_Dir=
-#        RSS_Dir=/C/Home/JPS/          # rm221d-w10p
-#        RSS_Dir=/C/Home/Robin/        # rm212d-w10p
-#        RSS_Dir=/C/VOLs/U06/Robin/    # rm212d-w10p
-
-#        RSS_Dir=/C/Home/SCN2/         # rm212d-w10p
-         RSS_Dir=/C/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/
-#        RSS_Dir=/webs/FRTools         # et219d-fr01
-
-#        RSS_Dir=/C/Home/JPS/          # rm221d-w10p
-#        RSS_Dir=/D/Home/SCN2/         # sc163p-w08s
-#        RSS_Dir=/home/robin/          # sc154p-rh62, sc153-ub14, etc
-#        RSS_Dir=/nfs/u06/SCN2/        # sc154p-rh62, sc153-ub14 -- sc152:/NFS
-#        RSS_Dir=/M/U06/SCN2/          # rm212d-w10p, sc163-w08s -- sc152:/NFS
-
-if [ "$RSS_LOG" != "" ]; then echo "" >>"$RSS_LOG"; fi
-if [ "$RSS_LOG" != "" ]; then echo "$( date '+%Y%m%d-%H%M%S%z')  ${SCN_SERVER:0:11} ${RSS_USER:0:8}  RSS[0]            ${RSS_Dir}${RSS_Scr} " "$@" >>"$RSS_LOG"; fi
-
-#echo "${RSS_Dir}${RSS_Scr}" "$@"
-      "${RSS_Dir}"${RSS_Scr} "$@"
+#   jpt rss "$@"
