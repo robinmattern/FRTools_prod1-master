@@ -7,6 +7,7 @@
 ##FD   RSS22-Info.sh            |  17214| 11/12/22 16:04|   318| p0.08.21112-1604
 ##FD   RSS22-Info.sh            |  18141| 11/12/22 18:28|   327| p0.08.21112-1828
 ##FD   RSS22-Info.sh            |  19554| 11/13/22 17:25|   344| p0.08.21113-1725
+##FD   RSS22-Info.sh            |  25627| 11/14/22 14:00|   435| p0.08.21114-1400
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #
 #
@@ -25,13 +26,17 @@
 # .(21112.01 11/12/22 RAM 12:00p| Modify RSS Version
 # .(21112.03 11/12/22 RAM  4:04p| Add RSS Info Var Set
 # .(21112.06 11/12/22 RAM  6:28p| Put quotes around value if necessary
-# .(21113.04 11/12/22 RAM  5:25p| SETX didn't work again
+# .(21113.04 11/13/22 RAM  5:25p| SETX didn't work again
+# .(21114.01 11/14/22 RAM  5:55a| Make Path Show smarter
+# .(21114.02 11/14/22 RAM  2:00p| Add -doit to Path Clean and Add
+# .(21114.04 11/14/22 RAM  6:30a| Add Path clean
+# .(21114.05 11/14/22 RAM  7:55a| Add Path add
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-          aVdt="Nov 12, 2022 6:28p"
+          aVdt="Nov 14, 2022 6:28p"
 
           aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21111.04.1)
 
@@ -58,7 +63,7 @@ function  logIt() {
         if [ "$aCmd2" == "path" ]; then aCmd1=path; fi
         if [ "$aCmd2" == "vars" ]; then aCmd1=vars; fi
         if [ "$aCmd2" == "log"  ]; then aCmd1=log;  fi
-            aCmd2=show
+              aCmd2=show
         fi
             echo ""
 #           echo "*** aCmd: $aCmd1.$aCmd2 \"$aArg1\", bCmdRan: ${aCmdRan}"; exit
@@ -68,7 +73,9 @@ function Help() {                                                               
 #           echo "  $LIB Info Functions              $( echo $0 | awk '{ gsub( /.+_[ptuv]|.sh/, ""); print }' )"
             echo "  RSS Info Functions   (${aVer})           (${aVdt})"                             # .(21111.04.2)
             echo "  -------------------------------------  ---------------------------------"
-            echo "    RSS Path Show                        Show PATH"
+            echo "    RSS Path [Show]                      Show PATH"
+            echo "    RSS Path Add  {Path} [-doit]         Add {Path} to PATH"
+            echo "    RSS Path Clean       [-doit]         Remove dups from PATH"
             echo "    RSS Vars Show {Search}               Show environment variables (Use ! for non-leading search string)"
             echo "    RSS Vars Set  {Name} {Value}         Set environment variable"
 #           echo "    RSS Top                              Show top running programs"
@@ -184,11 +191,76 @@ function Help() {                                                               
 
      if [ "$aCmd1" == "path" ]; then    # if  aCmd1 == path
 
-     if [ "$aCmd2" == "show" ]; then
-     if [ "$aArg1" == ""     ]; then echo $PATH | tr : "\n" | awk            '{ print "  " $0 }'; fi    # .(80929.01.1 Added print)
-     if [ "$aArg1" != ""     ]; then echo $PATH | tr : "\n" | awk '/'$aArg1'/ { print "  " $0 }'; fi    # .(80929.01.2 Added print)
-            bCmdRan="1"                                                                   #.(81014.03.8)
+aAwkPgm='
+BEGIN { aPath = ";"; d=ARGV[1]; bShow=ARGV[2] != "new"; ARGC=1 } # .(21114.01.1 RAM Beg Write Awk program to mark dups)
+      { if ( index( aPath, d $0 d ) ) { if (bShow) { print " x " $0 } }
+                                 else { if (bShow) { print "   " $0 }; aPath = aPath d $0 }
+      }
+END   { if (bShow != 1) { print aPath } }                        # .(21114.01.1 RAM End)
+'
+     if [ "$aCmd2" == "show"  ]; then
+#    if [ "$aArg1" == ""      ]; then echo $PATH | tr : "\n" | awk             '{ print "  " $0 }'    ; fi ##.(80929.01.1 Added print).(21114.01.2)
+     if [ "$aArg1" == ""      ]; then echo $PATH | tr : "\n" |                    awk "${aAwkPgm}" ";"; fi # .(21114.01.2 RAM Use AwkPgm)
+
+#    if [ "$aArg1" != ""      ]; then echo $PATH | tr : "\n" | awk '/'$aArg1'/  { print "  " $0 }'    ; fi # .(80929.01.2 ?? if $aArg1 != "")
+     if [ "$aArg1" != ""      ]; then echo $PATH | tr : "\n" | awk '/'$aArg1'/' | awk "${aAwkPgm}" ";"; fi # .(80929.01.2 Added print).(21114.01.3)
+            bCmdRan="1"                                                                                    # .(81014.03.8)
             fi                          # eif aCmd2 == path show
+#    +---- +------------------ +----------------------------------------------------------- # --------+
+
+     if [ "$aCmd2" == "clean" ]; then                                                       # .(21114.04.1 RAM Beg Add clean)
+
+#           aDoit=""; if [ "$4" == "-doit" ]; then aDoit="-doit"; fi
+            aNewPath=$( echo $PATH | tr : "\n" | awk  "${aAwkPgm}" ";" "new" )
+
+      if [ "$3" == "-doit" ]; then
+
+#           echo "$0 vars set -doit PATH \"${aNewPath:2}\""
+#                "${BASH_SOURCE} vars set -doit PATH \"${aNewPath:2}\""
+            echo "$0 vars set -doit PATH \"...\""
+#                "$( dirname ${BASH_SOURCE} )/$0 vars set -doit PATH \"${aNewPath:2}\""
+         else
+            echo -e "   The PATH will be reset to: \n\n${aNewPath:2}"
+            fi
+            bCmdRan="1"                                                                     # .(81014.03.8)
+            fi                          # eif aCmd2 == path clean                           # .(21114.04.1 RAM End)
+#    +---- +------------------ +----------------------------------------------------------- # --------+
+
+     if [ "$aCmd2" == "add" ]; then                                                         # .(21114.05.1 RAM Beg Add Path Add)
+
+#           aDoit=""; if [ "$4" == "-doit" ]; then aDoit="-doit"; fi
+#           aNewPath=$( echo "$4;$PATH" | tr : "\n" | awk  "${aAwkPgm}" ";" "new" )
+                                         bDoit=0;     aPath="$3"
+            if [ "$3" == "-doit" ]; then bDoit=1;     aPath="$4"; fi
+            if [ "$4" == "-doit" ]; then bDoit=1; fi; aPath="$( echo "${aPath}" | awk '{ gsub(/^ +| +$/, "" ); print }' )"
+
+            aOldPath=$( cat ~/.bashrc | awk '/export PATH=/ { sub( /.+=/, "" ); print }' )
+      if [ "$aOldPath" != "" ]; then
+            aNewPath="${aPath}:${aOldPath/${aPath}:/}"
+            echo "   Old PATH: '$aOldPath'"
+        else
+            aNewPath="${aPath}:\$PATH"
+            fi
+      if [ "${aOldPath}" == "${aNewPath}" ]; then
+            echo " * The global PATH will remain unchanged."
+        else
+            echo "   New PATH: '$aNewPath'"
+
+      if [ "${bDoit}" == "1" ]; then
+
+#           echo "$0 vars set -doit PATH \"${aNewPath:2}\""
+#                "${BASH_SOURCE} vars set -doit PATH \"${aNewPath:2}\""
+#                "$( dirname ${BASH_SOURCE} )/$0 vars set -doit PATH \"${aNewPath:2}\""
+#           echo "  $0" vars set -doit PATH "\"${aNewPath}\""
+                 "$0" vars set -doit PATH "${aNewPath}"
+#           echo -e "   The path, '${aPath}', has been added to the global PATH."
+         else
+            echo -e "   The path, '${aPath}', will be added to the global PATH."
+            fi
+            fi # eif "${aOldPath}" != "${aNewPath}"
+
+            bCmdRan="1"                                                                     # .(81014.03.8)
+            fi                          # eif aCmd2 == path add                             # .(21114.05.1 RAM End)
 #    +---- +------------------ +----------------------------------------------------------- # --------+
         fi                              # eif aCmd1 == path
 #   +----- +------------------ +----------------------------------------------------------- # ----------+
@@ -196,28 +268,34 @@ function Help() {                                                               
 
 #   +===== +================== +=========================================================== # ==========+
 
-function setBashrc() {                                                                                  # .(21112.03.1 RAM Beg Write it)
-#        aVar="$1"; aVal="$2"; if [ "${aVal/ /}" != "${aVal}" ]; then aVal="\\\"${aVal}\\\""; fi;       # .(21112.06.1  RAM Put Quotes if necessary)
-         aVar="$1"; aVal="$2"; if [ "${aVal/ /}" != "${aVal}" ]; then aVal="\\\"${aVal}\\\""; fi;       # .(21112.06.1  RAM Put Quotes if necessary)
+function setBashrc() { bDoit=$3                                                                          # .(21112.03.1 RAM Beg Write it).(21114.02.11)
+#        aVar="$1"; aVal="$2"; if [ "${aVal/ /}" != "${aVal}" ]; then aVal="\\\"${aVal}\\\""; fi;        # .(21112.06.1 RAM Put Quotes if necessary)
+         aVar="$1"; aVal="$2"; if [ "${aVal/ /}" != "${aVal}" ]; then aVal="\\\"${aVal}\\\""; fi;        # .(21112.06.1 RAM Put Quotes if necessary)
 #        echo -e "\n aVal: '${aVal}'"; # exit
 aAwkPgm='
 BEGIN { bNew=1 }
-    /export '${aVar}'/ { sub( /=.+/, "='${aVal}'" ); print $0; bNew=0; next }; { print }
+    /export '${aVar}'=/ { sub( /=.+/, "='${aVal}'" ); print $0; bNew=0; next }; { print }
 END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 
 #        echo "-----------------------------------------"
-#        echo "${aAwkPgm}";
+#        echo "${aAwkPgm}"; echo ""
 #        echo "-----------------------------------------"
 #        exit
 
-         aTS=$( date '+%y%m%d.%H%M'); aBak=".bashrc_v${aTS}"
+   if [ "${bDoit}" == "1" ]; then aVerb="has been"; aToDo="      Please run: source ~/.bashrc"           # .(21114.02.12)
+
          cd ~
+
+         aTS=$( date '+%y%m%d.%H%M'); aBak=".bashrc_v${aTS}"
          mv  .bashrc  ${aBak}
-         cat ${aBak} | awk "${aAwkPgm}" >.bashrc
+         cat ${aBak}  | awk "${aAwkPgm}" >.bashrc
 #        cat .bashrc
 #        source .bashrc
-         echo -e "  The Var, '${aVar}' has been set in your bash profile.      Please run: source ~/.bashrc"
-         }                                                                                              # .(21112.03.1 RAM End)
+      else                                                                                               # .(21114.02.13)
+                                 aVerb="will be"; aToDo=""                                               # .(21114.02.14)
+         fi                                                                                              # .(21114.02.15)
+         echo -e "   The Var, '${aVar}' ${aVerb} set in your bash profile. $aToDo"                       # .(21114.02.16)
+         }                                                                                               # .(21112.03.1 RAM End)
 #    +---- +------------------ +----------------------------------------------------------- # --------+
 
      if [ "$aCmd1" == "vars" ]; then    # if  aCmd1 == vars
@@ -226,7 +304,12 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 
      if [ "$aCmd2" == "set"  ]; then                                                                    # .(21112.03.2 RAM Beg Add vars set)
 
-         aVar="${aArg1}"; aVal="$4"; aVal1="${aVal}"
+         aArg2="$4"; aArg3="$5";            bDoit=0                                                     # .(21114.02.1 RAM Beg Add bDoit)
+         if [ "${aArg1}" == "-doit" ]; then bDoit=1; aArg1="${aArg2}"; aArg2="${aArg3}"; fi
+         if [ "${aArg2}" == "-doit" ]; then bDoit=1; aArg2="${aArg3}"; fi
+         if [ "${aArg3}" == "-doit" ]; then bDoit=1; fi
+
+         aVar="${aArg1}"; aVal="${aArg2}"; aVal1="${aVal}"                                              # .(21114.02.1 RAM End)
 #        if [ "${aVal/ /}" != "${aVal}" ]; then aVal1="\\\"${aVal}\\\""; fi;
 #        if [ "${aVal/ /}" != "${aVal}" ]; then aVal1="\"\"${aVal}\"\""; fi;
          if [ "${aVal/ /}" != "${aVal}" ]; then aVal1="\"${aVal}\""; fi;
@@ -246,23 +329,30 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 #        echo "  ${aDir}/../../../bin/nircmd.exe elevatecmd execmd   SETX ${aVar} ${aVal1} /M"
 #                ${aDir}/../../../bin/nircmd.exe elevatecmd execmd   SETX ${aVar} ${aVal1} /M           # .(21113.04.3 RAM No workie)
 #        echo "  ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  \"${aSETX}\""
-                 ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aSETX}"                          # .(21113.04.4 RAM This works!!)
+
+                                         aTodo="Please restart this session"                            # .(21114.02.2)
+         if [ "${bDoit}" == "0" ]; then                                                                 # .(21114.02.3)
+                 echo "  ${aSETX}"     ; aToDo=""                              ; aVerb="will be"        # .(21114.02.4)
+
+           else                                                                                         # .(21114.02.5)
+                 ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aSETX}" ; aVerb="has been"       # .(21113.04.4 RAM This works!!)
+              fi                                                                                        # .(21114.02.6)
 
 #        bBash=$( rss info path | awk 'BEGIN{ b=0 }; /\/(Git|git)\/usr/ { b=1; exit }; END { print b }' ); # echo -e "\n * bBash: ${bBash}"
          bBash=0; if [ "${aOSv:0:3}" == "gfw" ]; then bBash=1; fi
  if [ "${bBash}" == "1" ]; then
 
-         echo -e "  The Var, '${aVar}', has been set for all users in Windows."
+         echo -e "  The Var, '${aVar}', ${aVerb} set for all users in Windows."                         # .(21114.02.7)
 #        echo "  Bash  (${aOSv}): setBashrc \"${aVar}\" \"${aVal}\""
-                                  setBashrc  "${aVar}"   "${aVal}"
+                                  setBashrc  "${aVar}"   "${aVal}"  ${bDoit}                            # .(21114.02.8)
        else # OS == Linux
-         echo -e "  The Var, '${aVar}', has been set for all users in Windows.  Please restart this session"
+         echo -e "  The Var, '${aVar}', ${aVerb} set for all users in Windows.  ${aTodo}"               # .(21114.02.9)
 
          fi
        else # OS == Linux
 
 #        echo "  Linux (${aOSv}): setBashrc \"${aVar}\" \"${aVal}\""
-                                  setBashrc  "${aVar}"   "${aVal}"
+                                  setBashrc  "${aVar}"   "${aVal}"  ${bDoit}                            # .(21114.02.10)
          fi
 
          bCmdRan="1"
@@ -320,9 +410,10 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 
 #   +===== +================== +=========================================================== # ==========+
 
-     if [ "${aCmd1}" == "source"  ]; then echo $0 | awk '{                         print "  '$LIB' ScriptFile: "   $0 }'; echo ""; exit; fi
-#    if [ "${aCmd1}" == "version" ]; then echo $0 | awk '{ gsub( /.+_v|.sh/, "" ); print "  '$LIB' Version: "      $0 }'; echo ""; exit; fi  ##.(81014.02.1)
-#    if [ "${aCmd1}" == "version" ]; then echo $0 | awk '{ gsub( /.+_v|.sh/, "" ); print "  '$LIB' Info Version: " $0 }'; echo ""; exit; fi  # .(81014.02.1)
+     if [ "${aCmd1}" == "source"  ]; then echo $0 | awk '{                         print "  '$LIB' ScriptFile: "   $0    }'; echo ""; exit; fi
+#    if [ "${aCmd1}" == "source"  ]; then                                                  echo "                  ${aFns}"; echo ""; exit; fi  # .(21114.03.1 RAM There is not Main2Fns)
+#    if [ "${aCmd1}" == "version" ]; then echo $0 | awk '{ gsub( /.+_v|.sh/, "" ); print "  '$LIB' Version: "      $0 }';    echo ""; exit; fi  ##.(81014.02.1)
+#    if [ "${aCmd1}" == "version" ]; then echo $0 | awk '{ gsub( /.+_v|.sh/, "" ); print "  '$LIB' Info Version: " $0 }';    echo ""; exit; fi  # .(81014.02.1)
 #    if [ "${aCmd1}" == "version" ]; then echo "  $LIB Info Version: $0"; echo ""; exit; fi ##.(81014.02.1).(21112.01.2)
      if [ "${aCmd1}" == "version" ]; then echo "  $LIB Info Version: ${aVer}  (${0##*/})"   # .(21112.01.1 RAM Beg)
             echo -e "    ${0%/*}\n"
@@ -337,7 +428,7 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
            fi                                                                               #.(81014.03.11 End)
 # +------- +------------------ +----------------------------------------------------------- # ------------+ ------------------- # --------------+
 
-           echo ""
+#          echo ""
 #          echo "*** aCmd: $aCmd1.$aCmd2 \"$aArg1\", bCmdRan: ${aCmdRan}"; exit
 #*\
 ##SRCE     +====================+===============================================+
