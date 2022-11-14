@@ -1,5 +1,24 @@
 #!/bin/bash
-# FRTools Launch Script
+#  FRTools Launch Script
 
-  frt "$@"
+if [ "$1" == "setPath" ]; then 
+
+#  cd FRApps
+
+   bDoit=0; if [ "$2" == "-doit" ]; then bDoit=1; fi  
+
+   ._2/JPTs/RSS/Info/RSS22-Info.sh path add "$( pwd )/._2/bin" ${bDoit}
+
+   aPath="$( ._2/JPTs/RSS/Info/RSS22-Info.sh path show "\._2" )"
+   if [ "${aPath}" != "" ]; then 
+      echo -e "\n   The Path to the FRTools is now set to: ${aPath}" 
+    else
+      echo -e "\n   The Path to the FRTools is not set." 
+      fi 
+
+ else 
+
+   frt "$@" 
+
+   fi 
 
