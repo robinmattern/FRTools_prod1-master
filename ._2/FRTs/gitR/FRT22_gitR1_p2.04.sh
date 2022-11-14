@@ -83,6 +83,7 @@
 # .(21027.03 10/27/22 RAM 10:20a| Add "*" as optional getCmd
 # .(21111.02 11/11/22 RAM  2:30p| Special case for gitr pull FRTools
 # .(21111.03 11/11/22 RAM  5:09p| FormR_U is in /webs not /webs/nodeapps
+# .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -90,33 +91,25 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 11, 2022 5:09p"
+        aVdt="Nov 13, 2022 6:00p"; aVtitle="formR gitR Tools"                                               # .(21113.05.4 RAM Add aVtitle for Version in Begin)
+        aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.04.2 RAM Add [d...)
 
-#       aVer="$( echo $0 | awk '{    sub( /.+_p/,           "p"    ); sub( /\.sh/, ""); print }' )"
-        aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.01.1 RAM Add [d...)
+        LIB="FRT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                     # .(80923.01.1)
 
-     if [ "${1:0:3}" == "ver" ] || [ "${1:0:2}" == "-v" ]; then
-        echo ""
-#       echo "  FRTool gitR Version: ${aVer}   ($( date "+%b %-d %Y %H:%M" ))"
-        echo "  FRTool gitR Version: ${aVer}   (${aVdt})"
-     if [ "${1:0:3}" == "-vv" ]; then echo "  $0"; fi                                                       # .(20620.01.1 RAM)
-        ${aLstSp}                                                                                           # .(10706.09.3)
-        exit
-        fi
-#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
-
-     if [ "${aJFns}" != "" ];  then source ${aJFns};
-   else echo  " ** GitR1[109]  Unable to load Script Fns, 'JPT12_Main2Fns_p*.sh'"; exit; fi;                # .(20501.01.2 RAM)
+        aFns="$( dirname "${BASH_SOURCE}" )/../../JPTs/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then  # .(21113.05.5 RAM Always use JPT12_Main2Fns)
+        echo -e "\n ** RSS1[ 71]  JPT Fns script, '${aJFns}', NOT FOUND\n"; exit; fi; #fi
+        source "${aFns}";  
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
         setOS; bSpace=1;                                                                                    #  A space hasn't been displayed, print one next
-        aLstSp="echo "; if [ "${aOSv:0:1}" == "w" ]; then aLstSp=""; fi                                     # .(10706.09.1 RAM Windows returns an extra blank line)
+        aLstSp="echo "; if [ "${aOSv:0:1}" != "w" ]; then aLstSp=""; fi                                     # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
 
 #       bDoit=0                                                                                             ##.(20501.01.5 RAM !Important don't reset in Sub script)
         bQuiet=0                                                                                            ##.(20501.01.6 RAM)
 #       bDebug=0                                                                                            ##.(20501.01.7 RAM)
 
+        Begin "$@"                                                                                          # .(21113.05.8)  
 #       sayMsg    "GitR1[120]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
 
 # ------------------------------------------------------------------------------------
@@ -175,7 +168,7 @@ function Help( ) {
         echo "  Notes: Only two lowercase letter are needed for each command, seperated by spaces"
         echo "         One or more command options follow. Help for the command is dispayed if no options are given"
         echo "         The options, -debug, -doit and -quietly, can follow anywhere after the command"      # .(20122.03.2)
-        echo ""
+#       echo ""
         ${aLstSp}                                                                                           # .(10706.09.3)
         exit
 

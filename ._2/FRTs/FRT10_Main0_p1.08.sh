@@ -53,6 +53,7 @@
 # .(21027.04 10/27/22 RAM 10:59a| Update gitr with sparse and clone
 # .(21031.01 10/31/22 RAM  7:45a| Allow version _d1.09
 # .(21107.02 11/07/22 RAM 12:45a| Add RSS Commands
+# .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -60,53 +61,36 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-     aVdt="Nov 5, 2022 9:00p"                                                                               # .(20601.01.1 RAM)
+     aVdt="Nov 13, 2022 6:00p"; aVtitle="JScriptWare Tools"                                                 # .(21113.05.8 RAM Add aVtitle for Version in Begin)
+     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.04.2 RAM Add [d...)
+
+     LIB="FRT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
+
+     aFns="$( dirname "${BASH_SOURCE}" )/../JPTs/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then    # .(21113.05.9 RAM Always use JPT12_Main2Fns)
+     echo -e "\n ** RSS1[ 71]  JPT Fns script, '${aJFns}', NOT FOUND\n"; exit; fi; #fi
+     source "${aFns}";  
 
 #    aVer="$( echo $0 | awk '{    sub( /.+_u/,           "u"    ); sub( /\.sh/, ""); print }' )"            # "p2.02"
 #    aVer="$( echo $0 | awk '{    sub( /.+_([pstuv])/,   "v"    ); sub( /\.sh/, ""); print }' )"            # "p2.02"
 #    aVer="$( echo $0 | awk '{ gensub( /.+_([pstuv]).+/, "&", 1 ); sub( /\.sh/, ""); print }' )"            # "p2.02"
 #    aVer="$( echo $0 | awk '{ v = gensub( /.+[-_]([dptu][0-9.]+).sh/, "\\1", "g", $0 ); print v }' )"      #  just: _p1  or _d1.09             # .(20416.01.1 RAM).(21031.01.2)
-     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.01.1 RAM Add [d...)
-
-  if [ "${1:0:3}" == "ver" ] || [ "${1:0:2}" == "-v" ]; then                                                # .(20420.07.1 RAM Added Version)
-     echo ""
-#    echo "  FRTools Version: ${aVer}   ($( date "+%b %-d %Y %H:%M" ))"                                     ##.(20429.04.1)
-     echo "  FRTools Version: ${aVer}   (${aVdt})"                                                          # .(20429.04.1 RAM)
-     if [ "${1:0:3}" == "-vv" ]; then echo "  $0"; fi                                                       # .(20620.01.1 RAM)
-     echo ""
-     exit
-     fi
-#    -- --- ---------------  =  ------------------------------------------------------  #
-
-#    aVer=$(  echo $0 | awk '{ match( $0, /_[dptuv][0-9.]{1,3}/ ); print substr( $0, RSTART+1, RLENGTH) }' ) # .(20410.01.1 RAM Added)
-
-     aFldr=$( echo $0 | awk '{       gsub( /[//\\][^//\\]*$/,  "" ); print }' )                             # .(20416.03.1 RAM Get aVer and lost main2Fns)
-#    aJVer=$( echo $0 | awk '{       gsub( /.+[-_]v|\.[^.]+$/, "" ); print }' )                             # _v1.03.80916.2301
-#    echo "aFldr: '${aFldr}', aVer: '${aVer}', aJFns: '${aFldr}/JPT12_Main2Fns_p1.06.sh'"; exit
-
-     aJFns="${aFldr}/JPT12_Main2Fns_${aVer}.sh"; if [ ! -f "${aJFns}" ]; then                               #  require "JPT12-main2Fns.sh" # .(80920.02.1).(20416.03.2 RAM Check if file exists)
-#    aJFns="${aFldr}/JPT12_Main2Fns_p1.05.sh";   if [ ! -f "${aJFns}" ]; then                               # .(20416.03.3 RAM Check if p1.05 exists)
-     aJFns="${aFldr}/JPT12_Main2Fns_p1.06.sh";   if [ ! -f "${aJFns}" ]; then                               # .(20601.01.2 RAM Check if u1.06 exists)
-
-     echo "";
-     echo  " ** FRT10[ 93]  JPT Fns script, '${aJFns}', NOT FOUND"; echo ""; exit; fi; fi
+#    aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.01.1 RAM Add [d...)
 
      bDoit=0                                                                                                # .(20501.01.2 RAM !Important in Sub script).(20620.05.1 RAM Move to here)
-     bQuiet=0                                                                                               # .(20501.01.3 RAM).(20601.02.2 bQuiet by default)
+     bQuiet=1                                                                                               # .(20501.01.3 RAM).(20601.02.2 bQuiet by default)
      bDebug=0                                                                                               # .(20501.01.4 RAM)
      bSpace=0;                                                                                              # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
 
-#    echo  "  - FRT10[100]  aJFns: '${aJFns}'"; exit
-     export aJFns=${aJFns}; source "${aJFns}"                                                               # .(20429.04.1 RAM).(20501.01.1 RAM Exported ${aJFns})
-
+     Begin "$@"                                                                                             # .(21113.05.6)  
+     
 #    sayMsg    "FRT10[103]  aJFns: '${aJFns}' loaded" 1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #
 
      setOS;                                                                                                 # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
-     aLstSp="echo "; if [ "${aOSv:0:1}" == "w" ]; then aLstSp=""; fi                                        # .(10706.09.1 RAM Windows returns an extra blank line)
+     aLstSp="echo "; if [ "${aOSv:0:1}" != "w" ]; then aLstSp=""; fi                                        # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
 
-#    sayMsg    "FRT10[110]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 1
+#    sayMsg    "FRT10[110]  aServer: '${aServer}', aOSv: ${aOSv}, aOS: '${aOS}', bDebug: '${bDebug}'" 1
 #    sayMsg    "FRT10[111]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4', bQuiet: '${bQuiet}', bDebug: '${bDebug}'" 2
 
 #====== =================================================================================================== #  ===========

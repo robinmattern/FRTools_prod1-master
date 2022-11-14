@@ -36,6 +36,7 @@
 # .(20922.04  9/22/22 RAM  1:50p| Bump Version of JPT13_reNum_p1.06-1.sh
 # .(21031.01 10/31/22 RAM  7:45a| Allow version _dm.nn
 # .(21103.03 11/03/22 RAM  4:12p| Add RSS commands
+# .(21113.05 11/13/22 RAM  5:45p| Display Version and Source in Begin 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -43,58 +44,50 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-     aVdt="Nov 5, 2022 9:00p"
-
-#    aVer="$( echo $0 | awk '{ sub( /.+_p/, "p" ); sub( /\.sh/, ""); print }' )"                            # "p2.02"
+     aVdt="Nov 13, 2022 6:00p"; aVtitle="JScripWare Power Tools";                                           # .(21113.05.5 RAM Add aVtitle for Version in Begin)
      aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
-  if [ "${1:0:3}" == "ver" ] || [ "${1:0:2}" == "-v" ]; then                                                # .(20420.07.1 RAM Added Version)
-     echo ""
-#    echo "  JScriptWare Power Tools Version: ${aVer}   ($( date "+%b %-d %Y %H:%M" ))"                     ##.(20429.04.1)
-     echo "  JScriptWare Power Tools Version: ${aVer}   (${aVdt})"                                          # .(20429.04.1 RAM)
-     echo ""
-     exit
-     fi
-#    -- --- ---------------  =  ------------------------------------------------------  #
+     LIB="JPT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
 
-#    aVer=$(  echo $0 | awk '{ match( $0, /_[ptuv][0-9.]{1,3}/ ); print substr( $0, RSTART+1, RLENGTH) }' ) # .(20410.01.1 RAM Added)
-
-     aFldr=$( echo $0 | awk '{       gsub( /[//\\][^//\\]*$/,  "" ); print }' )                             # .(20416.03.1 RAM Get aVer and lost main2Fns)
+#    aFldr=$( echo $0 | awk '{       gsub( /[//\\][^//\\]*$/,  "" ); print }' )                             # .(20416.03.1 RAM Get aVer and lost main2Fns)
 #    aJVer=$( echo $0 | awk '{       gsub( /.+[-_]v|\.[^.]+$/, "" ); print }' )                             # _v1.03.80916.2301
 #    aVer=$(  echo $0 | awk '{ v = gensub( /.+[-_]([ptu][0-9.]+).sh/, "\\1", "g", $0 ); print v }' )        #  just: _p1                   # .(20416.01.1 RAM)
 #    aVer=$(  echo $0 | awk '{ match( $0, /_[ptuv][0-9.]{1,3}/      ); print substr( $0, RSTART+1, RLENGTH  ) }' )   # .(20410.01.1 RAM Added)
-     aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
-     aJFns="${aFldr}/JPT12_Main2Fns_${aVer}.sh"; if [ ! -f "${aJFns}" ]; then                               #  require "JPT12-main2Fns.sh" # .(80920.02.1).(20416.03.2 RAM Check if file exists)
-     aJFns="${aFldr}/JPT12_Main2Fns_p1.06.sh";   if [ ! -f "${aJFns}" ]; then                               # .(20416.03.3 RAM Check if p1.05 exists)
-     echo ""; echo " ** JPT10[ 71]  JPT Fns script, '${aJFns}', NOT FOUND"; echo ""; exit; fi; fi
+#    aJFns="${aFldr}/JPT12_Main2Fns_${aVer}.sh"; if [ ! -f "${aJFns}" ]; then                               #  require "JPT12-main2Fns.sh" # .(80920.02.1).(20416.03.2 RAM Check if file exists)
+#    aJFns="${aFldr}/JPT12_Main2Fns_p1.06.sh";   if [ ! -f "${aJFns}" ]; then                               # .(20416.03.3 RAM Check if p1.05 exists)
+     aFns="$( dirname "${BASH_SOURCE}" )/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then            # .(21113.03.4 RAM Always use JPT12_Main2Fns)
+     echo -e "\n ** JPT10[ 71]  JPT Fns script, '${aJFns}', NOT FOUND\n"; exit; fi; #fi
+     source "${aFns}";  
 
 #    echo  "  - JPT10[ 73]  aJFns: '${aJFns}'"; exit
-     export aJFns=${aJFns};  source "${aJFns}"                                                              # .(20429.04.1 RAM).(20501.01.1 RAM Exported ${aJFns})
+#    export aJFns=${aJFns};  source "${aJFns}"                                                              # .(20429.04.1 RAM).(20501.01.1 RAM Exported ${aJFns})
 #    sayMsg    "JPT10[ 75]  aJFns: '${aJFns}' loaded" 2
 
 #    -- --- ---------------  =  ------------------------------------------------------  #
 
-     if [ "${THE_SERVER}"  == "" ]; then THE_SERVER=${SCN_SERVER}; fi
-     if [ "${THE_SERVER}"  == "" ]; then THE_SERVER="rm212d-w10p"; fi
+#    if [ "${THE_SERVER}"  == "" ]; then THE_SERVER=${SCN_SERVER}; fi
+#    if [ "${THE_SERVER}"  == "" ]; then THE_SERVER="rm212d-w10p"; fi
 
-     aServer=${THE_SERVER}; if [ "${aServer}" == "" ]; then aServer="${SCN_SERVER}"; fi
+#    aServer=${THE_SERVER}; if [ "${aServer}" == "" ]; then aServer="${SCN_SERVER}"; fi
 
-     aOS="Linux"; if [ "${aServer:7:1}" == "w" ]; then aOS="Windows"; fi
-                 if [ "${aServer:7:1}" == "m" ]; then aOS="macOS";     fi
+#    aOS="Linux"; if [ "${aServer:7:1}" == "w" ]; then aOS="Windows"; fi
+#                 if [ "${aServer:7:1}" == "m" ]; then aOS="macOS";     fi
 
-     aSvr=${aServer:0:6}
+#    aSvr=${aServer:0:6}
 
 #    sayMsg    "JPT10[ 89]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
 
 #    -- --- ---------------  =  ------------------------------------------------------  #
 
      setOS; bSpace=1;                                                                                       #  A space hasn't been displayed, print one next
-     aLstSp="echo "; if [ "${aOSv:0:1}" == "w" ]; then aLstSp=""; fi                                        # .(10706.09.1 RAM Windows returns an extra blank line)
+     aLstSp="echo "; if [ "${aOSv:0:1}" != "w" ]; then aLstSp=""; fi                                        # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
 
      bDoit=0                                                                                                # .(20501.01.2 RAM !Important in Sub script)
      bQuiet=0                                                                                               # .(20501.01.3 RAM)
      bDebug=0                                                                                               # .(20501.01.4 RAM)
+
+     Begin "$@"                                                                                             # .(21113.05.6)  
 
 #====== =================================================================================================== #  ===========
 
