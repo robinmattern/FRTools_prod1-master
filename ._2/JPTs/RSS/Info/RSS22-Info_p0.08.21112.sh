@@ -6,6 +6,7 @@
 ##FD   RSS22-Info.sh            |   9510|  9/26/18 22:53|   191| v0.07.80923
 ##FD   RSS22-Info.sh            |  17214| 11/12/22 16:04|   318| p0.08.21112-1604
 ##FD   RSS22-Info.sh            |  18141| 11/12/22 18:28|   327| p0.08.21112-1828
+##FD   RSS22-Info.sh            |  19554| 11/13/22 17:25|   344| p0.08.21113-1725
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #
 #
@@ -24,6 +25,7 @@
 # .(21112.01 11/12/22 RAM 12:00p| Modify RSS Version
 # .(21112.03 11/12/22 RAM  4:04p| Add RSS Info Var Set
 # .(21112.06 11/12/22 RAM  6:28p| Put quotes around value if necessary
+# .(21113.04 11/12/22 RAM  5:25p| SETX didn't work again
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -195,6 +197,7 @@ function Help() {                                                               
 #   +===== +================== +=========================================================== # ==========+
 
 function setBashrc() {                                                                                  # .(21112.03.1 RAM Beg Write it)
+#        aVar="$1"; aVal="$2"; if [ "${aVal/ /}" != "${aVal}" ]; then aVal="\\\"${aVal}\\\""; fi;       # .(21112.06.1  RAM Put Quotes if necessary)
          aVar="$1"; aVal="$2"; if [ "${aVal/ /}" != "${aVal}" ]; then aVal="\\\"${aVal}\\\""; fi;       # .(21112.06.1  RAM Put Quotes if necessary)
 #        echo -e "\n aVal: '${aVal}'"; # exit
 aAwkPgm='
@@ -213,7 +216,7 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
          cat ${aBak} | awk "${aAwkPgm}" >.bashrc
 #        cat .bashrc
 #        source .bashrc
-         echo -e "  Var, '${aVar}' has been set in your bash profile.      Please run: source ~/.bashrc"
+         echo -e "  The Var, '${aVar}' has been set in your bash profile.      Please run: source ~/.bashrc"
          }                                                                                              # .(21112.03.1 RAM End)
 #    +---- +------------------ +----------------------------------------------------------- # --------+
 
@@ -223,27 +226,40 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 
      if [ "$aCmd2" == "set"  ]; then                                                                    # .(21112.03.2 RAM Beg Add vars set)
 
-         aVar="${aArg1}"; aVal="$4"
-#        echo -e "  rss info vars set '${aVar}' '${aVal}'"
-      if [ "${aOSv:0:1}" == "w" ]; then
+         aVar="${aArg1}"; aVal="$4"; aVal1="${aVal}"
+#        if [ "${aVal/ /}" != "${aVal}" ]; then aVal1="\\\"${aVal}\\\""; fi;
+#        if [ "${aVal/ /}" != "${aVal}" ]; then aVal1="\"\"${aVal}\"\""; fi;
+         if [ "${aVal/ /}" != "${aVal}" ]; then aVal1="\"${aVal}\""; fi;
+
+#        echo -e "  rss info vars set '${aVar}' '${aVal}' for aOSv: ${aOSv}"; exit
+
+      if [ "${aOSv:0:1}" == "w" ] || [ "${aOSv:0:1}" == "g" ]; then
 
 #        echo -e "  Windows aOSv: '${aOSv}'"
 #        echo "  setx ${aVar}=\"${aVal}\" /M"
 #                setx ${aVar}="${aVal}" /M
 #                /C/WEBs/8020/VMs/et218t/webs/nodeapps/FRTools_/prod1-master/._2/bin/nircmd.exe elevatecmd execmd "SETX ${aVar} ${aVal} /M"
-         aDir="$( dirname "${BASH_SOURCE}" )"
-#        echo "  ${aDir}/../../../bin/nircmd.exe elevatecmd execmd \"SETX ${aVar} ${aVal} /M\""
-#                ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "SETX ${aVar} \"${aVal}\" /M"       # .(21112.06.2)
+         aDir="$( dirname "${BASH_SOURCE}" )"; aSETX="SETX ${aVar} ${aVal1} /M"
+#                ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "SETX ${aVar} \"${aVal}\" /M"       # .(21113.04.1 RAM No workie)
+#        echo "  ${aDir}/../../../bin/nircmd.exe elevatecmd execmd \"SETX ${aVar} ${aVal1} /M\""
+#                ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "SETX ${aVar} ${aVal1} /M"          # .(21113.04.2 RAM No workie)
+#        echo "  ${aDir}/../../../bin/nircmd.exe elevatecmd execmd   SETX ${aVar} ${aVal1} /M"
+#                ${aDir}/../../../bin/nircmd.exe elevatecmd execmd   SETX ${aVar} ${aVal1} /M           # .(21113.04.3 RAM No workie)
+#        echo "  ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  \"${aSETX}\""
+                 ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aSETX}"                          # .(21113.04.4 RAM This works!!)
 
-         echo -e "  Var, '${aVar}' has been set for all users in Windows.  Please restart this session"
-
-         bBash=$( rss info path | awk 'BEGIN{ b=0 }; /\/(Git|git)\/usr/ { b=1; exit }; END { print b }' ); # echo -e "\n * bBash: ${bBash}"
+#        bBash=$( rss info path | awk 'BEGIN{ b=0 }; /\/(Git|git)\/usr/ { b=1; exit }; END { print b }' ); # echo -e "\n * bBash: ${bBash}"
+         bBash=0; if [ "${aOSv:0:3}" == "gfw" ]; then bBash=1; fi
  if [ "${bBash}" == "1" ]; then
 
+         echo -e "  The Var, '${aVar}', has been set for all users in Windows."
 #        echo "  Bash  (${aOSv}): setBashrc \"${aVar}\" \"${aVal}\""
                                   setBashrc  "${aVar}"   "${aVal}"
+       else # OS == Linux
+         echo -e "  The Var, '${aVar}', has been set for all users in Windows.  Please restart this session"
+
          fi
-       else
+       else # OS == Linux
 
 #        echo "  Linux (${aOSv}): setBashrc \"${aVar}\" \"${aVal}\""
                                   setBashrc  "${aVar}"   "${aVal}"
