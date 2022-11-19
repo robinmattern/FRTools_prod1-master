@@ -53,42 +53,42 @@
 # .(21027.04 10/27/22 RAM 10:59a| Update gitr with sparse and clone
 # .(21031.01 10/31/22 RAM  7:45a| Allow version _d1.09
 # .(21107.02 11/07/22 RAM 12:45a| Add RSS Commands
-# .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin 
+# .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin
+
 
 ##PRGM     +====================+===============================================+
-##ID 69.600. Main               |
+##ID 69.600. Main0              |
 ##SRCE     +====================+===============================================+
 #*/
 #========================================================================================================== #  ===============================  #
 
-     aVdt="Nov 13, 2022 6:00p"; aVtitle="JScriptWare Tools"                                                 # .(21113.05.8 RAM Add aVtitle for Version in Begin)
-     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.04.2 RAM Add [d...)
+     aVdt="Nov 16, 2022 5:00p"; aVtitle="formR Tools"                                                       # .(21113.05.8 RAM Add aVtitle for Version in Begin)
+     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
      LIB="FRT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
 
-     aFns="$( dirname "${BASH_SOURCE}" )/../JPTs/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then    # .(21113.05.9 RAM Always use JPT12_Main2Fns)
-     echo -e "\n ** RSS1[ 71]  JPT Fns script, '${aJFns}', NOT FOUND\n"; exit; fi; #fi
-     source "${aFns}";  
+#    aFns="$( dirname "${BASH_SOURCE}"         )/FRT12_Main2Fns_p1.06_v21027.sh";  if [ ! -f "${aFns}" ]; then  ##.(21113.05.9 RAM Use FRT12_Main2Fns_p1.06_v21027.sh)
+     aFns="$( dirname "${BASH_SOURCE}" )/../JPTs/JPT12_Main2Fns_p1.07.sh";         if [ ! -f "${aFns}" ]; then  # .(21113.05.9 RAM Use JPT12_Main2Fns_p1.07.sh)
+     echo -e "\n ** FRT10[ 71]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
+     source "${aFns}";
 
-#    aVer="$( echo $0 | awk '{    sub( /.+_u/,           "u"    ); sub( /\.sh/, ""); print }' )"            # "p2.02"
-#    aVer="$( echo $0 | awk '{    sub( /.+_([pstuv])/,   "v"    ); sub( /\.sh/, ""); print }' )"            # "p2.02"
-#    aVer="$( echo $0 | awk '{ gensub( /.+_([pstuv]).+/, "&", 1 ); sub( /\.sh/, ""); print }' )"            # "p2.02"
-#    aVer="$( echo $0 | awk '{ v = gensub( /.+[-_]([dptu][0-9.]+).sh/, "\\1", "g", $0 ); print v }' )"      #  just: _p1  or _d1.09             # .(20416.01.1 RAM).(21031.01.2)
-#    aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.01.1 RAM Add [d...)
+# +------- +------------------ +----------------------------------------------------------- # ------------+ ------------------- # --------------+
 
      bDoit=0                                                                                                # .(20501.01.2 RAM !Important in Sub script).(20620.05.1 RAM Move to here)
      bQuiet=1                                                                                               # .(20501.01.3 RAM).(20601.02.2 bQuiet by default)
      bDebug=0                                                                                               # .(20501.01.4 RAM)
      bSpace=0;                                                                                              # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
 
-     Begin "$@"                                                                                             # .(21113.05.6)  
-     
-#    sayMsg    "FRT10[103]  aJFns: '${aJFns}' loaded" 1
+     Begin "$@"                                                                                             # .(21113.05.18)
 
-#    -- --- ---------------  =  ------------------------------------------------------  #
 
      setOS;                                                                                                 # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
      aLstSp="echo "; if [ "${aOSv:0:1}" != "w" ]; then aLstSp=""; fi                                        # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
+
+#    -- --- ---------------  =  ------------------------------------------------------  #
+
+#    aOSv=gfw1 | w10p | w08s
+#    aOSv=rh62 | rh70 | uv14 | ub16
 
 #    sayMsg    "FRT10[110]  aServer: '${aServer}', aOSv: ${aOSv}, aOS: '${aOS}', bDebug: '${bDebug}'" 1
 #    sayMsg    "FRT10[111]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4', bQuiet: '${bQuiet}', bDebug: '${bDebug}'" 2
@@ -101,7 +101,7 @@
 #
 #====== =================================================================================================== #  ===========
 
-function Help() {
+function Help( ) {
 
      if [ "${aCmd}" != "Help" ] && [ "help" != "$1" ]; then return; fi
      if [ "$1" != "help" ]; then sayMsg " ** Invalid Command: '$1'" 3 "sp"; aCmd="Help"; fi

@@ -18,6 +18,7 @@
 ##FD   FRT22_gitR1.sh           |  79863| 10/27/22 10:20|  1361| p2.04-21027-1020
 ##FD   FRT22_gitR1.sh           |  80647| 11/03/22 16:05|  1370| p2.04-21103-1605
 ##FD   FRT22_gitR1.sh           |  81638| 11/11/22 17:09|  1387| p2.04-21111-1709
+##FD   FRT22_gitR1.sh           |  83204| 11/17/22 12:00|  1404| p2.04-21117-1200
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run git commands with helpfull
 #            output.
@@ -83,7 +84,8 @@
 # .(21027.03 10/27/22 RAM 10:20a| Add "*" as optional getCmd
 # .(21111.02 11/11/22 RAM  2:30p| Special case for gitr pull FRTools
 # .(21111.03 11/11/22 RAM  5:09p| FormR_U is in /webs not /webs/nodeapps
-# .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin 
+# .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin
+# .(21117.01 11/17/22 RAM 12:00p| Improve gitR Helps
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -91,48 +93,66 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 13, 2022 6:00p"; aVtitle="formR gitR Tools"                                               # .(21113.05.4 RAM Add aVtitle for Version in Begin)
-        aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # "_p2.02", or _d1.09     # .(21031.04.2 RAM Add [d...)
+        aVdt="Nov 16, 2022 5:00p"; aVtitle="formR gitR Tools"                                               # .(21113.05.6 RAM Add aVtitle for Version in Begin)
+        aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
-        LIB="FRT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                     # .(80923.01.1)
+        LIB="GITR"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                     # .(80923.01.1)
 
-        aFns="$( dirname "${BASH_SOURCE}" )/../../JPTs/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then  # .(21113.05.5 RAM Always use JPT12_Main2Fns)
+                                                                                                               ##.(21113.05.7 RAM Use JPT12_Main2Fns_p1.07.sh)
+        aFns="$( dirname "${BASH_SOURCE}")/../../JPTs/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then  # .(21113.05.7 RAM Use JPT12_Main2Fns_p1.07.sh)
         echo -e "\n ** RSS1[ 71]  JPT Fns script, '${aJFns}', NOT FOUND\n"; exit; fi; #fi
-        source "${aFns}";  
+        source "${aFns}";
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
+        bDoit=0                                                                                             ##.(20501.01.5 RAM !Important don't reset in Sub script)
+        bQuiet=1                                                                                            ##.(20501.01.6 RAM).(20601.02.2 bQuiet by default)
+        bDebug=0                                                                                            ##.(20501.01.7 RAM)
+        bSpace=0;                                                                                           # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
+
+        Begin "$@"                                                                                          # .(21113.05.16)
+
+
         setOS; bSpace=1;                                                                                    #  A space hasn't been displayed, print one next
-        aLstSp="echo "; if [ "${aOSv:0:1}" != "w" ]; then aLstSp=""; fi                                     # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
+        aLstSp="echo "; if [ "${aOSv:0:1}" == "w" ]; then aLstSp=""; fi                                     # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
+        echo "--------- aOSv: ${aOSv}; ${aOS}"
+        ${aLstSp}; exit
+#    -- --- ---------------  =  ------------------------------------------------------  #
 
-#       bDoit=0                                                                                             ##.(20501.01.5 RAM !Important don't reset in Sub script)
-        bQuiet=0                                                                                            ##.(20501.01.6 RAM)
-#       bDebug=0                                                                                            ##.(20501.01.7 RAM)
+#       aOSv=gfw1 | w10p | w08s
+#       aOSv=rh62 | rh70 | uv14 | ub16
 
-        Begin "$@"                                                                                          # .(21113.05.8)  
 #       sayMsg    "GitR1[120]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
+
+
+#====== =================================================================================================== #  ===========
 
 # ------------------------------------------------------------------------------------
 #
-#       HELP
+#       HELP Command
 #
 #====== =================================================================================================== #  ===========
 
 function Help( ) {
 
-        sayMsg    "GitR1[130]  aCmd:  '${aCmd}', aCmd0: '$1'" #1
+        sayMsg    "GitR1[130]  aCmd:  '${aCmd}', aCmd0: '$1', aCmd1: '${aCmd1}'" -1
 
-     if [ "${aCmd}" != "Help" ] && [ "help" != "$1" ]; then return; fi
+#    if [ "${aCmd}" != "Help" ] && [ "help" != "$1" ]; then return; fi                                      ##.(21117.01.1)
 
-#    if [ "$1" != "help" ]; then sayMsg " ** Invalid Command: '$1'" 3 sp; aCmd="Help"; fi                   ##.(20625.05.1)
-#    if [ "$1" != "help" ]; then sayMsg " ** Invalid Command: '$1'" sp 3; fi                                ##.(20625.05.1 RAM A little help with help)
-     if [ "$1" != "help" ]; then sayMsg " ** Invalid Command: '$1'" 3;    fi                                # .(20625.05.1 RAM A little help with help)
+#    if [ "$1" != "help"  ]; then sayMsg " ** Invalid Command: '$1'" 3 sp; aCmd="Help"; fi                  ##.(20625.05.1)
+#    if [ "$1" != "help"  ]; then sayMsg " ** Invalid Command: '$1'" sp 3; fi                               ##.(20625.05.1 RAM A little help with help)
+#    if [ "$1" != "help"  ]; then sayMsg " ** Invalid Command: '$1'" 3;    fi                               ##.(20625.05.1 RAM A little help with help)
+#    if [ "${aCmd/Help}" == "${aCmd}" ]; then sayMsg " ** Invalid Command: '$1'" 3; aCmd="Help";  fi        ##.(21117.01.2 RAM Works best)
+     if [ "${aCmd}" == "" ]; then bQuiet=0; sayMsg " ** Invalid gitR Command: '$1'" 3; aCmd="Help";  fi     # .(21117.01.2 RAM Works best)
+
+     if [ "${aCmd}" == "Help" ]; then                                                                       # .(21117.01.3)
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
         echo ""
         echo "  Useful gitR Commands   (${aVer})                                 (${aVdt})"
         echo "  -------------------------------------------------------------- -----------------------------------"
+        exit
         echo ""
         echo "   gitr  Init                                                    Create a .git folder"        # .(20429.03.2 End)
         echo ""
@@ -171,7 +191,9 @@ function Help( ) {
 #       echo ""
         ${aLstSp}                                                                                           # .(10706.09.3)
         exit
+        fi                                                                                                  # .(21117.01.4)
 
+#       sayMsg    "GitR1[193]  ${aCmd}" 2
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
   if [ "${aCmd}"  == "Show Help" ]; then
@@ -179,7 +201,6 @@ function Help( ) {
         echo "         Show the Git Remote URLs for fetch, pull and push for a Repository Project."
         echo "         The current folder must be a Project folder containing Git branches"
         echo "         Enter a Branch folder name or [all] to show the URLs for all branches"
-        echo ""
         ${aLstSp}                                                                                           # .(10706.09.3)
         exit
      fi
@@ -191,9 +212,8 @@ function Help( ) {
         echo "         The current folder must be a Project folder containing Git branches"
         echo "         Like the Show command, the Remote Alias, referring to a remote repository, "
         echo "           is set for Project Branch folder, but you can provide explicitly"
-        echo ""
-        exit
         ${aLstSp}                                                                                           # .(10706.09.3)
+        exit
      fi
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -202,7 +222,6 @@ function Help( ) {
         echo "         Git Remotes are Alias Names that refer to SSH Host Names contained in your SSH Config file"
         echo "         Use the command, Keys Set SSH Hosts, to create them for different Git Keys files"
         echo "         These names allow Git Keys to be used with the git fetch, pull and push commands"
-        echo ""
         ${aLstSp}                                                                                           # .(10706.09.3)
         exit
      fi
@@ -283,7 +302,11 @@ function Help( ) {
         getCmd "co" "re"        "Count Remote Commits"
 
         getCmd "li" "re" "al"   "List All Remotes"                                       # .(20623.13.12)
-        getCmd "li" "re"        "List Remotes"           # maybe ok: 'List Remotes All'
+        getCmd "li" "re"        "List Remotes"          # maybe ok: 'List Remotes All'
+
+        getCmd "he" "re"        "Remote Help"
+        getCmd "he" "sh"        "Show Help"
+        getCmd "he" "li"        "List Help"
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -291,7 +314,7 @@ function Help( ) {
 #       sayMsg    "GitR1[298]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aCmd0: '$aCmd0', bGlobal: '${bGlobal}'" -1 # 2
         sayMsg    "GitR1[299]  aCmd:  '${aCmd}', '$aCmd1', '$aCmd2', '$aCmd3', '$aCmd0', '$c1', '$c2', '$c3', '${aArg1}' " -1 # -1 or 2
 
-     if [ "${aCmd}" == "" ]; then aCmd="Help"; fi                                       # .(20625.05.2 RAM A little help with help)
+#    if [ "${aCmd}" == "" ]; then aCmd="Help"; fi                                       ##.(20625.05.2 RAM A little help with help).(21117.1.5)
 
         Help ${aCmd0}
 
