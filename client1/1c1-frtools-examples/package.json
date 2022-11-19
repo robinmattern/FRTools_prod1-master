@@ -1,0 +1,27 @@
+{
+  "name"          : "2c2-javascript-click-samples",
+  "description"   : "Webcomponent c1-lit-component following open-wc recommendations",
+  "license"       : "MIT",
+  "author"        : "c1-lit-component",
+  "version"       : "0.0.0",
+  "scripts": {
+    "startx"      : "web-dev-server",
+    "start"       : "web-dev-server --node-resolve --watch  --port 8012 --open click_u2.html",
+    "click_u1"    : "web-dev-server --node-resolve --watch  --port 8011 --open click_u1.html",
+    "click_u2"    : "web-dev-server --node-resolve --watch  --port 8012 --open click_u2.html",
+    "tooltips_u5" : "web-dev-server --node-resolve --watch  --port 8015 --open tooltips_u5.html",
+    "tooltips_u6" : "web-dev-server --node-resolve --watch  --port 8016 --open tooltips_u6.html",
+    "overlay_u3"  : "web-dev-server --node-resolve --watch  --port 8013 --open overlay_u3.html",
+    "overlay_u4"  : "web-dev-server --node-resolve --watch  --port 8014 --open overlay_u4.html",
+    "index_u7"    : "web-dev-server --node-resolve --watch  --port 8017 --open index_u7.html",
+    "index_u8"    : "web-dev-server --node-resolve --watch  --port 8018 --open index_u8.html"
+     },
+  "dependencies": {
+    "lit": "^2.0.2"
+     },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.4.17",
+    "@web/dev-server": "^0.1.28"
+     },
+  "customElements": "custom-elements.json"
+}
