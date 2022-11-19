@@ -4,6 +4,8 @@
 ##RD         FileList           | RSS File Lister aka RDir
 ##RFILE    +====================+=======+=================+======+===============+
 ##FD   RSS21-FileList.sh        |   9479| 10/08/18  1:48a |   136| v1.5.81008.01
+##FD   RSS21_FileList.sh        |  12243| 11/14/22  8:05p |   179| v1.07.21114.2005
+##FD   RSS21_FileList.sh        |  12902| 11/17/22 12:01p |   184| v1.07.21117.1201
 ##DESC     .--------------------+-------+-----------------+------+---------------+
 #
 #
@@ -27,6 +29,8 @@
 # .(10826.01  8/26/21 RAM  3:25p| Add -not node-modules
 # .(10923.01  9/23/21 RAM  4:16a| Add commented out awk statement
 # .(11010.01 10/10/21 RAM  8:05p| Add -i option, defaults to /node-modules$/
+# .(21114.07 11/13/22 RAM  8:05p| Change Headings
+# .(21117.02 11/17/22 RAM  9:45p| Get rid of ".40.3971848000  ."
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -111,10 +115,15 @@ while [[ $# > 0 ]]; do key="$1"; # echo "key: '${key}', \$2: '$2'"
 
 
 
-  echo ""
+# echo ""                                                                                                                       ##.(21114.07.2)
 # echo "        find \"${aDir}\"" ${opt} -iname "'"${aStr}"'"
 # echo "        find \"${aDir}\" ${opt} ${aSearch}${aSort}${aExcl}"                                                             ##.(11010.01.5)
-  echo "        find \"${aDir}\" ${opt} ${aSearch}${aSort}${aExcl}${aIncl}"                                                     # .(11010.01.5)
+# if [ "${bDebug}" == "1" ]; then                                                                                               # .(21117.02.1)
+# echo "        find \"${aDir}\" ${opt} ${aSearch}${aSort}${aExcl}${aIncl}"; fi                                                 # .(11010.01.5).(21114.07.2).(21117.02.2)
+# bQuiet=0; bSpace=0; sayMsg "                                find \"${aDir}\" ${opt} ${aSearch}${aSort}${aExcl}${aIncl}" -1    # .(21117.02.2)
+# echo -e "\n Folder Size     Files    Dirs  $( pwd )/$aDir"                                                                    # .(21114.07.2)
+  echo -e "\n   File Size     Date    Time   $( pwd )/$aDir"                                                                    # .(21114.07.2)
+
 
 
 
@@ -124,8 +133,8 @@ while [[ $# > 0 ]]; do key="$1"; # echo "key: '${key}', \$2: '$2'"
 
           aFmt='  %10s  %TY-%Tm-%Td %TH:%TM  %-110p %f \n';
     else
-  echo "  ----------  ----------------  -----------------------------------------------------"
-
+        # +------- +------------------ +----------------------------------------------------------- # ------------+ ------------------- # --------------+
+  echo "  ----------  ----------------  ---------------------------------------------------------------------------"
 
 
 #         aFmt='  %10s  %TY-%Tm-%Td %TH:%TM      %p\n';                                       #  echo "aFmt '${aFmt}'"          ##.(10707.07.1)
@@ -139,18 +148,19 @@ if [ "${aIncl}" == "" ]; then                                                   
   aCmd="find \"${aDir}\" ${opt} ${aSearch} -not -path "*/node-modules/*" -printf \""${aFmt}"\"";                                # .(10826.01.2 RAM)
 else                                                                                                                            # .(11010.01.7 Beg)
   aCmd="find \"${aDir}\" ${opt} ${aSearch} -printf \""${aFmt}"\"";
-  fi                                                                                                                            # .(11010.01.7 End)
-
-#  awk '{ n=index($0"/!_", "/!_"); printf "%-100s %s\n", substr($0,1,n-1), substr($0,n+1) }'                                    # .(10923.01.1 RAM ??)
+  fi
+                                                                                                                            # .(11010.01.7 End)
+# awk '{ n=index($0"/!_", "/!_"); printf "%-100s %s\n", substr($0,1,n-1), substr($0,n+1) }'                                    # .(10923.01.1 RAM ??)
 
 if [ "${aIncl}" == "" ]; then                                                                                                   # .(11010.01.8)
 # echo "${aCmd}${aExclude}${aSort}";  exit
 # eval "${aCmd}${aExclude}${aSort}";  exit                                                                                      # .(10707.,07.2)
-# eval "${aCmd}${aExclude}${aSort}" | awk '{ t=substr($3,1,5);                 printf "%12d  %10s %5s  %s\n", $1, $2, t,        $4    }'                  ##.(10707.,07.2).(10903.03.1)
-  eval "${aCmd}${aExclude}${aSort}" | awk '{ t=substr($3,1,5); i=index($0,$4); printf "%12d  %10s %5s  %s\n", $1, $2, t, substr($0,i) }'                  # .(10707.,07.2).(10903.03.1 RAM Print filename with spaces)
+# eval "${aCmd}${aExclude}${aSort}" | awk '{ t=substr($3,1,5);                 printf "%12d  %10s %5s  %s\n", $1, $2, t,        $4    }'              ##.(10707.07.2).(10903.03.1)
+# eval "${aCmd}${aExclude}${aSort}" | awk '$4 != "." { t=substr($3,1,5); i=index($0,$4); printf "%12d  %10s %5s  %s\n", $1, $2, t, substr($0,i) }'    # .(10707.07.2).(10903.03.1 RAM Print filename with spaces)
+  eval "${aCmd}${aExclude}${aSort}" | awk '$4 != "." { t=substr($3,1,5); i=index($0,$4); printf "%12d  %10s %5s  %s\n", $1, $2, t, substr($0,i) }'    # .(21117.02.1 RAM Added $4 != ".")
 else                                                                                                                            # .(11010.01.9 Beg)
 # echo "${aCmd}${aInclude}${aSort}";  exit
-  eval "${aCmd}${aInclude}${aSort}" | awk '{ t=substr($3,1,5); i=index($0,$4); printf "%12d  %10s %5s  %s\n", $1, $2, t, substr($0,i) }'
+  eval "${aCmd}${aInclude}${aSort}" | awk '$4 != "." { t=substr($3,1,5); i=index($0,$4); printf "%12d  %10s %5s  %s\n", $1, $2, t, substr($0,i) }'    # .(21117.02.2)
   fi                                                                                                                            # .(11010.01.9 End)
 
 if [ "$?" != "0" ]; then                                                                                                        # .(90401.01.1 RAM Beg ??)
