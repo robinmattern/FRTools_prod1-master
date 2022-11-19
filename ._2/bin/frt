@@ -1,7 +1,8 @@
 #!/bin/bash
-#  FRTools Launch Script on rm212p-w10p
+# formR Tools Launch Script
 
-   aCmd="$( dirname "${BASH_SOURCE}" )/../FRTs/FRT01_Main0.sh"
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../FRTs/FRT01_Main0.sh"
 
-"${aCmd}" "$@"
-
+#echo "${aCmd}" "$@"
+      "${aCmd}" "$@"

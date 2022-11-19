@@ -1,5 +1,8 @@
 @echo off
-: Robin's Dir Command Script
+: Robin's Rdir Command Script
 
-  bash jpt rss dir "%*"
+     set aDir=%~dp0
+     set aCmd=%aDir%..\JPTs\RSS\RSS01_Main1.sh
 
+:echo  "%aCmd%" dir %*
+ bash  "%aCmd%" dir %*

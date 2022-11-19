@@ -1,7 +1,8 @@
 @echo off
 : formR Tools Launch Script
 
-  set aCmd="%~dp0..\FRTs\FRT01_Main0.sh"
+     set aDir=%~dp0
+     set aCmd=%aDir%..\FRTs\FRT01_Main0.sh
 
-bash %aCmd% "%*"
-
+:echo  "%aCmd%" %*
+ bash  "%aCmd%" %*

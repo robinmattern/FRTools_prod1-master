@@ -1,5 +1,8 @@
 @echo off
 : formR Tools Launch Script
 
-  bash frtools "%*"
+  set aCmd="%~dp0FRTools"
+
+: echo %aCmd% "%*"
+  bash %aCmd% "%*"
 

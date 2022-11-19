@@ -1,7 +1,8 @@
 #!/bin/sh
-#   RSS Launcher
+# Robin's Shell Scripts Launch Script
 
-    aCmd="$( dirname "${BASH_SOURCE}" )/../JPTs/RSS/RSS1_Main1.sh"
- "${aCmd}"  "$@"
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../JPTs/RSS/RSS01_Main1.sh"
 
-#   jpt rss "$@"
+#echo "${aCmd}" "$@"
+      "${aCmd}" "$@"

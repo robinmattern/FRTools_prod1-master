@@ -1,7 +1,8 @@
 @echo off
-: Robin's Script gitR Launch Script
-  
-  set aCmd="%~dp0..\JPTs\RSS\RSS1-Main1.sh"
+: Robin's Shell Scripts Launch Script
 
- bash %aCmd% "%*"
+     set aDir=%~dp0
+     set aCmd=%aDir%..\JPTs\RSS\RSS01_Main1.sh
 
+:echo  "%aCmd%" %*
+ bash  "%aCmd%" %*

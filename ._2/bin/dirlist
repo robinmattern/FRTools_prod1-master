@@ -1,10 +1,8 @@
-#!/bin/bash
+#!/bin/sh
+# Robin's DirList Command Script
 
-   rss dirlist "$@"
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../JPTs/RSS/RSS01_Main1.sh"
 
-
-
-
-
-
-
+#echo "${aCmd}" dirlist "$@"
+      "${aCmd}" dirlist "$@"

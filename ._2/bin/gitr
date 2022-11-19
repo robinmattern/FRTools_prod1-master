@@ -1,5 +1,8 @@
 #!/bin/bash
-#  FRT gitR Launch Script on rm212p-w10p
+# formR gitR Command Script
 
-   frt gitr "$@"
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../FRTs/gitR/FRT22_gitR1.sh"
 
+#echo "${aCmd}" "$@"
+      "${aCmd}" "$@"

@@ -1,5 +1,8 @@
 @echo off
-: Robin's Dirlist Command Script
+: Robin's DirList Command Script
 
-  bash jpt rss dirlist "%*"
+     set aDir=%~dp0
+     set aCmd=%aDir%..\JPTs\RSS\RSS01_Main1.sh
 
+:echo  "%aCmd%" dirlist %*
+ bash  "%aCmd%" dirlist %*

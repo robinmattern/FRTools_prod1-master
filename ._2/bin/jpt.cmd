@@ -1,7 +1,8 @@
 @echo off
 : JScriptWare Power Tools Launch Script
 
-  set aCmd="%~dp0..\JPTs\JPT00_Main0.sh"
+     set aDir=%~dp0
+     set aCmd=%aDir%..\JPTs\JPT00_Main0.sh
 
-bash %aCmd% "%*"
-  
+:echo  "%aCmd%" %*
+ bash  "%aCmd%" %*

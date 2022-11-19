@@ -1,9 +1,8 @@
 @echo off
-: FRT gitR Launch Script
+: formR gitR Command Script
 
-  set aCmd="%~dp0..\FRTs\gitR\FRT22_gitR1.sh"
+     set aDir=%~dp0
+     set aCmd=%aDir%..\FRTs\gitR\FRT22_gitR1.sh
 
-bash %aCmd% "%*"
-
-
-
+:echo  "%aCmd%" %*
+ bash  "%aCmd%" %*

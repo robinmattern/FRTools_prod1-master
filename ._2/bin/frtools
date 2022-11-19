@@ -1,24 +1,32 @@
 #!/bin/bash
 #  FRTools Launch Script
 
-if [ "$1" == "setPath" ]; then 
+#  -----------------------------------------------------------
 
-#  cd FRApps
+if [ "$1" == "setPath" ]; then
 
-   bDoit=0; if [ "$2" == "-doit" ]; then bDoit=1; fi  
+              aInfoScr="._2\JPTs\RSS\Info\RSS22_Info.sh"; bOK=0
+   if [ -f "${aInfoScr}" ] && [ -d ".git" ]; then bOK=1; fi
 
-   ._2/JPTs/RSS/Info/RSS22-Info.sh path add "$( pwd )/._2/bin" ${bDoit}
+   if [ "${bOK}" == "0" ]; then
+      echo -e "\n * You must be in a Repo Project folder. \n"; exit
+      fi
+                                                aPath1="$( pwd )/._2/bin"
+                      "${aInfoScr}" path add "${aPath1}" # -doit
+           aPath2="$( "${aInfoScr}" path show "\._2" )"
 
-   aPath="$( ._2/JPTs/RSS/Info/RSS22-Info.sh path show "\._2" )"
-   if [ "${aPath}" != "" ]; then 
-      echo -e "\n   The Path to the FRTools is now set to: ${aPath}" 
+   if [ "${aPath2}" != "" ]; then
+   if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi
+
+      echo -e "\n   The Path to FRTools has been set to:\n             '${aPath2:4}'."
     else
-      echo -e "\n   The Path to the FRTools is not set." 
-      fi 
+      echo -e "\n   The Path to FRTools has not been set."
+      fi
 
- else 
+   exit
+   fi
+#  -----------------------------------------------------------
 
-   frt "$@" 
+   frt "$@"
 
-   fi 
 

@@ -1,5 +1,8 @@
 #!/bin/bash
-# JPTools Launch Script
+# JScriptWare Power Tools Launch Script
 
-  jpt "$@"
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../JPTs/JPT00_Main0.sh"
 
+#echo "${aCmd}" "$@"
+      "${aCmd}" "$@"
