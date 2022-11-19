@@ -9,6 +9,8 @@
 ##FD   JPT10_Main0.sh           |  16601|  5/15/22 12:59|   968| p1.06-20515-1259
 ##FD   JPT10_Main0.sh           |  16909|  9/22/22 13:53|   970| p1.06-20922-1353
 ##FD   JPT10_Main0.sh           |  19373| 11/03/22 16:12|  1006| p1.06-21103-1612
+##FD   JPT10_Main0.sh           |  19070| 11/13/22 19:13|   998| p1.06-21113-1913
+##FD   JPT10_Main0.sh           |  18051| 11/17/22 15:40|   294| p1.06-21117.1540
 ##DESC     .--------------------+-------+-----------------+------+---------------+
 #            Use the commands in this script to manage Ubuntu and Windows
 #            resources.
@@ -36,7 +38,8 @@
 # .(20922.04  9/22/22 RAM  1:50p| Bump Version of JPT13_reNum_p1.06-1.sh
 # .(21031.01 10/31/22 RAM  7:45a| Allow version _dm.nn
 # .(21103.03 11/03/22 RAM  4:12p| Add RSS commands
-# .(21113.05 11/13/22 RAM  5:45p| Display Version and Source in Begin 
+# .(21113.05 11/13/22 RAM  5:45p| Display Version and Source in Begin
+# .(21117.03 11/17/22 RAM 12:55p| New version of JPT13_reNum_p1.07.sh
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -44,50 +47,36 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-     aVdt="Nov 13, 2022 6:00p"; aVtitle="JScripWare Power Tools";                                           # .(21113.05.5 RAM Add aVtitle for Version in Begin)
-     aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
+     aVdt="Nov 17, 2022  3:40p"; aVtitle="JScripWare Power Tools";                                          # .(21113.05.2 RAM Add aVtitle for Version in Begin)
+     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
      LIB="JPT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
 
-#    aFldr=$( echo $0 | awk '{       gsub( /[//\\][^//\\]*$/,  "" ); print }' )                             # .(20416.03.1 RAM Get aVer and lost main2Fns)
-#    aJVer=$( echo $0 | awk '{       gsub( /.+[-_]v|\.[^.]+$/, "" ); print }' )                             # _v1.03.80916.2301
-#    aVer=$(  echo $0 | awk '{ v = gensub( /.+[-_]([ptu][0-9.]+).sh/, "\\1", "g", $0 ); print v }' )        #  just: _p1                   # .(20416.01.1 RAM)
-#    aVer=$(  echo $0 | awk '{ match( $0, /_[ptuv][0-9.]{1,3}/      ); print substr( $0, RSTART+1, RLENGTH  ) }' )   # .(20410.01.1 RAM Added)
+#    aFns="$( dirname "${BASH_SOURCE}"         )/JPT12_Main2Fns_p1.06_v21105.sh";  if [ ! -f "${aFns}" ]; then  ##.(21113.05.3 RAM Use FRT12_Main2Fns_p1.06_v21027.sh)
+     aFns="$( dirname "${BASH_SOURCE}"         )/JPT12_Main2Fns_p1.07.sh";         if [ ! -f "${aFns}" ]; then  # .(21113.05.3 RAM Use JPT12_Main2Fns_p1.07.sh)
+     echo -e "\n ** JPT10[ 57]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
+     source "${aFns}";
 
-#    aJFns="${aFldr}/JPT12_Main2Fns_${aVer}.sh"; if [ ! -f "${aJFns}" ]; then                               #  require "JPT12-main2Fns.sh" # .(80920.02.1).(20416.03.2 RAM Check if file exists)
-#    aJFns="${aFldr}/JPT12_Main2Fns_p1.06.sh";   if [ ! -f "${aJFns}" ]; then                               # .(20416.03.3 RAM Check if p1.05 exists)
-     aFns="$( dirname "${BASH_SOURCE}" )/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then            # .(21113.03.4 RAM Always use JPT12_Main2Fns)
-     echo -e "\n ** JPT10[ 71]  JPT Fns script, '${aJFns}', NOT FOUND\n"; exit; fi; #fi
-     source "${aFns}";  
+# +------- +------------------ +----------------------------------------------------------- # ------------+ ------------------- # --------------+
 
-#    echo  "  - JPT10[ 73]  aJFns: '${aJFns}'"; exit
-#    export aJFns=${aJFns};  source "${aJFns}"                                                              # .(20429.04.1 RAM).(20501.01.1 RAM Exported ${aJFns})
-#    sayMsg    "JPT10[ 75]  aJFns: '${aJFns}' loaded" 2
-
-#    -- --- ---------------  =  ------------------------------------------------------  #
-
-#    if [ "${THE_SERVER}"  == "" ]; then THE_SERVER=${SCN_SERVER}; fi
-#    if [ "${THE_SERVER}"  == "" ]; then THE_SERVER="rm212d-w10p"; fi
-
-#    aServer=${THE_SERVER}; if [ "${aServer}" == "" ]; then aServer="${SCN_SERVER}"; fi
-
-#    aOS="Linux"; if [ "${aServer:7:1}" == "w" ]; then aOS="Windows"; fi
-#                 if [ "${aServer:7:1}" == "m" ]; then aOS="macOS";     fi
-
-#    aSvr=${aServer:0:6}
-
-#    sayMsg    "JPT10[ 89]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
-
-#    -- --- ---------------  =  ------------------------------------------------------  #
-
-     setOS; bSpace=1;                                                                                       #  A space hasn't been displayed, print one next
-     aLstSp="echo "; if [ "${aOSv:0:1}" != "w" ]; then aLstSp=""; fi                                        # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
-
-     bDoit=0                                                                                                # .(20501.01.2 RAM !Important in Sub script)
-     bQuiet=0                                                                                               # .(20501.01.3 RAM)
+     bDoit=0                                                                                                # .(20501.01.2 RAM !Important in Sub script).(20620.05.1 RAM Move to here)
+     bQuiet=1                                                                                               # .(20501.01.3 RAM).(20601.02.2 bQuiet by default)
      bDebug=0                                                                                               # .(20501.01.4 RAM)
+     bSpace=0;                                                                                              # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
 
-     Begin "$@"                                                                                             # .(21113.05.6)  
+     Begin "$@"                                                                                             # .(21113.05.12)
+
+#    setOS; bSpace=1;                                                                                       #  A space hasn't been displayed, print one next
+     setOS;                                                                                                 # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
+     aLstSp="echo "; if [ "${aOSv/w}" != "${aOSv}" ]; then aLstSp=""; fi                                        # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse)
+
+#    -- --- ---------------  =  ------------------------------------------------------  #
+
+#    aOSv=gfw1 | w10p | w08s
+#    aOSv=rh62 | rh70 | uv14 | ub16
+
+#    sayMsg    "JPT10[ 78]  aServer: '${aServer}', aOSv: ${aOSv}, aOS: '${aOS}', bDebug: '${bDebug}', aLstSp: '${aLstSp}'" 2
+#    sayMsg    "JPT10[ 79]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4', bQuiet: '${bQuiet}', bDebug: '${bDebug}'" 2
 
 #====== =================================================================================================== #  ===========
 
@@ -109,11 +98,11 @@ function Help( ) {
      echo "  Useful JScriptWare Power Tools  (${aVer})     (${aVdt})"                                       # .(20429.04.2 RAM)
      echo "  ------------------------------------------- -----------------------------------"
      echo ""
-     echo "    JPT Make Project Dirs                     Create project structure "
+#    echo "    JPT Make Project Dirs                     Create project structure "
      echo "    JPT Format Script                         Update sayMsg LineNos and ## FD header "           # .(20504.01.1 RAM Added)
      echo "    JPT RSS {Command}                         Robin's Shell Script {Command}"                    # .(21103.03.2 RAM Added)
-#    echo "    {JPT} {Command1}                          {Command1}"                                        # .(20416.01.1 RAM Added)
-#    echo "    {JPT} {Command2}                          {Command2}"                                        # .(20416.02.2 RAM Added)
+#    echo "    JPT10 {Command1}                          {Command1}"                                        # .(20416.01.1 RAM Added)
+#    echo "    JPT10 {Command2}                          {Command2}"                                        # .(20416.02.2 RAM Added)
      echo ""
      echo "  Notes: Only 2 lowercase letters are needed for each command, seperated by spaces"
      echo "         One or more command options follow. Help for the command is dispayed if no options are given"
@@ -131,9 +120,9 @@ function Help( ) {
      getOpts "bdqgl"
      setCmds
 
-     sayMsg sp "JPT10[142]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'"
-#    sayMsg    "JPT10[143]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$c' " 1
-#    sayMsg    "JPT10[144]  aCmd:  '$aCmd',  aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' "
+     sayMsg sp "JPT10[123]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'" -1
+#    sayMsg    "JPT10[124]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$c' " 1
+     sayMsg    "JPT10[125]  aCmd:  '$aCmd',  aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' " -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -144,19 +133,20 @@ function Help( ) {
 #    getCmd  "cmd2"            "{Command2}"                                                                 # .(20416.02.2)
      getCmd  "ma" "pr" "di"    "Make Project Dirs"
      getCmd  "fo" "sc"         "Format Script"                                                              # .(20504.01.2
-     getCmd  "rss"             "RSS"                                                                        # .(21103.03.3
+#    getCmd  "rss"             "RSS"   1                                                                    # .(21103.03.3
+     getCmd  "rss"     "*"     "RSS"                                                                        # .(21103.03.3
 
-#    sayMsg    "JPT10[157]  aCmd:  '${aCmd}', nLv: -, aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}' " 1
+     sayMsg    "JPT10[139]  aCmd:  '${aCmd}', nLv: -, aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}' " -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-#    sayMsg    "JPT10[161]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
-#    sayMsg    "JPT10[162]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" 1
+#    sayMsg    "JPT10[143]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
+#    sayMsg    "JPT10[144]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" 1
 
      Help ${aCmd0}
 
-#    sayMsg    "JPT10[166]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" 1 # 2
-#    sayMsg    "JPT10[167]  aCmd:  '${aCmd}', aArg1: '${mARGs[0]}', aArg2: '${mARGs[1]}', aArg3: '${mARGs[2]}', aArg4: '${mARGs[3]}',aArg5: '${mARGs[4]}', bGlobal: '${bGlobal}'" 1 # 2
+#    sayMsg    "JPT10[148]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" 1 # 2
+#    sayMsg    "JPT10[149]  aCmd:  '${aCmd}', aArg1: '${mARGs[0]}', aArg2: '${mARGs[1]}', aArg3: '${mARGs[2]}', aArg4: '${mARGs[3]}',aArg5: '${mARGs[4]}', bGlobal: '${bGlobal}'" 1 # 2
 
 #====== =================================================================================================== #  ===========
 
@@ -166,12 +156,12 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-        sayMsg    "JPT10[177]  Make Project Dirs"
+        sayMsg    "JPT10[159]  Make Project Dirs"
 
      if [ "${aCmd}" == "Make Project Dirs" ]; then
 
-        sayMsg sp "JPT10[181]  ${aCmd} '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}'" 1
-        sayMsg    "JPT10[182]  aArg1: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
+        sayMsg sp "JPT10[163]  ${aCmd} '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}'" 1
+        sayMsg    "JPT10[164]  aArg1: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
 
         shift
        "$( dirname $0)/JPT21_Dirs1_p1.01.sh"  "$@"
@@ -190,12 +180,12 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-        sayMsg    "JPT10[201]  Format Script"
+        sayMsg    "JPT10[183]  Format Script"
 
      if [ "${aCmd}" == "Format Script" ]; then
 
-        sayMsg sp "JPT10[205]  ${aCmd} '${mARGs[0]}' '${mARGs[1]}' 'bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 1
-#       sayMsg    "JPT10[206]  aArg1: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
+        sayMsg sp "JPT10[187]  ${aCmd} '${mARGs[0]}' '${mARGs[1]}' 'bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 1
+#       sayMsg    "JPT10[188]  aArg1: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
 
      if [ "${aArg1}" == "" ]; then
         sayMsg sp "Please enter a script filename to format." 2
@@ -203,7 +193,8 @@ function Help( ) {
 
 #       shift
 #      "$( dirname $0 )/JPT13_reNum_p1.06-1.sh"  "$@"                                                       # .(20922.04.1 RAM New Version)
-       "$( dirname $0 )/JPT13_reNum_p1.06-1.sh"  "${mARGs[0]}" "${mARGs[1]}"                                # .(20922.04.2 RAM New Version)
+#      "$( dirname $0 )/JPT13_reNum_p1.06-1.sh"  "${mARGs[0]}" "${mARGs[1]}"                                # .(20922.04.2 RAM New Version)
+       "$( dirname $0 )/JPT13_reNum_p1.07.sh"    "${mARGs[0]}" "${mARGs[1]}"                                # .(21117.03.1 RAM New Version)
 
         ${aLstSp}
         exit
@@ -220,8 +211,7 @@ function Help( ) {
 
 function subFunction() {                                                                                    # .(20416.01.4 Beg RAM Added)
 
-        sayMsg "{JPT}[139]  subFunction[1]  Begin" 1
-
+        sayMsg "JPT10[214]  subFunction[1]  Begin" 1
 
      } # eof subFunction
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
@@ -232,16 +222,16 @@ function subFunction() {                                                        
 #
 #====== =================================================================================================== #
 
-        sayMsg "{JPT}[149]  RSS"
+        sayMsg "JPT10[225]  RSS ${aCmd}"
 
   if [ "${aCmd}" == "RSS" ]; then
-#       sayMsg "{JPT}[152]  RSS Not implemented yet" 1
+#       sayMsg "JPT10[228]  RSS Not implemented yet" 1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
         shift
-#       sayMsg "{JPT}[152] \"$( dirname $0 )/RSS/RSS1-Main1.sh\" \"$@\"" 1
-        $( dirname $0 )/RSS/RSS1-Main1.sh "$@"
+        sayMsg "JPT10[233] \"$( dirname $0 )/RSS/RSS1-Main1.sh\" \"$@\"" 1
+        $( dirname $0 )/RSS/RSS01_Main1.sh "$@"
 
         ${aLstSp}
      fi # eoc RSS                                                                                           # .(21103.03.4 End)
@@ -253,15 +243,15 @@ function subFunction() {                                                        
 #
 #====== =================================================================================================== #
 
-        sayMsg "{JPT}[149]  {Command1}"
+        sayMsg "JPT10[246]  {Command1}"
 
   if [ "${aCmd}" == "{Command1}" ]; then
-        sayMsg "{JPT}[152] {Command1} Not implemented yet" 2
+        sayMsg "JPT10[249] {Command1} Not implemented yet" 2
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
         shift
-        sayMsg "{JPT}[152] \"$( dirname $0 )/{Command1_Script}\" \"$@\"" 1
+        sayMsg "JPT10[254] \"$( dirname $0 )/{Command1_Script}\" \"$@\"" 1
 #       $( dirname $0 )/{Command1_Script} "$@"
 
         ${aLstSp}
@@ -276,15 +266,15 @@ function subFunction() {                                                        
 #
 #====== =================================================================================================== #
 
-        sayMsg "{JPT}[169]  {Command2}" # sp
+        sayMsg "JPT10[269]  {Command2}" # sp
 
   if [ "${aCmd}" == "{Command2}" ]; then
-        sayMsg "{JPT}[172]  {Command2} Not implemented yet" 2
+        sayMsg "JPT10[272]  {Command2} Not implemented yet" 2
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
         shift
-#       sayMsg "{JPT}[152] \"$( dirname $0 )/{Command1_Script}\" \"$@\"" 1
+#       sayMsg "JPT10[277] \"$( dirname $0 )/{Command1_Script}\" \"$@\"" 1
         $( dirname $0 )/{Command2_Script} "$@"
 
         ${aLstSp}                                                                                           # .(10706.09.14)
@@ -302,698 +292,5 @@ function subFunction() {                                                        
 ##SRCE     +====================+===============================================+
 ##RFILE    +====================+=======+===================+======+=============+
 #*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

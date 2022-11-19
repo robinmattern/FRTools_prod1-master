@@ -279,7 +279,8 @@ function sayMBugEnd() {                                                         
          }                                                                                                  # .(20620.06.1 RAM End)
 #   ------- ------------------  =  ---------------------------------------------------  #  ----------------
 
-function sayMsg( ) {  aMsg="$1"; aSp=""; aSP=$3; # aSp=" -- space --"; bSP=0; if [ "${bMBug}" == "" ]; then bMBug=0; fi
+function sayMsg( ) {  aMsg="$1"; aSP=$3;  aSp="";             bSP=0; if [ "${bMBug}" == "" ]; then bMBug=0; fi
+#                                         aSp=" -- space --";
 
             dBug2="$2"; if [ "$1" == "sp" ]; then dBug2="$3"; aSP=$4; bSP=1; aMsg="$2"; fi                  # .(20620.04.1 RAM Beg Redo sp functionality)
                         if [ "$2" == "sp" ]; then dBug2="$3"; aSP=$2; fi                                    # .(20623.09.1 RAM Don't assign bSP=1, aSP=$2)
