@@ -58,6 +58,7 @@
 # .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin
 # .(21119.01 11/19/22 RAM  7:22p| Capitalize Help Menu
 # .(21120.01 11/20/22 RAM  1:55p| Fix aOSv and aLstSp
+# .(21120.03 11/20/22 RAM  2:55p| Set System Path for FRTools in DOS, GFW and Linux
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -117,13 +118,15 @@ function Help( ) {
      echo "  ------------------------------------  ---------------------------------"
      echo "     FRT [Help]"                                                             # .(20620.01.1 RAM)
      echo ""                                                                            #
+     echo "     FRT Path Set [-doit]                Enable formR Tools to run anywhere" # .(21120.03.1 RAM Added)
+     echo ""                                                                            #
    # echo "     FRT keyS [ Host ] [ Help ]          Manage SSH Key files"
    # echo "         keyS List [ SSH Hosts ]"                                            # .(20429.02.1 Beg RAM Added)
 #  # echo "         keyS Make SSH Key  {KeyOwner}  {Host} {HostUser} {Resource}"
 #  # echo "         keyS Delete SSH Key {KNo} [Authorized_Keys]"
 #  # echo "         keyS Copy SSH Key  {KNo}"
 #  # echo "         keyS List SSH Hosts Keys"
-#  # echo "         keyS set  SSH Host {KNo}       {Host} {HostUser} {Resource}"
+#  # echo "         keyS Set  SSH Host {KNo}       {Host} {HostUser} {Resource}"
 #  # echo "         keyS Test SSH Host {HostAliasName}"                                 # .(20429.02.1 End)
    # echo ""
      echo "     FRT gitR [ help ]                   Manage Git Local and Remote Repos"  # .(20429.03.1 Beg RAM Added)
@@ -212,17 +215,19 @@ function Help( ) {
 
 #    Help
 
-#    getCmd    "he"            "Help"
-     getCmd1   "proxy"   ""    "proX"                                                                       # .(20620.03.1 RAM).(20620.10.1 RAM was Proxy)(20622.2.5 RAM Beg Use getCmd1)
-     getCmd1   "gitr"    ""    "gitR"  # 1                                                                  # .(20620.10.2 RAM was GitR)
-     getCmd1   "keys"    ""    "keyS"  1                                                                    # .(20620.10.3 RAM was Keys)
-     getCmd1   "appr"    "run" "appR"                                                                       # .(20508.01.1 RAM)(20620.10.4 RAM was App)(20622.2.5 RAM End)
-#    getCmd    "run"     "ap"  "appR"                                                                       # .(20508.01.2 RAM)(20620.10.5 RAM was App)
-     getCmd1   "jpt"     ""    "JPT"   1                                                                    # .(21107.02.5)
-     getCmd1   "rss"     ""    "JPT_RSS"      1                                                             # .(21107.02.6)
-     getCmd1   "rdir"    ""    "JPT_RDIR"     1                                                             # .(21107.02.7)
-     getCmd1   "dirlist" ""    "JPT_DIRLIST"  1                                                             # .(21107.02.8)
-     getCmd1   "dir"     ""    "JPT_RDIR"     1                                                             # .(21119.05.7)
+#    getCmd    "he"             "Help"
+     getCmd1   "proxy"   ""     "proX"                                                                      # .(20620.03.1 RAM).(20620.10.1 RAM was Proxy)(20622.2.5 RAM Beg Use getCmd1)
+     getCmd1   "gitr"    ""     "gitR"  # 1                                                                 # .(20620.10.2 RAM was GitR)
+     getCmd1   "keys"    ""     "keyS"  1                                                                   # .(20620.10.3 RAM was Keys)
+     getCmd1   "appr"    "run"  "appR"                                                                      # .(20508.01.1 RAM)(20620.10.4 RAM was App)(20622.2.5 RAM End)
+#    getCmd    "run"     "ap"   "appR"                                                                      # .(20508.01.2 RAM)(20620.10.5 RAM was App)
+     getCmd1   "jpt"     ""     "JPT"   1                                                                   # .(21107.02.5)
+     getCmd1   "rss"     ""     "JPT_RSS"      1                                                            # .(21107.02.6)
+     getCmd1   "rdir"    ""     "JPT_RDIR"     1                                                            # .(21107.02.7)
+     getCmd1   "dirlist" ""     "JPT_DIRLIST"  1                                                            # .(21107.02.8)
+     getCmd1   "dir"     ""     "JPT_RDIR"     1                                                            # .(21119.05.7)
+     getCmd1   "set"     "path" "PathSet"      1                                                            # .(21120.03.2)
+     getCmd1   "setpath" ""     "PathSet"      1                                                            # .(21120.03.3)
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -324,20 +329,20 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-#       sayMsg "FRT10[328]  appR Commands (${aArg1:0:3})"                                                    # .(20429.02.2 Beg RAM Added)
+#       sayMsg "FRT10[328]  appR Commands (${aArg1:0:3})"                                                   # .(20429.02.2 Beg RAM Added)
 
      if [ "${aCmd}"     == "appR" ]; then
 
         sayMsg "FRT10[332]  appR:   '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 1
 
         shift
-# echo "$( dirname $0 )/appR/FRT23_FRApp1_p1.06.sh"  "$@"                                                     ##.(20601.01.5)
-#      "$( dirname $0 )/appR/FRT23_FRApp1_p1.06.sh"  "$@"                                                     ##.(20601.01.5)
-       "$( dirname $0 )/appR/FRT23_FRApp1_u1.07.sh"  "$@"                                                     # .(20601.01.5 RAM Use u1.xx rather than p1.xx)
+# echo "$( dirname $0 )/appR/FRT23_FRApp1_p1.06.sh"  "$@"                                                   ##.(20601.01.5)
+#      "$( dirname $0 )/appR/FRT23_FRApp1_p1.06.sh"  "$@"                                                   ##.(20601.01.5)
+       "$( dirname $0 )/appR/FRT23_FRApp1_u1.07.sh"  "$@"                                                   # .(20601.01.5 RAM Use u1.xx rather than p1.xx)
 
         ${aLstSp}
         exit
-     fi # eoc appR Commands                                                                                  # .(20429.02.2 End).(20508.01.2 End)
+     fi # eoc appR Commands                                                                                 # .(20429.02.2 End).(20508.01.2 End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #========================================================================================================== #  ===============================  #
@@ -349,7 +354,7 @@ function Help( ) {
 #====== =================================================================================================== #
 
 #    if [ "${1:0:3}" == "pro" ]; then                                                                       ##.(20429.02.2)
-     if [ "${aCmd}"     == "proX" ]; then                                                                  # .(20429.02.2 RAM Beg Added)
+     if [ "${aCmd}"     == "proX" ]; then                                                                   # .(20429.02.2 RAM Beg Added)
 
         sayMsg "FRT10[355]  proX: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
 
@@ -360,7 +365,51 @@ function Help( ) {
 
         ${aLstSp}
         exit
-     fi # eoc proX Commands                                                                                # .(20620.02.2 RAM End)
+     fi # eoc proX Commands                                                                                 # .(20620.02.2 RAM End)
+#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
+
+#====== =================================================================================================== #  ===========
+
+# ------------------------------------------------------------------------------------
+#
+#       PathSet Command                                                                                     # .(20102.01.2 Beg RAM Added Command)
+#
+#====== =================================================================================================== #
+
+        sayMsg    "FRT10[379]  PathSet Command" sp;
+
+  if [ "${aCmd}" == "PathSet" ]; then
+
+#       sayMsg    "FRT10[383]  SetPath" 1
+
+                aInfoScr="._2\JPTs\RSS\Info\RSS22_Info.sh"; bOK=0
+     if [ -f "${aInfoScr}" ] && [ -d ".git" ]; then bOK=1; fi
+
+     if [ "${bOK}" == "0" ]; then
+        echo -e "\n  * You must be in the FRTools Repo folder. \n"; exit
+        fi
+
+        aPath1="$( pwd )/._2/bin"; 
+     if [ "${bDoit}" == "0" ] ; then  
+        aWhere="the ~/.bashrc file"; if [ "${aOSv:1}" == "w" ]; then aWhere="the Windows System"; fi 
+        echo -e "\n    The Path to FRTools will be set in ${aWhere} with: RSS Info Path Add \"{Path}\"."
+        "${aInfoScr}" path add "${aPath1}" -doit
+        ${aLstSp}; exit 
+        fi
+                   "${aInfoScr}" path add "${aPath1}" -doit
+        aPath2="$( "${aInfoScr}" path show "\._2" )"
+
+     if [ "${aPath2}" != "" ]; then
+     if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi
+
+        echo -e "\n    The Path to FRTools has been set to:\n             '${aPath2:4}'."
+      else
+        echo -e "\n    The Path to FRTools has not been set."
+        fi
+
+     ${aLstSp}; exit 
+
+     fi # eoc Next Command                                                                                  # .(20102.01.2 End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== =================================================================================================== #  ===========

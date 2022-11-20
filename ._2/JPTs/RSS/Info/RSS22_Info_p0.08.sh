@@ -219,7 +219,7 @@ END   { if (bShow != 1) { print aPath } }                        # .(21114.01.1 
             echo "$0 vars set -doit PATH \"...\""
 #                "$( dirname ${BASH_SOURCE} )/$0 vars set -doit PATH \"${aNewPath:2}\""
          else
-            echo -e "   The PATH will be reset to: \n\n${aNewPath:2}"
+            echo -e "    The PATH will be reset to: \n\n${aNewPath:2}"
             fi
             bCmdRan="1"                                                                     # .(81014.03.8)
             fi                          # eif aCmd2 == path clean                           # .(21114.04.1 RAM End)
@@ -236,14 +236,14 @@ END   { if (bShow != 1) { print aPath } }                        # .(21114.01.1 
             aOldPath=$( cat ~/.bashrc | awk '/export PATH=/ { sub( /.+=/, "" ); print }' )
       if [ "$aOldPath" != "" ]; then
             aNewPath="${aPath}:${aOldPath/${aPath}:/}"
-            echo "   Old PATH: '$aOldPath'"
+            echo "    Old PATH: '$aOldPath'"
         else
             aNewPath="${aPath}:\$PATH"
             fi
       if [ "${aOldPath}" == "${aNewPath}" ]; then
-            echo " * The global PATH will remain unchanged."
+            echo "  * The Global System PATH will remain unchanged."
         else
-            echo "   New PATH: '$aNewPath'"
+            echo "    New PATH: '$aNewPath'"
 
       if [ "${bDoit}" == "1" ]; then
 
@@ -254,7 +254,7 @@ END   { if (bShow != 1) { print aPath } }                        # .(21114.01.1 
                  "$0" vars set -doit PATH "${aNewPath}"
 #           echo -e "   The path, '${aPath}', has been added to the global PATH."
          else
-            echo -e "   The path, '${aPath}', will be added to the global PATH."
+            echo -e "    The path, '${aPath}', will be added to the global System PATH."
             fi
             fi # eif "${aOldPath}" != "${aNewPath}"
 

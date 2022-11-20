@@ -95,7 +95,7 @@ function Help() {
      echo "  Useful Shell Scripts  (${aVer})               (${aVdt})"
      echo "  ------------------------------------------  ---------------------------------"
      echo "    RSS [R]Dir  {Dir} {FileSearch}            List or Find files"
-     echo "    RSS DirList {Dir} {-test}                 List Directory Counts"
+     echo "    RSS DirList {Dir} [Levels] [Columns]      List Directory File Counts"
 #    echo "    RSS Net                                   Set Up Network"
      echo "    RSS Info [Help]                           Show or Set OS Info"
      echo "    RSS Info Path [Show|Add]                  Show or Update [System] Path"
