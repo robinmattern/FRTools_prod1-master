@@ -7,7 +7,7 @@
 ##FD   RSS22-Info.sh            |  17214| 11/12/22 16:04|   318| p0.08.21112-1604
 ##FD   RSS22-Info.sh            |  18141| 11/12/22 18:28|   327| p0.08.21112-1828
 ##FD   RSS22-Info.sh            |  19554| 11/13/22 17:25|   344| p0.08.21113-1725
-##FD   RSS22-Info.sh            |  25627| 11/14/22 14:00|   435| p0.08.21114-1400
+##FD   RSS22_Info.sh            |  25926| 11/20/22 13:43|   434| p0.08-21120.1343
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #
 #
@@ -36,8 +36,7 @@
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-          aVdt="Nov 14, 2022 6:28p"
-
+          aVdt="Nov 20, 2022  1:43p"; aVTitle="OS Info Tools"
           aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21111.04.1)
 
           LIB=RSS; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER
@@ -71,18 +70,18 @@ function  logIt() {
 
 function Help() {                                                                           #.(81014.03.1 Beg RAM Create function)
 #           echo "  $LIB Info Functions              $( echo $0 | awk '{ gsub( /.+_[ptuv]|.sh/, ""); print }' )"
-            echo "  RSS Info Functions   (${aVer})           (${aVdt})"                             # .(21111.04.2)
-            echo "  -------------------------------------  ---------------------------------"
-            echo "    RSS Path [Show]                      Show PATH"
-            echo "    RSS Path Add  {Path} [-doit]         Add {Path} to PATH"
-            echo "    RSS Path Clean       [-doit]         Remove dups from PATH"
-            echo "    RSS Vars Show {Search}               Show environment variables (Use ! for non-leading search string)"
-            echo "    RSS Vars Set  {Name} {Value}         Set environment variable"
-#           echo "    RSS Top                              Show top running programs"
-            echo "    RSS Log Show                         Show $LIB Log"
-            echo "    RSS Log Set {LogFile} {User}         Set $LIB log"
-            echo "    RSS Log On                           Turn $LIB log on"
-            echo "    RSS Log Off                          Turn $LIB log off"
+            echo "  RSS Info Tools   (${aVer})                    (${aVdt})"                # .(21111.04.2)
+            echo "  ------------------------------------------  ---------------------------------"
+            echo "    RSS Path [Show]                           Show PATH"
+            echo "    RSS Path Add [System] {Path} [-doit]      Add {Path} to [System] PATH"
+            echo "    RSS Path Clean [System]      [-doit]      Remove Duplicate Paths from [System] PATH"
+            echo "    RSS Vars Show {Search}                    Show Environment Variables (Use ! for non-leading search string)"
+            echo "    RSS Vars Set [System] {Name} {Value}      Set [System] Environment Variable"
+#           echo "    RSS Top                                   Show Top Running Programs (Unix only)"
+#           echo "    RSS Log Show                              Show $LIB Log"
+#           echo "    RSS Log Set {LogFile} {User}              Set $LIB log"
+#           echo "    RSS Log On                                Turn $LIB log on"
+#           echo "    RSS Log Off                               Turn $LIB log off"
             echo ""
             exit
         }
@@ -416,7 +415,7 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 #    if [ "${aCmd1}" == "version" ]; then echo $0 | awk '{ gsub( /.+_v|.sh/, "" ); print "  '$LIB' Info Version: " $0 }';    echo ""; exit; fi  # .(81014.02.1)
 #    if [ "${aCmd1}" == "version" ]; then echo "  $LIB Info Version: $0"; echo ""; exit; fi ##.(81014.02.1).(21112.01.2)
      if [ "${aCmd1}" == "version" ]; then echo "  $LIB Info Version: ${aVer}  (${0##*/})"   # .(21112.01.1 RAM Beg)
-            echo -e "    ${0%/*}\n"
+            echo "$0" | awk '{ print "   " $0 }'
             exit; fi                                                                        # .(21112.01.1 RAM End)
 
 #   +----- +------------------ +----------------------------------------------------------- # ----------+
