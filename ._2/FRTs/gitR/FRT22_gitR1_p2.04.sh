@@ -427,7 +427,7 @@ function setProjVars( ) {
 #       aPath=${aDir/${aRoot}/}
 
         nLen=${#aRoot};  aDir1="'${aDir:0:${nLen}}' -- '${aDir:${nLen}}'"
-        sayMsg "setProjVars[ 6 ]  aDir:  ${aDir1} (${#aRoot}), aPath: '${aPath}'" 2 # 1
+        sayMsg "setProjVars[ 6 ]  aDir:  ${aDir1} (${#aRoot}), aPath: '${aPath}'" # 2 # 1
 
                                                                       aPath1="${aPath}"
   if [ "${aWebs}" == "SCN2"    ]; then aPath1="${aPath/nodeapps\//}"; aPath1="${aPath1/nodeapps/}"; fi
