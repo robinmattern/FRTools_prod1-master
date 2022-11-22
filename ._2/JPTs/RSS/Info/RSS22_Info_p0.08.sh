@@ -371,16 +371,17 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
    if [ "${bDoit}" == "1" ]; then aVerb="has been"; #aToDo="      Please run: source ~/${aBashrc}"       # .(21114.02.12).(21121.03.4)
                                                      aToDo="      Please logout and login again"         # .(21121.03.4)
          cd ~
+         aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                    # .(21121.03.2)
 
          aTS=$( date '+%y%m%d.%H%M'); aBak="${aBashrc}_v${aTS}"                                          # .(21121.03.5)
-         mv  ${aBashrc}  ${aBak}                                                                         # .(21121.03.6)
+         mv  ${aBashrc}  ${aBak};                                                                        # .(21121.03.6)
          cat ${aBak}  | awk "${aAwkPgm}" >${aBashrc}                                                     # .(21121.03.7)
 #        cat ${aBashrc}
 #        source ${aBashrc}
       else                                                                                               # .(21114.02.13)
                                  aVerb="will be"; aToDo=""                                               # .(21114.02.14)
          fi                                                                                              # .(21114.02.15)
-         echo -e "   The Var, '${aVar}' ${aVerb} set in your bash profile. $aToDo"                       # .(21114.02.16)
+         echo -e "    The Var, '${aVar}' ${aVerb} set in your bash profile. $aToDo"                      # .(21114.02.16)
          }                                                                                               # .(21112.03.1 RAM End)
 #    +---- +------------------ +----------------------------------------------------------- # --------+
 

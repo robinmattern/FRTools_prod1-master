@@ -225,13 +225,13 @@ function Help( ) {
      getCmd1   "appr"    "run"  "appR"                                                                      # .(20508.01.1 RAM)(20620.10.4 RAM was App)(20622.2.5 RAM End)
 #    getCmd    "run"     "ap"   "appR"                                                                      # .(20508.01.2 RAM)(20620.10.5 RAM was App)
      getCmd1   "jpt"     ""     "JPT"   1                                                                   # .(21107.02.5)
-     getCmd1   "rss"     ""     "JPT_RSS"      1                                                            # .(21107.02.6)
-     getCmd1   "rdir"    ""     "JPT_RDIR"     1                                                            # .(21107.02.7)
-     getCmd1   "dirlist" ""     "JPT_DIRLIST"  1                                                            # .(21107.02.8)
-     getCmd1   "dir"     ""     "JPT_RDIR"     1                                                            # .(21119.05.7)
-     getCmd1   "set"     "var"  "SetVar"                                                                    # .(21120.03.2)
-     getCmd1   "set"     "path" "SetVar"                                                                    # .(21120.03.2)
-     getCmd1   "setpath" ""     "SetVar"   1                                                                # .(21120.03.3)
+     getCmd1   "rss"     ""     "JPT RSS"      1                                                            # .(21107.02.6)
+     getCmd1   "rdir"    ""     "JPT RDir"     1                                                            # .(21107.02.7)
+     getCmd1   "dirlist" ""     "JPT DirList"  1                                                            # .(21107.02.8)
+     getCmd1   "dir"     ""     "JPT RDir"     1                                                            # .(21119.05.7)
+     getCmd1   "set"     "var"  "Set Var"                                                                   # .(21120.03.2)
+     getCmd1   "set"     "path" "Set Var"                                                                   # .(21120.03.2)
+     getCmd1   "setpath" ""     "Set Var"   1                                                               # .(21120.03.3)
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -259,11 +259,11 @@ function Help( ) {
 #       aArgs="$( echo "$@" | tr '[:upper:]' '[:lower:]' )"                                                 #
 
         if [ "${aCmd}" ==  "JPT" ];         then aSubCmd=""; fi
-        if [ "${aCmd}" ==  "JPT_RSS1" ];    then aSubCmd="rss"; fi                                          ##.(21119.05.1 RAM)
-        if [ "${aCmd}" ==  "JPT_RSS"  ];    then aSubCmd=""; fi                                             # .(21119.05.1 RAM)
-        if [ "${aCmd}" ==  "JPT_RDIR" ];    then aSubCmd="rss rdir"; fi
-        if [ "${aCmd}" ==  "JPT_DIRLIST" ]; then aSubCmd="rss dirlist"; fi
-        if [ "${aCmd}" ==  "JPT_RSS"  ] && [ "$#" == "1" ]; then aSubCmd="rss"; fi                          # .(21119.05.2)
+#       if [ "${aCmd}" ==  "JPT RSS1" ];    then aSubCmd="rss"; fi                                          ##.(21119.05.1 RAM)
+        if [ "${aCmd}" ==  "JPT RSS"  ];    then aSubCmd=""; fi                                             # .(21119.05.1 RAM)
+        if [ "${aCmd}" ==  "JPT RDir" ];    then aSubCmd="rss rdir"; fi
+        if [ "${aCmd}" ==  "JPT DirList" ]; then aSubCmd="rss dirlist"; fi
+        if [ "${aCmd}" ==  "JPT RSS"  ] && [ "$#" == "1" ]; then aSubCmd="rss"; fi                          # .(21119.05.2)
 #       if [ "$@" == "rss"            ];    then aSubCmd="rss"; fi                                          # .(21119.05.2)
 
         shift;
@@ -376,17 +376,17 @@ function Help( ) {
 
 # ------------------------------------------------------------------------------------
 #
-#       PathSet Command                                                                                     # .(20102.01.2 Beg RAM Added Command)
+#       Set Var Command                                                                                     # .(20102.01.2 Beg RAM Added Command)
 #
 #====== =================================================================================================== #
 
-        sayMsg    "FRT10[383]  SetVar Command" sp;
+        sayMsg    "FRT10[383]  Set Var Command" sp;
 
-  if [ "${aCmd}" == "SetVar" ]; then
+  if [ "${aCmd}" == "Set Var" ]; then
 
 # --------------------------------------------------------------------
 
-                aInfoScr="._2\JPTs\RSS\Info\RSS22_Info.sh"; bOK=0
+                aInfoScr="._2/JPTs/RSS/Info/RSS22_Info.sh"; bOK=0                                           # .(21122.02.1 RAM Fix backsplashed)
 
   if [ "${aArg2}" == "path" ]; then
 #       sayMsg    "FRT10[392]  SetVar" 1
