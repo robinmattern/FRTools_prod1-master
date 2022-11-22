@@ -387,8 +387,9 @@ function setProjVars( ) {
   if [ "${aDir/repos/}" != "${aDir}" ]; then aVMs="/C/Repos";               aWebs="Repos";   fi;            # .(20615.01.1 RAM Repos)
 
   if [ "${aOS}" == "linux" ]; then
-          aDir=$( pwd -P );                  aVMs="";                       aWebs="SCN2_U"
-  if [ "${aServer:0:2}" == "et" ];      then aVMs="";                       aWebs="FormR_U"; fi
+          aDir=$( pwd -P );                  aVMs="";                       aWebs="FormR_U"                 # .(21122.03.1 RAM Switch SCN2_ and FormR_U)
+  if [ "${aServer:0:2}" == "sc" ];      then aVMs="";                       aWebs="SCN2_U"; fi
+
           fi
 # if [ "${aDir/nodeapps/}" != "" ] && [ "${aWebs}" == "8020" ]; then        aWebs="8020_N";  fi             ##.(10821.01.1 RAM)
 
@@ -426,7 +427,7 @@ function setProjVars( ) {
 #       aPath=${aDir/${aRoot}/}
 
         nLen=${#aRoot};  aDir1="'${aDir:0:${nLen}}' -- '${aDir:${nLen}}'"
-        sayMsg "setProjVars[ 6 ]  aDir:  ${aDir1} (${#aRoot}), aPath: '${aPath}'" # 1
+        sayMsg "setProjVars[ 6 ]  aDir:  ${aDir1} (${#aRoot}), aPath: '${aPath}'" 2 # 1
 
                                                                       aPath1="${aPath}"
   if [ "${aWebs}" == "SCN2"    ]; then aPath1="${aPath/nodeapps\//}"; aPath1="${aPath1/nodeapps/}"; fi
