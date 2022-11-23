@@ -89,6 +89,7 @@
 # .(21117.01 11/17/22 RAM 12:00p| Improve gitR Helps
 # .(21120.02 11/20/22 RAM  1:55p| Fix aOSv and aLstSp
 # .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer 
+# .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
