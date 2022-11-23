@@ -417,9 +417,9 @@ function Help( ) {
      if [ "${aPath2}" != "" ]; then
      if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi
 
-        echo -e "\n    The Path to FRTools has been set to:\n             '${aPath2:4}'."
+        echo ""; echo "    The Path to FRTools has been set to:"; echo "              '${aPath2:4}'."
       else
-        echo -e "\n    The Path to FRTools has not been set."
+        echo -e     "\n    The Path to FRTools has not been set."
         fi
         ${aLstSp}; exit
         fi # eif bDoit

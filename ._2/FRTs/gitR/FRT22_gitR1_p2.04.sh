@@ -88,6 +88,7 @@
 # .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin
 # .(21117.01 11/17/22 RAM 12:00p| Improve gitR Helps
 # .(21120.02 11/20/22 RAM  1:55p| Fix aOSv and aLstSp
+# .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -379,7 +380,9 @@ function setProjVars( ) {
         aStage=""
         aApp=""
 
-  if [ "${aOS}" == "windows" ]; then
+# if [ "${aOS}" == "windows" ] || [ "${aOS}" == "GitBash" ]; then                                           ##.(21122.03.4 RAM Added || [ "${aOS}" == "GitBash" ]) 
+  if [ "${aOSv/w}" != "${aOSv}" ]; then                                                                     # .(21122.03.4 RAM What we've been using)
+
           aDir=$( pwd -P );                  aVMs="/C/WEBs/SCN2/Files/VMs"; aWebs="SCN2"
   if [ "${aDir/8020/}"  != "${aDir}" ]; then aVMs="/C/WEBs/8020/VMs";       aWebs="8020";    fi
   if [ "${aDir/icat/}"  != "${aDir}" ]; then aVMs="/C/WEBs/SCN2/VMs";       aWebs="iCat";    fi
@@ -387,10 +390,11 @@ function setProjVars( ) {
   if [ "${aDir/repos/}" != "${aDir}" ]; then aVMs="/C/Repos";               aWebs="Repos";   fi;            # .(20615.01.1 RAM Repos)
 
   if [ "${aOS}" == "linux" ]; then
+
           aDir=$( pwd -P );                  aVMs="";                       aWebs="FormR_U"                 # .(21122.03.1 RAM Switch SCN2_ and FormR_U)
   if [ "${aServer:0:2}" == "sc" ];      then aVMs="";                       aWebs="SCN2_U"; fi
-
           fi
+
 # if [ "${aDir/nodeapps/}" != "" ] && [ "${aWebs}" == "8020" ]; then        aWebs="8020_N";  fi             ##.(10821.01.1 RAM)
 
   if [ "${aWebs}" == "8020"    ]; then aApps=""; else aApps="/nodeapps"; fi
@@ -416,9 +420,9 @@ function setProjVars( ) {
   if [ "${aVM}" == ""      ]; then aVM="???"; fi
   if [ "${aOS}" == "linux" ]; then aVM=${aServer:0:5}; fi
 
-        sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'" # 1 # 2
+        sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'" -1 # 2
 
-        aRoot=${aVMs}/${aVM}                     # or "" if linux
+        aRoot=${aVMs}/${aVM}                     # or "" if linux  
   if [ "${aOS}"  == "linux" ]; then aRoot=""; fi
 #       aRoot="";  aDir="/webs/nodeapps/NuSvs/Main-dev04/server1"
 
@@ -932,6 +936,10 @@ END{ }
         setProjVars
 
         echo ""
+    if [ "${aArg2}" == "-hard" ]; then 
+        git diff 
+        fi
+
         sayMsg "GitR1[935]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
         git reset --hard | awk '{ print "   " $0 }'
@@ -940,7 +948,7 @@ END{ }
         echo -e "\n * FRTools script permissions have been reset"
 
       else                                                                                                  # .(21111.02.1 RAM End)
-        git pull | awk '/changed|Already/ { print "  "$0 }'
+        git pull | awk '/changed|Already/ { print "   "$0 }'
         fi
 
 #       ${aLstSp}
@@ -1037,10 +1045,10 @@ END{ }
 
   if [ "${aCmd}" ==  "List Remotes" ]; then
 
-#       sayMsg "aCmd3: ${aCmd3}, aBranch: ${aBranch}" 1
+        sayMsg "aCmd3: ${aCmd3}, aBranch: ${aBranch}" -1
         setProjVars "${aBranch}"
 
-        shoGitRemotes1
+        echo shoGitRemotes1 "$@"
 
 #       echo ""
      fi # eif List Remotes
@@ -1205,7 +1213,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       LIST REMOTE COMMITS
 #====== =================================================================================================== #
-        sayMsg "GitR1[1208]  ${aCmd}, nDays: '${nDays}'"  # 1
+        sayMsg "GitR1[1208]  ${aCmd}, nDays: '${nDays}'"                                                                    # .(21122.04.0 nDays Not assigned yet) 
 
   if [ "${aCmd}" ==  "List All Commits"    ]; then aCmd="List Remote Commits"; fi                                           # .(20623.03.1)
   if [ "${aCmd}" ==  "List Local Commits"  ]; then aCmd="List Remote Commits"; fi                                           # .(20122.04.2)
@@ -1213,14 +1221,16 @@ END{ }
 
   if [ "${aCmd2/lo/}" == "${aCmd2}" ] && [ "${aCmd3/lo/}" == "${aCmd3}" ]; then bLocal=0; else bLocal=1; fi                 # .(10824.02.1 RAM)
 
+     aDO="-y";  # aDO="-d"                                                                                 # .(21122.04.1 RAM Beg Change -Days option)
      if [ "${nDays}"     == ""   ]; then nDays=14;
-     if [ "${aArg1:0:2}" == "-d" ]; then nDays=$aArg2; aArg1="$aArg3"; aArg2="$aArg4"; aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
-     if [ "${aArg2:0:2}" == "-d" ]; then nDays=$aArg3;                 aArg2="$aArg4"; aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
-     if [ "${aArg3:0:2}" == "-d" ]; then nDays=$aArg4;                                 aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
-     if [ "${aArg4:0:2}" == "-d" ]; then nDays=$aArg5;                                                 aArg4="$aArg6"; aArg5="$aArg7"; fi
-     if [ "${aArg5:0:2}" == "-d" ]; then nDays=$aArg6;                                                                 aArg5="$aArg7"; fi
-     if [ "${aArg6:0:2}" == "-d" ]; then nDays=$aArg7;                                                                                 fi; fi
-
+     if [ "${aArg1:0:2}" == $aDO ]; then nDays=$aArg2; aArg1="$aArg3"; aArg2="$aArg4"; aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
+     if [ "${aArg2:0:2}" == $aDO ]; then nDays=$aArg3;                 aArg2="$aArg4"; aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
+     if [ "${aArg3:0:2}" == $aDO ]; then nDays=$aArg4;                                 aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
+     if [ "${aArg4:0:2}" == $aDO ]; then nDays=$aArg5;                                                 aArg4="$aArg6"; aArg5="$aArg7"; fi
+     if [ "${aArg5:0:2}" == $aDO ]; then nDays=$aArg6;                                                                 aArg5="$aArg7"; fi
+     if [ "${aArg6:0:2}" == $aDO ]; then nDays=$aArg7;                                                                                 fi 
+                                                       fi;                                                                  # .(21122.04.1 RAM End)
+     if [ "${nDays}"     == ""   ]; then nDays=14;     fi;                                                                  # .(21122.04.2 Added fi)
         setProjVars                                                                                                         # .(20122.01.1)
 #       aStage=$(  echo "${aPath1}" | awk '{ n = split( $0, a, /\// ); print a[n] }' )                                      # .(20122.01.2)
         aStage=$(  echo "${aPath1}" | awk '{     split( $0, a, /\// ); print a[3] }' )                                      # .(20122.01.2 RAM Assumes path: "nodeapps/{Project}/{Stage}")
@@ -1234,12 +1244,12 @@ END{ }
         sayMsg "    ${mResults}." 3
         exit
         fi
-                                                               getCurRemote;  # sayMsg "aRemote: ${aRemote}" 2
+                                                                  getCurRemote;                 # sayMsg "aRemote: ${aRemote}" 2
 #       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=Bruce_FormR-test; fi                             ##.(10821.01.7)
 #       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=$( git remote );  fi                             ##.(10821.01.7)
         aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=${aRemote};       fi                             # .(10822.01.7)
 
-                                                               getCurBranch ${aGit_Remote}; # sayMsg "aBranch: ${aBranch}" 2
+                                                                  getCurBranch ${aGit_Remote};  # sayMsg "aBranch: ${aBranch}" 2
 #       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=$( git branch | awk '/\*/ { print $2 }' ); fi    ##.(10821.01.8)
 #       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=main; fi                                         ##.(10821.01.8)
         aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=${aBranch}; fi                                   # .(10822.01.8)
@@ -1292,9 +1302,9 @@ if [ "${bLocal}" == "1" ]; then
 #       git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s"
 
   if [ "${aSince}" == "" ]; then
-        git log ${aPath}             --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s" | awk -F'[|]' -e "${aPrg}"
+        git log ${aPath}             --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}"   # .(21122.04.4 RAM Swap ! for |)
     else
-        git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s" | awk -F'[|]' -e "${aPrg}"
+        git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}"   # .(21122.04.5)
      fi
 
 #       mRecs=$( bash -c "( git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s" )" )
