@@ -63,6 +63,7 @@
 # .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or profile
 # .(21122.01 11/22/22 RAM  9:15a| Add exit code if paths are the same
 # .(21126.01 11/26/22 RAM  2:00p| Check SYSTEM path if set path was successful
+# .(21126.08 11/26/22 RAM  6:11p| Add -user option to 'frt set path'
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -122,7 +123,7 @@ function Help( ) {
      echo "  ------------------------------------  ---------------------------------"
      echo "     FRT [Help]"                                                             # .(20620.01.1 RAM)
      echo ""                                                                            #
-     echo "     FRT Path Set [-doit]                Enable formR Tools to run anywhere" # .(21120.03.1 RAM Added)
+     echo "     FRT Path Set [-doit] [-user]        Enable formR Tools to run anywhere" # .(21120.03.1 RAM Added).(21126.08.1 RAM Added -user)
      echo ""                                                                            #
    # echo "     FRT keyS [ Host ] [ Help ]          Manage SSH Key files"
    # echo "         keyS List [ SSH Hosts ]"                                            # .(20429.02.1 Beg RAM Added)
@@ -396,22 +397,29 @@ function Help( ) {
      if [ "${bOK}" == "0" ]; then
         echo -e "\n  * You must be in the FRTools Repo folder. \n"; exit
         fi
-
         aPath1="$( pwd )/._2/bin";
-     if [ "${bDoit}" == "0" ] ; then
-        aBashrc=".bashrc"; if [ ! -f "~/${aBashrc}" ]; then aBashrc="profile"; fi                           # .(21121.03.8)
+        if [ "$3" == "-user" ] || [ "$4" == "-user"    ] ; then aUser="-user"; fi                           # .(21126.08.2)
 
-        aWhere="the ~/${aBashrc} file"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="the Windows System"; fi   # .(21121.03.9)
-        echo -e "\n    The Path to FRTools will be set in ${aWhere} with: RSS Info Path Add \"{Path}\"."
-                    "${aInfoScr}" path       add "${aPath1}"
+     if [ "${bDoit}" == "0" ] ; then
+#       aBashrc=".bashrc"; if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                        # .(21121.03.8)
+        aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                        # .(21121.03.1 RAM Use alternate profile file)
+
+#       aWhere="the ~/${aBashrc} file"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="the Windows System"; fi   ##.(21121.03.9).(21126.09.1)
+        aWhere="${aOS} Shell"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="Windows System Environment"; fi    # .(21121.03.9).(21126.09.1)
+        if [ "${aUser}" == "-user" ]; then aWhere="Windows User Environment"; fi                            # .(21126.08.11)
+        echo -e "\n    The Path to FRTools will be set in the ${aWhere} with: RSS Info Path Add \"{Path}\" ${aUser}"
+
+                    "${aInfoScr}" path add "${aPath1}" "${aUser}"                                           # .(21126.08.3)
+
         if [ "$?" != "1" ]; then echo -e "\n    Add -doit to the command line to add the path to FRTools."; fi
         ${aLstSp}; exit
         fi
 #       --------------------------------------------------------
 
      if [ "${bDoit}" == "1" ] ; then
+
 #          echo     "${aInfoScr}" path add -doit "${aPath1}"; exit
-                    "${aInfoScr}" path add -doit "${aPath1}"
+                    "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                     # .(21126.08.4)
                if [ "$?" == "1" ]; then exit; fi                                                            # .(21122.01.5 if no change to path)
 
 #          aPath2="$( "${aInfoScr}" path show "\._2"         )"                                             ##.(21126.01.1)

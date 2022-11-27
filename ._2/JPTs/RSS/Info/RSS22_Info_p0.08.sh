@@ -47,6 +47,7 @@
 # .(21126.03 11/26/22 RAM  1:00p| Display None found when searching info show path 
 # .(21126.04 11/26/22 RAM  2:00p| Add Show OS command
 # .(21126.06 11/26/22 RAM  5:30p| Fix extracted path from .bashrc 
+# .(21126.08 11/26/22 RAM  6:11p| Add -user option to 'frt set path'
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -393,6 +394,11 @@ END    { if (bShow != 1) { print aPath }
                                          bDoit=0;     aPath="$3"
             if [ "$3" == "-doit" ]; then bDoit=1;     aPath="$4"; fi
             if [ "$4" == "-doit" ]; then bDoit=1; fi; aPath="$( echo "${aPath}" | awk '{ gsub(/^ +| +$/, "" ); print }' )"
+                                          aShell="-sys"                                     # .(21126.08.5)
+            if [ "$4"  == "-user" ]; then aShell="-user"; fi                                # .(21126.08.6) 
+            if [ "$4"  == "-bash" ]; then aShell="-bash"; fi                                # .(21126.08.7) 
+            if [ "$5"  == "-user" ]; then aShell="-user"; fi                                # .(21126.08.14) 
+            if [ "$5"  == "-bash" ]; then aShell="-bash"; fi                                # .(21126.08.15) 
 
 #           -----------------------------------------------------------
 
@@ -402,8 +408,16 @@ END    { if (bShow != 1) { print aPath }
 #           aOldPath="$( echo "${PATH}" | tr : "\n" | awk /${aPath//\//\\\/}/ | awk 'NR == 1' )"  # Find $aPath in $PATH
 #           aOldPath="$( echo "${PATH}"     | awk '{ n = length($0); print substr( $0, 1, n < 80 ? n : 80 ) "..." }' )"  # Find 1st 80 chars in $PATH
 #           aOldPath="$( echo "${aPath}"    | awk '{ gsub( /:/, ";"); gsub( /\/[cC]/, "C:" ); gsub( /\//, "\\" ); print }' )"
-            aOldPATH="${PATH}"
-#     if [ "$aOldPath" != "" ]; then                                                            # if $PATH exists, it always will in Windows
+#           aOldPATH="${PATH}"                                                                                                              ##.(21124.01.6)
+      if [ "${aShell}" == "-sys" ]; then 
+            aOldPATH="$( cmd //c REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH )"; fi # .(21124.01.6 RAM Get Windows PATH)
+      if [ "${aShell}" == "-user" ]; then 
+            aOldPATH="$( cmd //c REG QUERY "HKEY_CURRENT_USER\Environment" -v PATH )"           # .(21126.08.8)
+            fi                                                                                  
+#           aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+REG_SZ +/, ""); print }' )" # {aOldPATH:105}"                           ##.(21124.01.7).(21126.08.12)
+            aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+_SZ +/, ""   ); print }' )" # {aOldPATH:105}"                           ##.(21126.08.12)
+
+#    if [ "$aOldPath" != "" ]; then                                                             ##if $PATH exists, it always will in Windows
 #           echo "Found: aPath:    ${aPath}"
 #           echo "   in: aOldPath: ${aOldPath}"; # exit
 #           aNewPath="${aPath}:${aOldPath/${aPath};/}"                                          ##.(21121.01.2 Find aPath in Path and remote it if found)
