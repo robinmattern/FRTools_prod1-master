@@ -38,6 +38,9 @@
 # .(21122.01 11/22/22 RAM  9:00a| Add Parse args
 # .(21124.01 11/24/22 RAM  2:00p| Get $PATH with REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH 
 # .(21124.02 11/24/22 RAM  2:00p| Check if PATH length > 2047
+# .(21125.01 11/25/22 RAM  2:00p| Update path with REG ADD "...
+# .(21125.02 11/25/22 RAM  2:00p| Don't cvt2winPath slashes in OS = windows
+# .(21125.03 11/25/22 RAM  7:00p| IGNORECASE when searching info show path 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -232,11 +235,37 @@ END    { if (bShow != 1) { print aPath } }                                      
 #          a="$( cmd /c "echo %PATH%" )"                                                                           # .(21120.06.5 RAM How to get Windows Path)
 #          echo "-- aCmd2: $aCmd2, aArg1: $aArg1, PATH: ${PATH};"; exit
      if [ "$aCmd2" == "show"  ]; then
-#    if [ "$aArg1" == ""      ]; then echo $PATH | tr : "\n" | awk             '{ print "  " $0 }'    ; fi         ##.(80929.01.1 Added print).(21114.01.2)
-     if [ "$aArg1" == ""      ]; then echo $PATH | tr : "\n" |                    awk "${aAwkPgm}" "${aDelim}"; fi # .(21114.01.2 RAM Use AwkPgm).(21120.06.6)
+                                               aShell=${aArg2};                                                                             # .(21125.06.1 RAM Beg Show different paths)
+           if [ "${aArg1:0:1}"  == "-" ]; then aShell=${aArg1}; aArg1="${aArg2}"; fi
+           if [ "${aShell:0:1}" != "-" ]; then aShell="-bash"; if [ "${aOSv:0:1}" == "w" ]; then aShell="-user"; fi; fi                                                                           # .(21125.06.1 RAM End)  
+#         echo "aArg1: '$aArg1', aShell: '$aShell'"; exit 
 
-#    if [ "$aArg1" != ""      ]; then echo $PATH | tr : "\n" | awk '/'$aArg1'/  { print "  " $0 }'    ; fi         # .(80929.01.2 ?? if $aArg1 != "")
-     if [ "$aArg1" != ""      ]; then echo $PATH | tr : "\n" | awk '/'$aArg1'/' | awk "${aAwkPgm}" "${aDelim}"; fi # .(80929.01.2 Added print).(21114.01.3).(21120.06.7)
+     if [ "${aShell}" == "-sys" ]; then                                                                          # .(21125.06.2                                                              
+           aOldPATH="$( cmd //c REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH )";     # .(21125.05.1 RAM Get Windows PATH)
+           aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+_SZ +/, "" ); print }' )"; aDelim=";"; fi                                # .(21125.05.2)
+         
+     if [ "${aShell}" == "-user" ]; then                                                                         # .(21125.06.3   
+           aOldPATH="$( cmd //c REG QUERY "HKEY_CURRENT_USER\Environment" -v PATH )"                                                        # .(21125.03.1 RAM Get Windows PATH)
+           aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+_SZ +/, "" ); print }' )"; aDelim=";"; fi                                # .(21125.01.2)
+#          aOldPATH="$( echo "${aOldPATH}" | tr '[:upper:]' '[:lower:]' )"; aDelim=";"                                                      ##.(21125.03.2)
+
+     if [ "${aShell}" == "-bash" ]; then                                                                         # .(21125.06.4   
+           aOldPATH="$PATH"; aDelim=":"  
+           fi 
+
+#   echo -e "\n    aOSv: ${aOSv}; aArg1: '${aArg1}'; PATH Length: ${#aOldPATH}\n----------------------------------------------------------------"          
+#                                     echo ${aOldPATH} | tr "${aDelim}" "\n" | awk '{ printf "%3d %s %5d\n", NR, " ? " $0, nLen; nLen = nLen + length($0) }'; echo ""; # exit 
+
+#    if [ "$aArg1" == ""      ]; then echo $PATH | tr : "\n" | awk             '{ print "  " $0 }'    ; fi         ##.(80929.01.1 Added print).(21114.01.2)
+#    if [ "$aArg1" == ""      ]; then echo $PATH       | tr : "\n"                              | awk "${aAwkPgm1}" "${aDelim}"; fi ##.(21114.01.2 RAM Use AwkPgm).(21120.06.6).(21125.01.3)
+     if [ "$aArg1" == ""      ]; then echo ${aOldPATH} | tr "${aDelim}" "\n" | awk 'NF > 0'     | awk "${aAwkPgm1}" "${aDelim}"; fi # .(21114.01.2 RAM Use AwkPgm).(21120.06.6).(21125.01.3).(21125.01.3 RAM Fuck you NF > 1 S.B NF > 0) 
+#    if [ "$aArg1" == ""      ]; then echo ${aOldPATH} | tr "${aDelim}" "\n" | awk '{ printf "%3d %s %5d\n", NR, "?   " $0, nLen; nLen = nLen + length($0) }'; fi 
+
+     if [ "$aArg1" != ""      ]; then aArg1="$( echo "${aArg1}" | awk '{ gsub( /\\/, "\\\\" ); gsub( /\//, "\\/" ); print }' )"; fi # echo "aArg1: ${aArg1}";fi # .(21126.02.1 RAM Handle slashes in aArg1)
+#    if [ "$aArg1" != ""      ]; then echo $PATH       | tr : "\n"           | awk '/'$aArg1'/  { print "  " $0 }'             ; fi ##.(80929.01.2 ?? if $aArg1 != "")
+#    if [ "$aArg1" != ""      ]; then echo $PATH       | tr : "\n"           | awk '/'$aArg1'/' | awk "${aAwkPgm1}" "${aDelim}"; fi ##.(80929.01.2 Added print   ).(21114.01.3).(21120.06.7).(21125.01.4)
+     if [ "$aArg1" != ""      ]; then echo ${aOldPATH} | tr "${aDelim}" "\n" | awk '/'$aArg1'/' | awk "${aAwkPgm1}" "${aDelim}"; fi # .(80929.01.2 Added print   ).(21114.01.3).(21120.06.7).(21125.01.4)
+
             bCmdRan="1"                                                                                            # .(81014.03.8)
             fi                          # eif aCmd2 == path show
 #    +---- +------------------ +----------------------------------------------------------- # --------+
