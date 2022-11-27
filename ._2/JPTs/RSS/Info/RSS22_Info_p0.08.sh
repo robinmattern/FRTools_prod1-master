@@ -37,6 +37,7 @@
 # .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or profile
 # .(21122.01 11/22/22 RAM  9:00a| Add Parse args
 # .(21124.01 11/24/22 RAM  2:00p| Get $PATH with REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH 
+# .(21124.02 11/24/22 RAM  2:00p| Check if PATH length > 2047
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
