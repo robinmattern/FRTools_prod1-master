@@ -45,6 +45,7 @@
 # .(21125.06 11/25/22 RAM  8:15p| Add -sys, -user and -bash options to Path show 
 # .(21126.02 11/26/22 RAM 12:00p| Handle slashes when searching info show path  
 # .(21126.03 11/26/22 RAM  1:00p| Display None found when searching info show path 
+# .(21126.04 11/26/22 RAM  2:00p| Add Show OS command
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -98,6 +99,7 @@ function Help() {                                                               
             echo "    RSS Path Add [System] {Path} [-doit]      Add {Path} to [System] PATH"
             echo "    RSS Path Clean [System]      [-doit]      Remove Duplicate Paths from [System] PATH"
             echo "    RSS Vars Show {Search}                    Show Environment Variables (Use ! for non-leading search string)"
+            echo "    RSS Vars Show OS                          Show Current OS Name"      # .(21126.04.1 RAM)
             echo "    RSS Vars Set [System] {Name} {Value}      Set [System] Environment Variable"
 #           echo "    RSS Top                                   Show Top Running Programs (Unix only)"
 #           echo "    RSS Log Show                              Show $LIB Log"
@@ -652,21 +654,40 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 #====== =================================================================================================== #
 
      if [ "$aCmd2" != "show" ]; then aArg1=$aCmd2; aCmd2=show; fi
+     if [ "$aArg1" == "os"   ]; then aArg1="OS"; fi                                         # .(21126.04.2 RAM)
 
-     if [ "$aCmd2" == "show" ]; then
+     if [ "$aCmd2" == "show" ] && [ "$aArg1" != "OS" ]; then                                # .(21126.04.2) 
      
-     
-     if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { print "  "$0 }'; fi
+#    if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { print "  "$0 }'; fi      # .(21126.04.3) 
+     if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { a=$0; if (substr( a,1,5 ) == "PATH=") { a = substr( a,1,80 ) "... (" (length($0)-5) " chars)" }; print "  " a }'; fi # .(21126.04.3) 
 
      if [ "$aArg1" != ""     ]; then
          if [ "${aArg1:0:1}" == "!" ]; then aArg1="${aArg1:1}.+="; else aArg1="^${aArg1}"; fi
              if [ "$bTest" == 1 ]; then
-                  echo "set | awk '/^[A-Z]+=/' | awk 'BEGIN {IGNORECASE=1} /$aArg1/'" | awk '{ print "  "$0 }'; echo ""; fi
-                        set | awk '/^[A-Z]+=/' | awk 'BEGIN {IGNORECASE=1} /'$aArg1'/ { print "  "$0 }'
-         fi
+               echo "set | awk '/^[A-Z]+=/' | awk 'BEGIN {IGNORECASE=1}  /$aArg1/" | awk '{ print "  "$0 }'; echo ""; 
+            fi
+                         set | awk '/^[A-Z]+=/' | awk 'BEGIN {IGNORECASE=1} /'$aArg1'/       { print "  "$0 }'
+
+         fi # eif "$aCmd2" == "show aArg1"
+
          bCmdRan="1"                                                                      #.(81014.03.9)
          fi                             # eif aCmd2 == vars show
 #   +----- +------------------ +----------------------------------------------------------- # ----------+
+
+# ------------------------------------------------------------------------------------
+#
+#       Show OS Command
+#
+#====== =================================================================================================== #
+
+     if [ "$aArg1" == "OS" ]; then                                                          #.(21126.04.1 RAM Beg New Cmd) 
+
+          set  |  awk 'BEGIN {IGNORECASE=1} /^OS/ { print "  "$0 }'
+          echo "  aOSv='${aOSv}'"
+          echo "  aOS='${aOS}'"
+
+          bCmdRan="1"                                                                      #.(81014.03.9)
+          fi                            # eif aCmd1 == vars show OS                         #.(21126.04.1 RAM End)
 #    +---- +------------------ +----------------------------------------------------------- # --------+
      fi                                 # eif aCmd1 == vars
 #   +----- +------------------ +----------------------------------------------------------- # ----------+
