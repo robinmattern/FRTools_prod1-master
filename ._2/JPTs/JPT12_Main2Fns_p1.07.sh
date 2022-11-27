@@ -79,7 +79,6 @@
 # .(20620.09  6/23/22 RAM  2:45p| Don't print if bDebug=1 and sayMsg ... 1
 # .(20625.04  6/25/22 RAM  8:00p| Set bSpace=1, not 0 and add export
 # .(21027.02 10/27/22 RAM 12:00p| Add "*" as optional getCmd 2nd Arg
-
 # .(21112.02 11/12/22 RAM 11:50a| Export useful variables
 # .(21112.04 11/12/22 RAM  4:30p| Change SCN_SERVER to THE_SERVER
 # .(21112.05 11/12/22 RAM  4:30p| Create THE_SERVER if missing
@@ -89,6 +88,7 @@
 # .(21120.02 11/20/22 RAM  1:58p| Fix aOSv and aLstSp
 # .(21126.05 11/26/22 RAM  3:37p| Set aOSv again for GitBash and ComEmu
 # .(21126.07 11/26/22 RAM  5:48p| Remove aVdt.. version vars from this script
+# .(21112.02 11/27/22 RAM  2:33p| Export aOS
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -188,6 +188,8 @@ function  setOS() {
      aOS="linux"; if [ "${aOSv:0:1}" == "w" ]; then aOS="windows"; fi                   # .(20623.03.4)
                   if [ "${aOSv:0:1}" == "m" ]; then aOS="macOS";   fi                   # .(20623.03.5)
                   if [ "${aOSv:0:1}" == "g" ]; then aOS="GitBash"; fi                   # .(20623.03.6)
+
+     export aOS                                                                                                                 # .(21112.02.1 RAM Export aOS)
 
   if [ "${bQuiet}"   == "0"      ] || [ "1" == "0" ]; then
      aCmd0="${aCmd}                       "; aCmd0="${aCmd0:0:23}";
