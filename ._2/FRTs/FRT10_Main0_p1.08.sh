@@ -64,6 +64,7 @@
 # .(21122.01 11/22/22 RAM  9:15a| Add exit code if paths are the same
 # .(21126.01 11/26/22 RAM  2:00p| Check SYSTEM path if set path was successful
 # .(21126.08 11/26/22 RAM  6:11p| Add -user option to 'frt set path'
+# .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -428,7 +429,11 @@ function Help( ) {
      if [ "${aPath2}" != "" ]; then
      if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi
 
-        echo ""; echo "    The Path to FRTools has been set to:"; echo "              '${aPath2:4}'."
+
+         aTodo="restwart this session"; if [ "${aOSv:0:1}" == "w" ]; then aToDo="login again"; fi           # .(21126.09.2)
+        echo ""; echo "    The Path to FRTools has been set to:"; echo "              '${aPath2:8}'."
+                 echo ""
+                 echo "  * Please ${aToDo} for the Path to take effect."                                    # .(21126.09.3)
       else
         echo -e     "\n    The Path to FRTools has not been set."
         fi
