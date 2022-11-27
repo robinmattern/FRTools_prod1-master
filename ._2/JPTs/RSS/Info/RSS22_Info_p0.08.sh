@@ -46,6 +46,7 @@
 # .(21126.02 11/26/22 RAM 12:00p| Handle slashes when searching info show path  
 # .(21126.03 11/26/22 RAM  1:00p| Display None found when searching info show path 
 # .(21126.04 11/26/22 RAM  2:00p| Add Show OS command
+# .(21126.06 11/26/22 RAM  5:30p| Fix extracted path from .bashrc 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -448,7 +449,9 @@ END    { if (bShow != 1) { print aPath }
 
             aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi           # .(21121.03.1 RAM Use alternate profile file)
                                                         aOSname="~/${aBashrc} file"                # .(21121.03.2)
-            aOldPATH="$( cat ~/${aBashrc} | awk '/export PATH=/ { sub( /.+=/, "" ); print }' )"    # .(21121.03.3)
+            aOldPATH="$( cat ~/${aBashrc}   | awk '!/^ *#/' | awk '/export PATH=/ { sub( /.+=/, "" ); print; exit }' )" # .(21121.03.3).(21126.06.1 RAM Exclude commented out lines).(21126.06.2 RAM 1st only only)
+            aOldPATH="$( echo "${aOldPATH}" | awk '{ sub( /^ *["]/, "" ); sub( /["] *$/, "" ); print }' )"              # .(21126.06.2 RAM Remove trailing quotes)
+
       if [ "$aOldPATH" != "" ]; then                                                               # if $PATH exists in .bashrc
             aNewPATH="${aPath}:${aOldPATH/${aPath}:/}"; aNewPath="$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} )"  #.(21121.01.3 Put aPath (back) in front of PATH))
             echo "    Old PATH: '${aOldPATH}'"
@@ -595,7 +598,7 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 #        echo "  rss info vars set '${aVar}' '${aVal}' for aOSv: ${aOSv}; bDoit=${bDoit}"; exit
 
 #     if [ "${aOSv:0:1}" == "w" ] || [ "${aOSv:0:1}" == "g" ]; then
-      if [ "${aOSv:0:1}" == "w" ]; then                                                                 # .(21126.06.4 RAM Just for Windows)
+      if [ "${aOSv:0:1}" == "w" ]; then                                                                 # .(21126.06.3 RAM Just for Windows)
 
 #        echo -e "  Windows aOSv: '${aOSv}'"
 #        echo "  setx ${aVar}=\"${aVal}\" /M"
