@@ -62,7 +62,7 @@
 # .(21120.03 11/20/22 RAM  2:55p| Set System Path for FRTools in DOS, GFW and Linux
 # .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or profile
 # .(21122.01 11/22/22 RAM  9:15a| Add exit code if paths are the same
-# .(21126.01 11/26/22 RAM  2:00p| Check SYSTEM path to see if set path was successful
+# .(21126.01 11/26/22 RAM  2:00p| Check SYSTEM path if set path was successful
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
