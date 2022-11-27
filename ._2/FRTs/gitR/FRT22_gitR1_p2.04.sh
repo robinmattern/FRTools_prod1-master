@@ -90,6 +90,7 @@
 # .(21120.02 11/20/22 RAM  1:55p| Fix aOSv and aLstSp
 # .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer 
 # .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits 
+# .(21118.02 11/27/22 RAM  3:00p| Use gitR_clone_p1.04
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -799,7 +800,8 @@ END{ }
         aDoit=""; if [ "${bDoit}" == "1" ]; then aDoit="-doit"; fi                                          #
 #       echo "    $( dirname $0 )/gitr_clone_u1.03.sh"       "${mARgs[0]}" "${aArg2}" "${aArg3}" ${aDoit}
 #       echo "    $( dirname $0 )/FRT23_gitR_clone_p1.03.sh" "${mARgs[0]}" "${aArg2}" "${aArg3}" ${aDoit}
-                 "$( dirname $0 )/FRT23_gitR_clone_p1.03.sh" "${mARgs[0]}" "${aArg2}" "${aArg3}" ${aDoit}
+#                "$( dirname $0 )/FRT23_gitR_clone_p1.04.sh" "${mARgs[0]}" "${aArg2}" "${aArg3}" ${aDoit}   # .(21118.02.1 RAM Used this version)
+                 "$( dirname $0 )/FRT23_gitR_clone_p1.04.sh" "${mARgs[0]}" "${mARgs[1]}" "${aArg3}" ${aDoit}   # .(21118.02.3 RAM Preserve RepoDir case)
 
         ${aLstSp}; exit
      fi # eoc Next Command                                                                                  # .(21027.01.4 End)
