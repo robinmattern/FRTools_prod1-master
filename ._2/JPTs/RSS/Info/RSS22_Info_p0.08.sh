@@ -43,6 +43,8 @@
 # .(21125.03 11/25/22 RAM  7:00p| IGNORECASE when searching info show path 
 # .(21125.04 11/25/22 RAM  7:35p| Add Command comment seperators
 # .(21125.06 11/25/22 RAM  8:15p| Add -sys, -user and -bash options to Path show 
+# .(21126.02 11/26/22 RAM 12:00p| Handle slashes when searching info show path  
+# .(21126.03 11/26/22 RAM  1:00p| Display None found when searching info show path 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -255,15 +257,22 @@ function cvt2winPath() { nLen=110                                               
          echo "${aNewPath}" | awk '{ n = length($0);  print n < '${nLen}' ? $0 : substr( $0, 1, '${nLen}' ) "..." }'  # Find 1st 80 chars in $PATH
          }                                                                                           # .(21131.06.1 RAM End)
 #    +---- +------------------ +-----------------------------------------------------------
-                                                                                                  # .(21131.06.1 RAM End)
-aAwkPgm='
+
+aAwkPgm1='
 function cvt(a) { if (d == ";") { sub( /\/[cC]/, "C:", a ); gsub( /\//, "\\", a ) } return a }       # .(21120.06.1 RAM cvt path character)
-BEGIN  {  aPath = ";"; d=ARGV[1]; bShow=ARGV[2] != "new"; ARGC=1 }                                   # .(21114.01.1 RAM Beg Write Awk program to mark dups)
-       {  if ( index( aPath, d $0 d ) ) { if (bShow) { print " x " cvt( $0 ) } }                     # .(21120.06.2)
-                                   else { if (bShow) { print "   " cvt( $0 ) }; aPath = aPath d $0 } # .(21120.06.3)
+BEGIN  { d = ARGV[1]; aPath = d; bShow=ARGV[2] != "new"; ARGC=1; IGNORECASE=1; m=0 }                 # .(21114.01.1 RAM Beg Write Awk program to mark dups).(21125.03.1 RAM Added IGNORECASE).(21126.03.1)
+#      { print index( aPath, d $0 d ) " " aPath }
+       { n = index( aPath, d $0 d ); } # printf "%3d %s %5d\n", NR, n "   " cvt( $0 ), length( aPath) } 
+       { if (n > 0) { if (bShow) { printf "%3d %s\n", NR, " x " cvt( $0 ) } }                           # .(21120.06.2)
+               else { if (bShow) { printf "%3d %s\n", NR, "   " cvt( $0 ) }; aPath = aPath d $0; m++ }  # .(21120.06.3).(21126.03.2)
+#                                                                            aPath = aPath d $0         # .(21120.06.3)
           }
-END    { if (bShow != 1) { print aPath } }                                                           # .(21114.01.1 RAM End)
+END    { if (bShow != 1) { print aPath } 
+           else { if (m == 0) { print "     * None found" } }                                        # .(21126.03.3 RAM Print "None found")
+         }                                                                                           # .(21114.01.1 RAM End)
 '
+#    +---- +------------------ +-----------------------------------------------------------
+
            aDelim=":"; if [ "${aOSv:0:1}" == "w" ]; then aDelim=";"; fi;                             # .(21120.06.4)
 
      if [ "$aCmd2" != "show"  ] && [ "$aCmd2" != "clean"  ] && [ "$aCmd2" != "add"  ]; then          # .(21120.04.1 RAM)
@@ -397,29 +406,44 @@ END    { if (bShow != 1) { print aPath } }                                      
 #           aNewPath="${aPath}:${aOldPath/${aPath};/}"                                          ##.(21121.01.2 Find aPath in Path and remote it if found)
 
 #           aOldPath="$( echo "${PATH}"     | awk '{ gsub( /:/, ";"); gsub( /\/[cC]/, "C:" ); gsub( /\//, "\\" ); print }' )"
-#           aOldPath="$( echo "${aOldPath}" | awk '{ n = length($0);  print n < '${nLen}' ? $0 : substr( $0, 1, '${nLen}' ) "..." }' )"    # Find 1st 80 chars in $PATH
-            aOldPath="$( cvt2winPath "${aOldPATH}" ${aOSv:0:1} )"                               # .(21121.01.1 For display)
-            echo "    Old PATH: '${aOldPath}"
-#           echo "    aAwkPgm: '{ sub( /"${aPath//\//\\\/}":/, \"\" ); print }'"
-            aNewPATH="$( echo "${PATH}" | awk '{ sub( /'${aPath//\//\\\/}':/, "" ); print }' )" # .(21121.01.2 Find aPath in PATH and remove it if found)
-            aNewPATH="${aPath}:${aNewPATH}"                                                     # .(21121.01.3 Put  aPath (back) in front of PATH)
-#           aNewPath="$( cvt2winPath "${aPath}:${aNewPATH}" ${aOSv:0:1} )"
-            aNewPath="$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} )"                               # .(21121.01.4 For display)
-#           aNewPath="$( echo "${aNewPath}" | awk '{ gsub( /:/, ";"); gsub( /\/[cC]/, "C:" ); gsub( /\//, "\\" ); print }' )"
-#           aNewPath="$( echo "${aNewPath}" | awk '{ n = length($0);  print n < '${nLen}' ? $0 : substr( $0, 1, '${nLen}' ) "..." }' )"    # Find 1st 80 chars in $PATH
-            aNewPath="${aNewPath};\$PATH";
-#           echo "    New Path: '${aNewPath}'"; # exit
+#           aOldPath="$( echo "${aOldPATH}" | awk '{ n = length($0);  print n < '${nLen}' ? $0 : substr( $0, 1, '${nLen}' ) "..." }' )"     ##Find 1st nLen chars in $PATH
+#           aOldPath="$( cvt2winPath "${aOldPATH}" ${aOSv:0:1} )"                               ##.(21121.01.1 For display)
+# echo "--- aOldPATH: '${aOldPATH}'"
+            aOldPath="$( cvt2winPath "${aOldPATH}" "x" )"                                       ##.(21121.01.1 For display).(21125.02.1 RAM It is a Windows path)
+# echo "--- aOldPath: '${aOldPath}'"; exit 
 
- #      else                                                                      # Not Found
-#           aNewPath="${aPath};\$PATH"                                            ##.(21121.01.3
-#           aNewPath="${aWinPath};\$PATH"                                         # .(21121.01.3
+            echo "    Old PATH: '${aOldPath}'"                                                  # .(21124.01.8 RAM Display 1st nLen chars of aOldPATH ??)
+# echo "--- aPath: '${aPath}'";
+            aPath="$( cvt2winPath "${aPath}" "w" 1 )"                                           # .(21125.02.2 RAM Convert the GFW path)
+# echo "--- aPath: '${aPath}'"; exit 
+#           echo "    aAwkPgm: '{ sub( /"${aPath//\//\\\/}";/, \"\" ); print }'"; exit          ##Look for Unix path
+#           echo "    aAwkPgm: '{ sub( /"${aPath//\\/\\\\}";/, \"\" ); print }'"; exit          ##Look for Windows path 
+
+#           aNewPATH="$( echo "${PATH}"     | awk '{ sub( /'${aPath//\//\\\/}':/, "" ); print }' )" ##.(21121.01.2 Find aPath in PATH and remove it if found)
+            aNewPATH="$( echo "${aOldPATH}" | awk '{ sub( /'${aPath//\\/\\\\}';/, "" ); print }' )" # .(21121.01.2 Find aPath in PATH and remove it if found).(21125.01.21)
+            aNewPATH="${aPath};${aNewPATH}"                                                     # .(21121.01.3 Put  aPath (back) in front of PATH)
+
+#           aNewPath="$( cvt2winPath "${aPath}:${aNewPATH}" ${aOSv:0:1} )"
+#           aNewPath="$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} )"                               ##.(21121.01.4 For display).(21125.02.3 RAM It is a Windows path)
+#           aNewPath="${aNewPATH}"                                                              ##.(21121.01.4 For display).(21125.02.4 RAM It is a Windows path)
+            aNewPath="$( cvt2winPath "${aNewPATH}" "x" 0 )"                                     # .(21121.01.4 For display).(21125.02.4 RAM It is a Windows path. just chop it])
+
 #           aNewPath="$( echo "${aNewPath}" | awk '{ gsub( /:/, ";"); gsub( /\/[cC]/, "C:" ); gsub( /\//, "\\" ); print }' )"
-#           aNewPath="$( echo "${aNewPath}" | awk '{ n = length($0);  print n < 90 ? $0 : substr( $0, 1, 90 ) "..." }' )"    # Find 1st 80 chars in $PATH
+#           aNewPath="$( echo "${aNewPath}" | awk '{ n = length($0);  print n < '${nLen}' ? $0 : substr( $0, 1, '${nLen}' ) "..." }' )"    ## Find 1st 80 chars in $PATH
+            aNewPath="${aNewPath}\$PATH";
+#           echo " -  New Path: '${aNewPath}'";  exit
+
+#         else                                                                                  ##Not Found
+#           aNewPath="${aPath};\$PATH"                                            ##.(21121.01.3
+#           aNewPath="${aWinPath};\$PATH"                                                       ##.(21121.01.3
+#           aNewPath="$( echo "${aNewPath}" | awk '{ gsub( /:/, ";"); gsub( /\/[cC]/, "C:" ); gsub( /\//, "\\" ); print }' )"
+#           aNewPath="$( echo "${aNewPath}" | awk '{ n = length($0);  print n < 90 ? $0 : substr( $0, 1, 90 ) "..." }' )"    ##Find 1st 80 chars in $PATH
 #           echo "       aNewPath: ${aNewPath}"; # exit
 #           fi
 #         -----------------------------------------------------------
 
-        else # if aOSv is Windows
+        else # if aOSv is not Windows
+
             aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi           # .(21121.03.1 RAM Use alternate profile file)
                                                         aOSname="~/${aBashrc} file"                # .(21121.03.2)
             aOldPATH="$( cat ~/${aBashrc} | awk '/export PATH=/ { sub( /.+=/, "" ); print }' )"    # .(21121.03.3)
@@ -454,9 +478,41 @@ END    { if (bShow != 1) { print aPath } }                                      
 #                "${BASH_SOURCE} vars set -doit PATH \"${aNewPath:2}\""
 #                "$( dirname ${BASH_SOURCE} )/$0 vars set -doit PATH \"${aNewPath:2}\""
 #           echo "  $0" vars set -doit PATH "\"${aNewPath}\""
+
+      if [ "${aDelim}" == ":" ]; then                                                       # .(21125.01.11)
+
                  "$0" vars set PATH -doit "$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} 1)"     # Convert to Windows path, but no length chop
+      if [ "$?" == "1" ]; then exit 1; fi
+
+          else                                                                              # .(21125.01.12)             
+#           cmd="$( dirname $0)/../../../bin/nircmd.exe elevatecmd execmd"                  # .(21125.01.13)  
+            aDir="$( dirname "${BASH_SOURCE}" )"; 
+#          $cmd "REG ADD \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \"${aNewPATH}\"" # .(21125.01.14)            
+#     echo $cmd "\"REG ADD \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \"${aNewPATH}\"\"" # .(21125.01.14)            
+#     echo $cmd "\"REG ADD \\\"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \\\"${aNewPATH}\\\"\"" # .(21125.01.14)            
+
+     if [ "${aShell}" == "-sys"  ]; then                                                    # .(21126.08.9 RAM Beg)
+           aHKey="HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"; fi 
+     if [ "${aShell}" == "-user" ]; then 
+           aHKey="HKEY_CURRENT_USER\\Environment"
+           aOSname="Windows User"
+           fi                                                                               # .(21126.08.9 RAM End)
+           aREGA="REG ADD \"${aHKey}\" /v \"PATH\" /t REG_SZ /d \"${aNewPATH}\" /f"
+#          echo  nircmd.exe elevatecmd execmd  "${aREGA}"; exit                             # Works in DOS      
+           echo  "@echo off"                                 >"${aDir}/@regAdd.bat"  
+           echo  "nircmd.exe elevatecmd execmd ${aREGA}"    >>"${aDir}/@regAdd.bat"         # .(21125.01.x This finally works works in BASH
+
+#                         echo  nircmd.exe elevatecmd execmd  "${aREGA//\\/\\\\}";  exit    # 
+# aRes="$( ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aREGA}" 2>&1 )"            # .(21113.04.4 RAM This doesn't work!!)
+#          ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aREGA//\\/\\\\}"           # .(21113.04.4 RAM This doesn't work!!)
+#          ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aDir}/@regAdd.bat"         # .(21113.04.4 RAM This doesn't work!!)
+                                                              "${aDir}/@regAdd.bat"         # .(21125.01.x)
+                                                           rm "${aDir}/@regAdd.bat"         # .(21125.01.x RAM delete .bat file) 
+            fi                                                                              # .(21125.01.15)             
 #           echo -e "    The path, '${aPath}', has been added to the global PATH."
          else
+          
+            if [ "${aShell}" == "-user" ]; then aOSname="Windows User"; fi                  # .(21126.09.2)              
             echo    "    The path, '$( cvt2winPath "${aPath}" ${aOSv:0:1} )', will be added to the ${aOSname} PATH."
 #           echo -e "    The path, '${aPath}', will be added to the ${aOSname} PATH."
             fi
@@ -524,12 +580,6 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
          }                                                                                               # .(21112.03.1 RAM End)
 #    +---- +------------------ +----------------------------------------------------------- # --------+
 
-     if [ "$aCmd1" == "vars" ]; then    # if  aCmd1 == vars
-
-#    +---- +------------------ +----------------------------------------------------------- # --------+
-
-     if [ "$aCmd2" == "set"  ]; then                                                                    # .(21112.03.2 RAM Beg Add vars set)
-
 #        aArg2="$4"; aArg3="$5";            bDoit=0                                                     # .(21114.02.1 RAM Beg Add bDoit)
 #        if [ "${aArg1}" == "-doit" ]; then bDoit=1; aArg1="${aArg2}"; aArg2="${aArg3}"; fi
 #        if [ "${aArg2}" == "-doit" ]; then bDoit=1; aArg2="${aArg3}"; fi
@@ -542,7 +592,8 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 
 #        echo "  rss info vars set '${aVar}' '${aVal}' for aOSv: ${aOSv}; bDoit=${bDoit}"; exit
 
-      if [ "${aOSv:0:1}" == "w" ] || [ "${aOSv:0:1}" == "g" ]; then
+#     if [ "${aOSv:0:1}" == "w" ] || [ "${aOSv:0:1}" == "g" ]; then
+      if [ "${aOSv:0:1}" == "w" ]; then                                                                 # .(21126.06.4 RAM Just for Windows)
 
 #        echo -e "  Windows aOSv: '${aOSv}'"
 #        echo "  setx ${aVar}=\"${aVal}\" /M"
@@ -556,21 +607,25 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 #                ${aDir}/../../../bin/nircmd.exe elevatecmd execmd   SETX ${aVar} ${aVal1} /M           # .(21113.04.3 RAM No workie)
 #        echo "  ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  \"${aSETX}\""
 
-                                         aTodo="Please restart this session"                            # .(21114.02.2)
+                                         aTodo="Please Login again for the ${aVar} to take effect."     # .(21114.02.2).(21126.09.6)
          if [ "${bDoit}" == "0" ]; then                                                                 # .(21114.02.3)
                  echo "  ${aSETX}"     ; aToDo=""                              ; aVerb="will be"        # .(21114.02.4)
 
-           else                                                                                         # .(21114.02.5)
+           else                                                                  aVerb="has been"       # .(21114.02.5)
 #                echo nircmd.exe elevatecmd execmd  "${aSETX}" ; aVerb="has been"
-                      ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aSETX}" ; aVerb="has been"  # .(21113.04.4 RAM This works!!)
-              if [ "$?" != "1" ]; then exit 1; fi                                                       # .(21122.01.7)
+     aResult="$( ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aSETX}" 2>&1 )"                  # .(21113.04.4 RAM This works!!)
+#                ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aSETX}"
+
+             if [ "$?" == "139" ]; then                                                                 # .(21122.01.7 RAM Error code 139 for  Segmentation fault)
+                echo -e " ** The DOS command SETX failed\n"
+                exit 1; fi                                                                              # .(21122.01.8)
               fi                                                                                        # .(21114.02.6)
 
 #        bBash=$( rss info path | awk 'BEGIN{ b=0 }; /\/(Git|git)\/usr/ { b=1; exit }; END { print b }' ); # echo -e "\n * bBash: ${bBash}"
          bBash=0; if [ "${aOSv:0:3}" == "gfw" ]; then bBash=1; fi
  if [ "${bBash}" == "1" ]; then
 
-         echo -e "  The Var, '${aVar}', ${aVerb} set for all users in Windows."                         # .(21114.02.7)
+         echo -e "    The Var, '${aVar}', ${aVerb} set in your bash profile."                           # .(21114.02.7)
 #        echo "  Bash  (${aOSv}): setBashrc \"${aVar}\" \"${aVal}\""
                                   setBashrc  "${aVar}"   "${aVal}"  ${bDoit}                            # .(21114.02.8)
        else # eif OS == Windows
@@ -599,6 +654,8 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
      if [ "$aCmd2" != "show" ]; then aArg1=$aCmd2; aCmd2=show; fi
 
      if [ "$aCmd2" == "show" ]; then
+     
+     
      if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { print "  "$0 }'; fi
 
      if [ "$aArg1" != ""     ]; then
