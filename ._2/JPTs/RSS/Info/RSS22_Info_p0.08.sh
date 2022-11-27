@@ -42,6 +42,7 @@
 # .(21125.02 11/25/22 RAM  2:00p| Don't cvt2winPath slashes in OS = windows
 # .(21125.03 11/25/22 RAM  7:00p| IGNORECASE when searching info show path 
 # .(21125.04 11/25/22 RAM  7:35p| Add Command comment seperators
+# .(21125.06 11/25/22 RAM  8:15p| Add -sys, -user and -bash options to Path show 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -266,7 +267,7 @@ END    { if (bShow != 1) { print aPath } }                                      
            aDelim=":"; if [ "${aOSv:0:1}" == "w" ]; then aDelim=";"; fi;                             # .(21120.06.4)
 
      if [ "$aCmd2" != "show"  ] && [ "$aCmd2" != "clean"  ] && [ "$aCmd2" != "add"  ]; then          # .(21120.04.1 RAM)
-           aArg1="$aCmd2"; aCmd2="show"; fi                                                          # .(21120.04.2)
+           aArg1="$aCmd2"; aCmd2="show"; aArg2="$3"; fi                                              # .(21120.04.2).(21125.06.4 RAM Add aArg2)
 
 #    +---- +------------------ +----------------------------------------------------------- # --------+
 
@@ -485,7 +486,7 @@ END    { if (bShow != 1) { print aPath } }                                      
 
 #    +---- +------------------ +----------------------------------------------------------- # --------+
 
-     if [ "$aCmd2" == "set"  ]; then                                                                    # .(21112.03.2 RAM Beg Add vars set)
+     if [ "$aCmd2" == "set"  ]; then                                                                     # .(21112.03.2 RAM Beg Add vars set)
 
 function setBashrc() { bDoit=$3                                                                          # .(21112.03.1 RAM Beg Write it).(21114.02.11)
 #        aVar="$1"; aVal="$2"; if [ "${aVal/ /}" != "${aVal}" ]; then aVal="\\\"${aVal}\\\""; fi;        # .(21112.06.1 RAM Put Quotes if necessary)
@@ -608,6 +609,7 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
          fi
          bCmdRan="1"                                                                      #.(81014.03.9)
          fi                             # eif aCmd2 == vars show
+#   +----- +------------------ +----------------------------------------------------------- # ----------+
 #    +---- +------------------ +----------------------------------------------------------- # --------+
      fi                                 # eif aCmd1 == vars
 #   +----- +------------------ +----------------------------------------------------------- # ----------+
