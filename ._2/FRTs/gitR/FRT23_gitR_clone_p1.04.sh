@@ -7,6 +7,7 @@
 ##FD   FRT23_gitR_clone.sh      |  27579| 11/05/22 18:00|   507| p1.03-21105-1800
 ##FD   FRT23_gitR_clone.sh      |  28520| 11/05/22 19:00|   515| p1.03-21105-1900
 ##FD   FRT23_gitR_clone.sh      |  29196| 11/07/22 08:45|   528| p1.03-21107-0845
+##FD   FRT23_gitR_clone.sh      |  33656| 11/27/22 17:20|   567| p1.04-21127.1720
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run gitr clone {Project}
 #
@@ -30,6 +31,8 @@
 # .(21105.05 11/05/22 RAM  7:00p| Set c1 if parsing and in Project_ folder
 # .(21107.01 11/07/22 RAM  8:45a| Check if RepoDir is completely removed
 # .(21118.02 11/27/22 RAM  3:10p| Add RepoDir folder to parsed argument
+# .(21127.01 11/27/22 RAM  3:10p| Change name of gitr-config file
+# .(21127.02 11/27/22 RAM  3:10p| RDir may not exist
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -105,7 +108,7 @@
 
 # if [ "${aPrj/-/}"  != "${aPrj}" ] || [ "${aPrj/:/}" != "${aPrj}" ] || [ "${aPrj/-/}" != "${aPrj}" ]; then bParse=1; else bParse=0; fi
 
-         bParse=$( echo "${aPrj}" | awk '/^[a-zA-Z0-9]+_?$/ { print 0; exit }; { print 1 }' );         # .(21101.01.4 RAM 1st work contains _)   
+         bParse=$( echo "${aPrj}" | awk '/^[a-zA-Z0-9]+_?$/ { print 0; exit }; { print 1 }' );         # .(21101.01.4 RAM 1st work contains _)
 #        echo -e "\n  bParse: ${bParse}"; exit
  if [ "${bParse}" == "1" ]; then                                                                       # .(21101.01.5 RAM Beg Parse if aPrj = location)
 
@@ -190,7 +193,7 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
     fi                                                                                                  # .(21101.02.1 RAM End)
 #   -----------------------------------------
 
-                                                 aConfigFile=""                                                      ##.(21127.01.1 RAM Beg) 
+                                                 aConfigFile=""                                                      ##.(21127.01.1 RAM Beg)
 #if [ -f "../../gitr_${aProj}-config.sh" ]; then aConfigFile="../../gitr_${aProj}-config.sh";  aCurDir="../../"; fi
 #if [ -f "../../gitr_${aProj}_config.sh" ]; then aConfigFile="../../gitr_${aProj}_config.sh";  aCurDir="../../"; fi  # .(21029.03.1 RAM)
 #if [ -f "../../gitr_${aProj}config.sh"  ]; then aConfigFile="../../gitr_${aProj}config.sh";   aCurDir="../../"; fi
@@ -199,15 +202,15 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 #if [ -f    "../gitr_${aProj}config.sh"  ]; then aConfigFile="../gitr_${aProj}config.sh";      aCurDir="../"; fi
 #if [ -f       "gitr_${aProj}-config.sh" ]; then aConfigFile="gitr_${aProj}-config.sh"; fi;    aCurDir="./"
 #if [ -f       "gitr_${aProj}_config.sh" ]; then aConfigFile="gitr_${aProj}_config.sh"; fi;    aCurDir="./"          # .(21029.03.3)
-#if [ -f       "gitr_${aProj}config.sh"  ]; then aConfigFile="gitr_${aProj}config.sh"; fi;     aCurDir="./"          ##.(21127.01.1 RAM End) 
+#if [ -f       "gitr_${aProj}config.sh"  ]; then aConfigFile="gitr_${aProj}config.sh"; fi;     aCurDir="./"          ##.(21127.01.1 RAM End)
 
-                                                aConfigFile=""                                                      # .(21127.01.2 RAM Beg Change Config file name) 
+                                                aConfigFile=""                                                       # .(21127.01.2 RAM Beg Change Config file name)
  if [ -f "../../${aPrj}_gitr-config.sh" ]; then aConfigFile="../../${aPrj}_gitr-config.sh";  aCurDir="../../"; fi
- if [ -f "../../${aPrj}_gitr_config.sh" ]; then aConfigFile="../../${aPrj}_gitr_config.sh";  aCurDir="../../"; fi  # .(21029.03.1 RAM)
+ if [ -f "../../${aPrj}_gitr_config.sh" ]; then aConfigFile="../../${aPrj}_gitr_config.sh";  aCurDir="../../"; fi    # .(21029.03.1 RAM)
  if [ -f    "../${aPrj}_gitr-config.sh" ]; then aConfigFile="../${aPrj}_gitr-config.sh";     aCurDir="../"; fi
- if [ -f    "../${aPrj}_gitr_config.sh" ]; then aConfigFile="../${aPrj}_gitr_config.sh";     aCurDir="../"; fi     # .(21029.03.2)
+ if [ -f    "../${aPrj}_gitr_config.sh" ]; then aConfigFile="../${aPrj}_gitr_config.sh";     aCurDir="../"; fi       # .(21029.03.2)
  if [ -f       "${aPrj}_gitr-config.sh" ]; then aConfigFile="${aPrj}_gitr-config.sh"; fi;    aCurDir="./"
- if [ -f       "${aPrj}_gitr_config.sh" ]; then aConfigFile="${aPrj}_gitr_config.sh"; fi;    aCurDir="./"          # .(21029.03.3).(21127.01.2 RAM End)
+ if [ -f       "${aPrj}_gitr_config.sh" ]; then aConfigFile="${aPrj}_gitr_config.sh"; fi;    aCurDir="./"            # .(21029.03.3).(21127.01.2 RAM End)
 
  if [ "${aWebsDir}" == "" ]; then
 #   aWebsDir=$( basename $( ls -1 ${aCurDir} ) )
@@ -220,12 +223,12 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 #   echo "   Setting aWebsDir: '${aWebsDir}', aCurDir: ${aCurDir}"
     fi
 #   -----------------------------------------
-#   echo "   Setting aWebsDir: '${aWebsDir}', aCurDir: ${aCurDir}"; exit 
+#   echo "   Setting aWebsDir: '${aWebsDir}', aCurDir: ${aCurDir}"; exit
 
                                                  aConfigFile="${aConfigFile/_-/_}"
- if [ "${aConfigFile}" == "" ]; then                                                        # .(21127.01.3 RAM It wasn't found above)  
-#        aConfigFile=gitr_${aProj}-config.sh;    aConfigFile="${aConfigFile/_-/_}"          ##.(21127.01.4) 
-         aConfigFile=${aProj}_gitr-config.sh;    aConfigFile="${aConfigFile/_-/_}"          # .(21127.01.4 RAM Create one with this name) 
+ if [ "${aConfigFile}" == "" ]; then                                                        # .(21127.01.3 RAM It wasn't found above)
+#        aConfigFile=gitr_${aProj}-config.sh;    aConfigFile="${aConfigFile/_-/_}"          ##.(21127.01.4)
+         aConfigFile=${aProj}_gitr-config.sh;    aConfigFile="${aConfigFile/_-/_}"          # .(21127.01.4 RAM Create one with this name)
 
     if [ "${bDoit}" != "1" ]; then                                                          # .(21101.02.1)
 #   echo ""
@@ -260,8 +263,8 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
     if [ "${bDir}" == "1" ] && [ "${bParse}${c4}" == "1#"  ]; then c2=" "; c1="#"; fi;  # 1 /webs/prj_stg   # 1 gitr_{Project}_config.sh  ##.(21105.05.2 RAM Set c2, if c4 was not set, or just keep it set to c2)
 
 if [ "${aStage_var}" == "{stg1}-{ownr}" ]; then aStage_var="";         c3=" "; c1="#"; c2="#"; c4="#"; fi   # .(21105.01.1 RAM If no ${aStage}).(21105.04.2)
-if [ "${aRepoDir}"   == ""   ]; then                           c5="#"; 
-                                else                           c5=" "; c3="#"; c1="#"; c2="#"; c4="#"; fi  
+if [ "${aRepoDir}"   == ""   ]; then                           c5="#";
+                                else                           c5=" "; c3="#"; c1="#"; c2="#"; c4="#"; fi
 
 #   echo "   aPrj: '${aPrj}', aStage_var: '${aStage_var}', aDir: ${aDir}, aPDir: ${aPDir}, bDir: ${bDir}; '${c1}${c2}${c3}${c4}', aConfigFile: '${aConfigFile}'" ; # exit
 
@@ -277,14 +280,14 @@ if [ "${bDir}" == "1" ]; then aWebsDir=$( builtin cd ..; pwd ); fi              
     echo "    GitHub_Acct=\"${aGitHub_Acct_var}\""                                      >>"${aConfigFile}"
     echo "    GitHub_SSH=\"${aGitHub_SSH_var}\""                                        >>"${aConfigFile}"
     echo ""                                                                             >>"${aConfigFile}"
-if [ "$c5" == "#" ]; then  
+if [ "$c5" == "#" ]; then
     echo "$c1   RepoDir=\"\${Project}_\${Stage}\"     # 1 {Project}_gitr_config.sh"     >>"${aConfigFile}"
     echo "$c2   RepoDir=\"\${Project}_/\${Stage}\"    # 2 {Project}_gitr_stg-config.sh" >>"${aConfigFile}"
     echo "$c3   RepoDir=\"\${Project}\"              # 3 {Project}_gitr-config.sh"      >>"${aConfigFile}"
-    echo "$c4   RepoDir=\"\${Project}/\${Stage}\"     # 4 {Project}_gitr-stg-config.sh" >>"${aConfigFile}"; 
-    echo ""; fi 
-if [ "$c5" == " " ]; then  
-    echo "    RepoDir=\"${aRepoDir}\"               # 5 {Project}_gitr_config.sh"       >>"${aConfigFile}"; 
+    echo "$c4   RepoDir=\"\${Project}/\${Stage}\"     # 4 {Project}_gitr-stg-config.sh" >>"${aConfigFile}";
+    echo ""; fi
+if [ "$c5" == " " ]; then
+    echo "    RepoDir=\"${aRepoDir}\"               # 5 {Project}_gitr_config.sh"       >>"${aConfigFile}";
     fi                                                                                  >>"${aConfigFile}"
     echo "    WebsDir=\"${aWebsDir}\""                                                  >>"${aConfigFile}"
 #   echo "#   WebsDir=\"/webs\""                                                        >>"${aConfigFile}"
@@ -357,7 +360,7 @@ END   { }'
 
     if [ "${bDoit}" != "1" ]; then                                                          # .(21101.02.5)
 
-       $0 "${aPrj}"                                                                         # .(21105.02.1 RAM Show updated config) 
+       $0 "${aPrj}"                                                                         # .(21105.02.1 RAM Show updated config)
        echo ""; exit
     fi                                                                                      # .(21101.02.6)
     fi
@@ -441,6 +444,7 @@ if [ "${bSSH}" == "0" ]; then
     bCpy=1; bZip=0
 
  if [ -d "${aRepoDir}/.git" ] && [ "${bCpy}" == "1" ]; then                     # .(21029.01.1 RAM Beg Copy repo to ${aRepoDir}_v${aTS})
+
     aTS=$( date '+%y%m%d.%H%M' ); aTS=${aTS:1}
     if [ ! -d "${aRepoDir}_v${aTS}" ]; then mkdir  "${aRepoDir}_v${aTS}"; fi    # .(21030.01.1 RAM Don't remove _)
     echo -e "\nBacking up to '${aWebsDir}/${aRepoDir}_v${aTS}'"
@@ -450,6 +454,7 @@ if [ "${bSSH}" == "0" ]; then
 #   -----------------------------------------------------------------
 
  if [ -d "${aRepoDir}/.git" ] && [ "${bZip}" == "1" ]; then                     # .(21029.01.2 RAM Beg Zip repo to ${aRepoDir}_v${aTS}.zip)
+
     aTS=$( date '+%y%m%d.%H%M' ); aTS=${aTS:1}
     aZipFile="${aRepoDir}_v${aTS}.zip"                                          # .(21030.01.2 RAM Don't remove _)
     if [ -f "${aZipFile}" ]; then rm "${aZipFile}"; fi
@@ -460,12 +465,15 @@ if [ "${bSSH}" == "0" ]; then
 
     rm -fr "${aRepoDir}"/*  2>/dev/null                                         # .(21026.01.1 RAM Delete all files in RepoDir)
     rm -fr "${aRepoDir}"/.* 2>/dev/null
-    nCnt=$( ls -la "${aRepoDir}" | awk '/total/ { print $2 }' )                 # .(21107.01.1 RAM Check if RepoDir contains files)
 
+         nCnt=$( ls -la "${aRepoDir}" | awk '/total/ { print $2 }' )                 # .(21107.01.1 RAM Check if RepoDir contains files)
  if [ "${nCnt}" != "0" ]; then
-    echo -e "\n * The repo folder, ${aRepoDir} was not completey removed"
-    rdir "${aRepoDir}"
-    exit
+
+         echo -e "\n * The repo folder, ${aRepoDir} was not completey removed"
+
+                   aRDir="../../JPTs/RSS/DirList\RSS22_DirList.sh"              # .(21127.02.1 RDir may not exist)
+         if [ -f "${aRDir}" ]; then "${aRDir}" "${aRepoDir}"; exit; fi          # .(21127.02.2)
+         exit
     fi
 #   -----------------------------------------------------------------
 
