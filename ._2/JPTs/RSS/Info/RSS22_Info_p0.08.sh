@@ -36,6 +36,7 @@
 # .(21121.01 11/21/22 RAM  4:30p| Fix searching for a path in windows
 # .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or profile
 # .(21122.01 11/22/22 RAM  9:00a| Add Parse args
+# .(21124.01 11/24/22 RAM  2:00p| Get $PATH with REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -242,16 +243,47 @@ END    { if (bShow != 1) { print aPath } }                                      
      if [ "$aCmd2" == "clean" ]; then                                                       # .(21114.04.1 RAM Beg Add clean)
 
 #           aDoit=""; if [ "$4" == "-doit" ]; then aDoit="-doit"; fi
-            aNewPath=$( echo $PATH | tr : "\n" | awk  "${aAwkPgm}" "${aDelim}" "new" )      # .(21120.06.8)
+#           aNewPATH="$( echo $PATH | tr : "\n" | awk  "${aAwkPgm}" "${aDelim}" "new" )"    ##.(21120.06.8).(21124.01.1)
+#           aNewPATH="$( cvt2winPath "${aNewPATH:2}" ${aOSv:0:1} 1 )"                       ##.(21124.01.2)
+#                        cmd //c REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH
+#           aOldPATH="$( echo "${aOldPATH}" | awk '{ sub( /[\s\S ]+REG_SZ /, "" ); print }' )"     # {aOldPATH:105}"                        ##.(21124.01.3)
+            aOldPATH="$( cmd //c REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH )"     # .(21124.01.3 RAM Get Windows PATH)
+            aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+REG_SZ +/, "" ); print }' )"     # {aOldPATH:105}"                      # .(21124.01.4)
 
+            aNewPATH="$( echo "${aOldPATH}" | awk "${aAwkPgm}" "${aDelim}" "new" )"; aNewPATH="${aNewPATH:2}"                               # .(21124.01.5)
+
+      if [ "${#aNewPATH}" -gt "2047" ]; then                                                # .(21124.02.1 RAM Beg Check if PATH len > 2047)
+            echo -e " ** The new PATH can't be greater than 2047 characters. It is now ${#aNewPATH} chars."
+            echo    "    You can reset the registry value of HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\Path."
+            echo -e "    and then reboot Windows.\n"
+            exit
+            fi                                                                              # .(21124.02.1 RAM End)
+
+            nDups=$(( ${#aOldPATH} - ${#aNewPATH} )); # echo "nDups: '${nDups}'"; # exit    # .(21125.01.6 RAM Beg)  
+
+    if [ "${nDups}" == "0" ]; then                                                        	          
+            echo -e "  * The New PATH will be the same as the Old PATH."
+            exit
+            fi                                                                              # .(21125.01.6 RAM End)            
       if [ "$3" == "-doit" ]; then
 
-#           echo "$0 vars set -doit PATH \"${aNewPath:2}\""
-#                "${BASH_SOURCE} vars set -doit PATH \"${aNewPath:2}\""
-            echo "$0 vars set -doit PATH \"...\""
-#                "$( dirname ${BASH_SOURCE} )/$0 vars set -doit PATH \"${aNewPath:2}\""
+#           echo "$0 vars set -doit PATH \"${aNewPATH}\""
+#                           "${BASH_SOURCE}      vars set -doit PATH \"${aNewPATH}\""
+#                "$( dirname ${BASH_SOURCE} )/$0 vars set -doit PATH \"${aNewPATH}\""
+#           echo                             "$0 vars set -doit PATH \"...\""
+
+            echo -e "    About to remove ${nDups} chars from the global System PATH."
+
+    if [ "${aDelim}" == ":" ]; then                                                       	# .(21125.01.7)
+           "$0" vars set PATH -doit "${aNewPATH}"                                         	# .(21124.01.5 RAM Let's see if this works)
+      if [ "$?" == "1" ]; then exit; fi                                                   	# .(21124.01.6 RAM Exit if it doesn't)
+          else                                                                            	# .(21125.01.8)             
+            cmd //c REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH -d "${aNewPath}" # .(21125.01.9)            
+            fi                                                                            	# .(21125.01.10)             
+            echo -e "    The new PATH has been reset (${#aNewPATH} chars).\n"
          else
-            echo -e "    The PATH will be reset to: \n\n${aNewPath:2}"
+            echo -e "    The Old PATH will have (${nDups}) chars removed from the new PATH (${#aNewPATH} chars)\n"; echo "${aNewPATH}"
+            fi
             fi
             bCmdRan="1"                                                                     # .(81014.03.8)
             fi                          # eif aCmd2 == path clean                           # .(21114.04.1 RAM End)

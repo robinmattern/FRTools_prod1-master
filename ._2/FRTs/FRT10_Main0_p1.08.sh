@@ -62,6 +62,7 @@
 # .(21120.03 11/20/22 RAM  2:55p| Set System Path for FRTools in DOS, GFW and Linux
 # .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or profile
 # .(21122.01 11/22/22 RAM  9:15a| Add exit code if paths are the same
+# .(21126.01 11/26/22 RAM  2:00p| Check SYSTEM path to see if set path was successful
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -412,7 +413,9 @@ function Help( ) {
 #          echo     "${aInfoScr}" path add -doit "${aPath1}"; exit
                     "${aInfoScr}" path add -doit "${aPath1}"
                if [ "$?" == "1" ]; then exit; fi                                                            # .(21122.01.5 if no change to path)
-         aPath2="$( "${aInfoScr}" path show "\._2" )"
+
+#          aPath2="$( "${aInfoScr}" path show "\._2"         )"                                             ##.(21126.01.1)
+           aPath2="$( "${aInfoScr}" path show "FRTools" -sys )"                                             # .(21126.01.1 RAM Need to check SYSTEM paths)
 
      if [ "${aPath2}" != "" ]; then
      if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi
