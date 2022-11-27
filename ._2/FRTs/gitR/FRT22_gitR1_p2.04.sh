@@ -91,6 +91,7 @@
 # .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer 
 # .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits 
 # .(21118.02 11/27/22 RAM  3:00p| Use gitR_clone_p1.04
+# .(21127.03 11/27/22 RAM  4:45p| Improve Git Pull -hard 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -801,7 +802,7 @@ END{ }
 #       echo "    $( dirname $0 )/gitr_clone_u1.03.sh"       "${mARgs[0]}" "${aArg2}" "${aArg3}" ${aDoit}
 #       echo "    $( dirname $0 )/FRT23_gitR_clone_p1.03.sh" "${mARgs[0]}" "${aArg2}" "${aArg3}" ${aDoit}
 #                "$( dirname $0 )/FRT23_gitR_clone_p1.04.sh" "${mARgs[0]}" "${aArg2}" "${aArg3}" ${aDoit}   # .(21118.02.1 RAM Used this version)
-                 "$( dirname $0 )/FRT23_gitR_clone_p1.04.sh" "${mARgs[0]}" "${mARgs[1]}" "${aArg3}" ${aDoit}   # .(21118.02.3 RAM Preserve RepoDir case)
+                 "$( dirname $0 )/FRT23_gitR_clone_p1.04.sh" "${mARgs[0]}" "${mARgs[1]}" "${aArg3}" ${aDoit} # .(21118.02.2 RAM Preserve RepoDir case)
 
         ${aLstSp}; exit
      fi # eoc Next Command                                                                                  # .(21027.01.4 End)
@@ -939,15 +940,16 @@ END{ }
         setProjVars
 
         echo ""
-    if [ "${aArg2}" == "-hard" ]; then 
-        git diff 
-        fi
-
-        sayMsg "GitR1[935]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
-    if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
+    if [ "${aArg2}" == "-hard" ]; then                                                                      # .(21127.03.1 RAM Beg Added)
+#       git diff 
         git reset --hard | awk '{ print "   " $0 }'
+        fi                                                                                                  # .(21127.03.1 RAM End)
+        sayMsg "GitR1[935]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
+
         git pull | awk '/changed|Already/ { print "   "$0 }'
-        chmod -R 755 "${aProjDir}"
+
+    if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
+        chmod -R 755 "${aProjDir}" *.sh
         echo -e "\n * FRTools script permissions have been reset"
 
       else                                                                                                  # .(21111.02.1 RAM End)
