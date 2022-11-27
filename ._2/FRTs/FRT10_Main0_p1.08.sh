@@ -65,7 +65,7 @@
 # .(21122.01 11/22/22 RAM  9:15a| Add exit code if paths are the same
 # .(21126.01 11/26/22 RAM  2:00p| Check SYSTEM path if set path was successful
 # .(21126.08 11/26/22 RAM  6:11p| Add -user option to 'frt set path'
-# .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH 
+# .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -127,15 +127,16 @@ function Help( ) {
      echo ""                                                                            #
      echo "     FRT Path Set [-doit] [-user]        Enable formR Tools to run anywhere" # .(21120.03.1 RAM Added).(21126.08.1 RAM Added -user)
      echo ""                                                                            #
-   # echo "     FRT keyS [ Host ] [ Help ]          Manage SSH Key files"
+#    echo "     FRT keyS [ Host ] [ Help ]          Manage SSH Key files"
+     echo "     FRT keyS [ Help ]                   Manage SSH Key files"
    # echo "         keyS List [ SSH Hosts ]"                                            # .(20429.02.1 Beg RAM Added)
 #  # echo "         keyS Make SSH Key  {KeyOwner}  {Host} {HostUser} {Resource}"
 #  # echo "         keyS Delete SSH Key {KNo} [Authorized_Keys]"
 #  # echo "         keyS Copy SSH Key  {KNo}"
-#  # echo "         keyS List SSH Hosts Keys"
+     echo "         keyS List SSH Hosts Keys"
 #  # echo "         keyS Set  SSH Host {KNo}       {Host} {HostUser} {Resource}"
 #  # echo "         keyS Test SSH Host {HostAliasName}"                                 # .(20429.02.1 End)
-   # echo ""
+     echo ""
      echo "     FRT gitR [ help ]                   Manage Git Local and Remote Repos"  # .(20429.03.1 Beg RAM Added)
      echo "         gitR Init"                                                          # .(20429.03.1 End)
      echo "         gitR Clone"                                                         # .(21027.04.1 RAM Added)
