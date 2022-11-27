@@ -87,13 +87,15 @@
 # .(21113.02 11/12/22 RAM  1:30p| Don't add Run
 # .(21113.05 11/12/22 RAM  5:30p| Move Version in to Begin
 # .(21120.02 11/20/22 RAM  1:58p| Fix aOSv and aLstSp
+# .(21126.05 11/26/22 RAM  3:37p| Set aOSv again for GitBash and ComEmu
+# .(21126.07 11/26/22 RAM  5:48p| Remove aVdt.. version vars from this script
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-     aVdt="Nov 20, 2022  1:58p"; aVtitle="JavaScriptware Tools Utility Fns"                 # .(21113.05.4 RAM Add aVtitle for Version in Begin)
-     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
+#    aVdt_x="Nov 20, 2022  1:58p"; aVtitle_x="JavaScriptware Tools Utility Fns"                 # .(21113.05.4 RAM Add aVtitle for Version in Begin)
+#    aVer_x="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
 #          if [ "${LIB}" == "" ]; then LIB=JPT; Lib=RSS; fi                                 ##.(80926.01.1)
            if [ "${LIB}" == "" ]; then LIB=JPT; Lib=JPT; fi                                 # .(80926.01.1).(21113.01.1 RAM Was RSS)
@@ -150,11 +152,17 @@ function  setOS() {
 #    fi                                                                                 # .(21120.02.6)
 #    bGFW1=$( echo "$PATH" | tr : "\n" | awk '/\/(git|Git)\/usr\// { print 1 }' )       ##.(21120.02.7)
 #             echo "$PATH" | tr : "\n" | awk '/(git|Git)\/usr/'
-     bGFW1=$( echo "$PATH" | tr : "\n" | awk '/(git|Git)\/usr/ { print 1; exit }' )     # .(21120.02.8)                         # .(21112.05.1 RAM Check if /git/usr/bin in path)
-#   echo "bGFW1: ${bGFW1}, bGFW2: ${bGFW2}"; exit
+#    bGFW1=$( echo "$PATH" | tr : "\n" | awk '/(git|Git)\/usr/ { print 1; exit }' )     # .(21120.02.8)                         # .(21112.05.1 RAM Check if /git/usr/bin in path)
+     bGFW1=$( echo "$PATH" | tr : "\n" | awk '/mingw64/ { print 1; exit }' )            # .(21126.05.1 RAM One last Time)       # .(21112.05.1 RAM Check if /git/usr/bin in path)
   if [ "${bGFW1}" == "1" ]; then                                                                                                # .(21112.05.2 RAM Was if [ "${ConEmuTask}" != "" ])
      aOSv="gfw1"
      fi
+     bGFW2=$( echo "$PATH" | tr : "\n" | awk '/ConEmu/ { print 1; exit }' )             # .(21126.05.2 RAM Beg And ConEmu)
+  if [ "${bGFW2}" == "1" ]; then                                                                                                # .(21112.05.2 RAM Was if [ "${ConEmuTask}" != "" ])
+     aOSv="gfw2"
+     fi                                                                                 # .(21126.05.2 RAM End)
+ #  echo "bGFW1: ${bGFW1}, bGFW2: ${bGFW2}"; exit
+
                                        aDrv=""
   if [ "${aOSv:0:1}" == "g"    ]; then aDrv="/c"  ; fi    # Windows Git Bash
   if [ "${aOSv:0:1}" == "m"    ]; then aDrv=""    ; fi    # MacOS                       # .(20623.03.1)
