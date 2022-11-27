@@ -1,0 +1,6 @@
+#!.bin/sh
+
+  chmod -R 755 ._2
+   
+._2/bin/frt set path "$@" 
+
