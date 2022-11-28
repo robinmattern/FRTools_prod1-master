@@ -252,7 +252,8 @@ function Help( ) {
         getCmd "in"             "Init"                                                  # .(20502.06.x End)
 
         getCmd "push"           "Push"
-        getCmd "pull"           "Pull"
+#       getCmd "pull"           "Pull"
+        getCmd "pull"  "*"      "Pull"                                                  # .(21127.03.1)
         getCmd "clon"  "*"      "Clone"                                                 # .(21027.01.3).(21027.03.2)
 
         getCmd "fe"    "al"     "Fetch All"       0
@@ -940,16 +941,18 @@ END{ }
   if [ "${aCmd}" ==  "Pull" ]; then
         setProjVars
 
-        echo ""
-    if [ "${aArg2}" == "-hard" ]; then                                                                      # .(21127.03.1 RAM Beg Added)
+    if [ "${aArg1}" == "hard"   ]; then  aArg1="-hard"; fi                                                   # .(21127.03.2)
+    if [ "${aArg1}" == "--hard" ]; then  aArg1="-hard"; fi                                                   # .(21127.03.3)
+    if [ "${aArg1}" == "-hard"  ]; then                                                                      # .(21127.03.4 RAM Beg Added)
 #       git diff 
         git reset --hard | awk '{ print "   " $0 }'
-        fi                                                                                                  # .(21127.03.1 RAM End)
+        fi                                                                                                  # .(21127.03.5 RAM End)
         sayMsg "GitR1[948]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
 
         git pull | awk '/changed|Already/ { print "   "$0 }'
 
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
+        if [  -d  "../${aProjDir}" ]; then aProjDir="../${aProjDir}"; fi                                    # .(21127.03.6)  
         chmod -R 755 "${aProjDir}" *.sh
         echo -e "\n * FRTools script permissions have been reset"
 
