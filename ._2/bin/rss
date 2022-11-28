@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Robin's Shell Scripts Launch Script
 
          aDir="$( dirname "${BASH_SOURCE}" )"
