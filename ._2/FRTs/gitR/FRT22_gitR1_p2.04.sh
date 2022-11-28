@@ -952,7 +952,7 @@ END{ }
         fi                                                                                                  # .(21127.03.5 RAM End)
         sayMsg "GitR1[948]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
 
-        git pull | awk '/changed|Already/ { print "   "$0 }'
+        git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'
 
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
         if [  -d  "../${aProjDir}" ]; then aProjDir="../${aProjDir}"; fi                                    # .(21127.03.6)  
@@ -961,7 +961,7 @@ END{ }
         echo -e "\n * FRTools script permissions have been reset"
 
       else                                                                                                  # .(21111.02.1 RAM End)
-        git pull | awk '/changed|Already/ { print "   "$0 }'
+        git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'
         fi
 
         ${aLstSp}                                                                                           # .(21127.08.2)
