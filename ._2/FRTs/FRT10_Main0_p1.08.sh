@@ -443,7 +443,7 @@ function Help( ) {
       else
         echo -e     "\n    The Path to FRTools has not been set."
         fi
-        ${aLstSp}; exit
+        ${aLstSp}; exit                                                                                     # .(21127.08.1)
         fi # eif bDoit
      fi # eoc set path
 #       --------------------------------------------------------
