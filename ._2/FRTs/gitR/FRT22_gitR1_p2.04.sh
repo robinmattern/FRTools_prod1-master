@@ -93,6 +93,7 @@
 # .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits 
 # .(21118.02 11/27/22 RAM  3:00p| Use gitR_clone_p1.04
 # .(21127.03 11/27/22 RAM  4:45p| Improve Git Pull -hard 
+# .(21127.03 11/27/22 RAM  9:15p| More improvements to Git Pull -hard 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -164,7 +165,8 @@ function Help( ) {
         echo "         Push                                                    Upload changes to remote"
         echo "         Fetch                                                   Fetch remote changes (Refs only, i.e. no local changes)"
         echo "         Fetch [All]                                             Fetch remote changes for all remotes and branches"
-        echo "         Pull                                                    Merge remote changes (if not merge conflicts)"
+        echo "         Pull                                                    Merge remote changes (if no merge conflicts)"
+        echo "         Pull  -hard  [ hard | --hard ]                          Remove all changes before merge"                 # .(21127.03.8)
         echo "         Sparse On | Off | List                                  Turn sparse-checkout on and/or off"              # .(21025.01.2 RAM Added).(21026.01.1)
         echo "         Clone {Project} [-doit] [-all]                          Backup and Clone Repo with sparse-checkout"      # .(21027.01.2 RAM Added)
         echo "         Clone {RepoURL} [-doit] [-all]                          Create config file: gitr_{project}_config.sh"    # .(21101.05.1 RAM Added)
@@ -940,6 +942,7 @@ END{ }
 
   if [ "${aCmd}" ==  "Pull" ]; then
         setProjVars
+        echo ""
 
     if [ "${aArg1}" == "hard"   ]; then  aArg1="-hard"; fi                                                   # .(21127.03.2)
     if [ "${aArg1}" == "--hard" ]; then  aArg1="-hard"; fi                                                   # .(21127.03.3)
