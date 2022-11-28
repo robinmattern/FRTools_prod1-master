@@ -1,0 +1,8 @@
+#!/bin/bash
+# formR DocR Launch Script
+
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../FRTs/FRT30_docR0.sh"
+
+#echo "${aCmd}" "$@"
+      "${aCmd}" "$@"
