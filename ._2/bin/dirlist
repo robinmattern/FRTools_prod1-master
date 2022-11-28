@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Robin's DirList Command Script
 
          aDir="$( dirname "${BASH_SOURCE}" )"
