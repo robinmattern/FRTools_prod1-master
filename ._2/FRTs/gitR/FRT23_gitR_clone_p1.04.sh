@@ -33,6 +33,7 @@
 # .(21118.02 11/27/22 RAM  3:10p| Add RepoDir folder to parsed argument
 # .(21127.01 11/27/22 RAM  3:10p| Change name of gitr-config file
 # .(21127.02 11/27/22 RAM  3:10p| RDir may not exist
+# .(21127.08 11/27/22 RAM  8:30p| Added ${aLstSp} in various places 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -323,8 +324,9 @@ if [ "$c5" == " " ]; then
      cat   "${aConfigFile}"
     echo "-------------------------------------------------------------------------------"
     echo ""
+    echo "  Then run the command again, gitr clone ${aPrj} to view the settings."
 
-    exit
+    {aLstSp}; exit
     fi                                                                                      # .(21101.02.4)
 #   -----------------------------------------
     fi
@@ -361,7 +363,7 @@ END   { }'
     if [ "${bDoit}" != "1" ]; then                                                          # .(21101.02.5)
 
        $0 "${aPrj}"                                                                         # .(21105.02.1 RAM Show updated config)
-       echo ""; exit
+       echo ""; exit                                                                        # .(21127.08.5)
     fi                                                                                      # .(21101.02.6)
     fi
 #   --------------------------------------------------------------------------------------------------
@@ -427,9 +429,9 @@ if [ "${bSSH}" == "0" ]; then
     echo ""
     echo -e "  To clone ${aCone}"
     echo ""
-    echo "    Run: gitr clone ${aProj} ${aAll}-doit"
-    echo ""
-    exit
+    echo    "    Run: gitr clone ${aPrj} ${aAll}-doit"                          # .(21127.08.3 RAM Uppercase Project)
+
+    ${aLstSp}; exit                                                             # .(21127.08.4)
     fi
 
 #   -----------------------------------------------------------------
@@ -466,14 +468,16 @@ if [ "${bSSH}" == "0" ]; then
     rm -fr "${aRepoDir}"/*  2>/dev/null                                         # .(21026.01.1 RAM Delete all files in RepoDir)
     rm -fr "${aRepoDir}"/.* 2>/dev/null
 
-         nCnt=$( ls -la "${aRepoDir}" | awk '/total/ { print $2 }' )                 # .(21107.01.1 RAM Check if RepoDir contains files)
- if [ "${nCnt}" != "0" ]; then
+ if [ -d "${aRepoDir}" ]; then                                                  # .(21127.08.3 RAM check if folder is still there)
+            nCnt=$( ls -la "${aRepoDir}" | awk '/total/ { print $2 }' )         # .(21107.01.1 RAM Check if RepoDir contains files)
+    if [ "${nCnt}" != "0" ]; then
 
          echo -e "\n * The repo folder, ${aRepoDir} was not completey removed"
 
                    aRDir="../../JPTs/RSS/DirList\RSS22_DirList.sh"              # .(21127.02.1 RDir may not exist)
          if [ -f "${aRDir}" ]; then "${aRDir}" "${aRepoDir}"; exit; fi          # .(21127.02.2)
          exit
+      fi                                                                        # .(21127.08.3)  
     fi
 #   -----------------------------------------------------------------
 
