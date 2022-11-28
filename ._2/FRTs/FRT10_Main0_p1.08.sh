@@ -405,6 +405,7 @@ function Help( ) {
         if [ "$3" == "-user" ] || [ "$4" == "-user"    ] ; then aUser="-user"; fi                           # .(21126.08.2)
 
      if [ "${bDoit}" == "0" ] ; then
+
 #       aBashrc=".bashrc"; if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                        # .(21121.03.8)
         aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                        # .(21121.03.1 RAM Use alternate profile file)
 
@@ -425,7 +426,7 @@ function Help( ) {
 #          echo       "${aInfoScr}" path add -doit "${aPath1}"; exit
     export bQuiet=1;  "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                   # .(21126.08.4).(21127.07.03)
 
-           if [ "$?" == "1" ]; then exit; fi                                                                # .(21122.01.5 if no change to path)
+           if [ "$?" == "1" ]; then ${aLstSp}; exit; fi                                                     # .(21122.01.5 if no change to path)
 
 #          aPath2="$( "${aInfoScr}" path show "\._2"         )"                                             ##.(21126.01.1)
            aPath2="$( "${aInfoScr}" path show "FRTools" -sys )"                                             # .(21126.01.1 RAM Need to check SYSTEM paths)
