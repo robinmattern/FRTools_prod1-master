@@ -953,7 +953,8 @@ END{ }
 
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
         if [  -d  "../${aProjDir}" ]; then aProjDir="../${aProjDir}"; fi                                    # .(21127.03.6)  
-        chmod -R 755 "${aProjDir}" *.sh
+#       chmod -R 755 "${aProjDir}" *.sh                                                                     ##.(21127.03.7)  
+        chmod -R 755 "${aProjDir}"                                                                          # .(21127.03.7)  
         echo -e "\n * FRTools script permissions have been reset"
 
       else                                                                                                  # .(21111.02.1 RAM End)
