@@ -5,18 +5,32 @@
 
       if [ "${bDoit}"  == "" ]; then bDoit=0; fi
       if [ "${bQuiet}" == "" ]; then bQuiet=0; fi
-      if [ "${aFCd}"   == "" ]; then aFCd="${aFile:0:5}"; fi
+      if [ "${aFCd}"   == "" ]; then aFCd="${aFile:0:5}"; fi   # .(21128.03.1 RAM First 5 chars of Filename)
 
-#        aFCd='GitR1'; aFile="FRT22_${aFCd}_p2.02.sh"
-#        aFCd='JPFns'; aFile="JPT12_Main2Fns_p1.06.sh"
-#        aFCd='FRT10'; aFile="${aFCd}_frt_p1.06.sh"
-#        aFCd='{JPT}'; aFile="FRT90_frt_u1.06-MT.sh"
-#        aFCd='JPT10'; aFile="JPT10_Main0_p1.06.sh"
+#             aFCd='GitR1'; aFile="FRT22_${aFCd}_p2.02.sh"
+#             aFCd='JPFns'; aFile="JPT12_Main2Fns_p1.06.sh"
+#             aFCd='FRT10'; aFile="${aFCd}_frt_p1.06.sh"
+#             aFCd='{JPT}'; aFile="FRT90_frt_u1.06-MT.sh"
+#             aFCd='JPT10'; aFile="JPT10_Main0_p1.06.sh"
 
-      if [ "${aFCd}" == "FRT22" ]; then aFCd="GitR1"; fi
-      if [ "${aFCd}" == "FRT23" ]; then aFCd="FRApp"; fi
+#     if [ "${aFCd}" == "FRT10" ]; then aFCd="FRT10"; fi       # .(21128.03.2 RAM Use as is)          keyS1     
+      if [ "${aFCd}" == "FRT21" ]; then aFCd="keyS1"; fi       # .(21128.03.3 RAM Swap)               keyS1     
+      if [ "${aFCd}" == "FRT22" ]; then aFCd="gitR1"; fi       #                                      gitR1
+      if [ "${aFCd}" == "FRT23" ]; then aFCd="gitR2"; fi       # .(21128.03.4 RAM Swap)               gitR_clone
+
+#     if [ "${aFCd}" == "FRA23" ]; then aFCd="FRApp"; fi       # .(21128.03.5 RAM Visit later)        ??  
+
+#     if [ "${aFCd}" == "JPT10" ]; then aFCd="JPT10"; fi       # .(21128.03.6 RAM Use as is)          Main1     
       if [ "${aFCd}" == "JPT12" ]; then aFCd="JPFns"; fi
-      if [ "${aFCd}" == "FRT90" ]; then aFCd="{JPT}"; fi
+#     if [ "${aFCd}" == "JPT13" ]; then aFCd="JPT13"; fi       # .(21128.03.7 RAM Use as is)          reNum     
+#     if [ "${aFCd}" == "JPT21" ]; then aFCd="JPT21"; fi       # .(21128.03.8 RAM Use as is)          Dirs1
+#     if [ "${aFCd}" == "JPT30" ]; then aFCd="JPT30"; fi       # .(21128.03.9 RAM Use as is)          docR0    
+      if [ "${aFCd}" == "FRT90" ]; then aFCd="{JPT}"; fi       #                                      Template
+      if [ "${aFCd}" == "FRT99" ]; then aFCd="{JPT}"; fi       # .(21128.03.10 RAM Swap)              Template
+
+#     if [ "${aFCd}" == "RSS21" ]; then aFCd="RSS21"; fi       # .(21128.03.11 RAM Use as is)         ListList
+#     if [ "${aFCd}" == "RSS22" ]; then aFCd="RSS22"; fi       # .(21128.03.12 RAM Use as is)         DirList
+      if [ "${aFCd}" == "RSS22" ]; then aFCd="RSS23"; fi       # .(21128.03.13 RAM Use as is)         Info 
 
 #        bDoit=0
 
@@ -29,7 +43,7 @@
          exit
          fi
 
-         echo "  - JPT13[ 32]  aFCd:  '${aFCd}', aFile: '${aFile}'"; # exit
+         echo "  - JPT13[ 46]  aFCd:  '${aFCd}', aFile: '${aFile}'"; #  exit
 
 # ---------------------------------------------------------------
 
@@ -41,7 +55,8 @@
          aTS=$( date '+%y%m%d.%H%M' ); aTS="\`${aTS:1}";  # echo "  aTS: '${aTS}'"; # exit
          aCnts="$( wc ${aFile} | awk '{ printf "%7d%6d\n", $3, $1 }' )";
          nSize=${aCnts:1:6}; nSize=$(( ${nSize} + 82 ))
-         nLines=$(( ${aCnts:8:5} - 1 ))                                                             # .(21117.03.2 RAM nLines - 1)
+#        nLines=$(( ${aCnts:8:5} - 1 ))                                                             # .(21117.03.2 RAM nLines - 1)
+         nLines=$(( ${aCnts:8:5} + 1 ))                                                             # .(21128.03.2 RAM nLines + 1)
          aDate="$( date '+%-m/%d/%y %H:%M' )"
          aDat2="$( date '+%b %d, %Y %l:%M%p' | awk '{ sub( /PM/, "p"); sub( /AM/, "a"); print }' )" # .(21117.04.2 RAM Add nice version date)
 
@@ -59,7 +74,7 @@
          aVer=$( echo ${aVer}  | awk '{ sub( /_v[0-9-]+[absz]+/, ""  ); print }' ); aVer=${aVer/-/.}; aVer1=${aVer}
 
          echo ""
-         echo "  - JPT13[ 62]  aFle:  '${aFle}', aVer: '${aVer}', aVer2: '${aVer2}'";  # exit
+         echo "  - JPT13[ 76]  aFle:  '${aFle}', aVer: '${aVer}', aVer2: '${aVer2}'";  # exit
 
 #        aVer="${aVer}-${aTS:1}";                                   aVn="v${aVer:1}"
 #        aVer="${aVer}-${aTS:1}"; if [ "${aVer:0:1}" != "u" ]; then aVn="v${aVer:1}"; fi
@@ -102,7 +117,7 @@ END{ }
 #                   echo "$aFile2" | awk '{ sub( /\.sh/, "'${aTS}'.sh" );     sub( /_[ptu]/,  "_v"  ); print }'
 #        aFile2="$( echo "$aFile2" | awk '{ sub( /\.sh/, "'${aTS}'.sh" );     sub( /_[ptu]/,  "_v"  ); print }' )"
 
-         echo "  - JPT13[103]  aFile2:'${aFile2}', aTS: ${aTS:1}";
+         echo "  - JPT13[119]  aFile2:'${aFile2}', aTS: ${aTS:1}";
 
 #        aFile2=${aFile2/.sh/${aTS}.sh}
          aFile2="$( echo "${aFile2}" | awk '{ sub( /_'${aVer2}'/, "_'${aVer1}'" ); print }' )"                                       # Remove part of _old version
@@ -111,8 +126,8 @@ END{ }
 #        aFile2="$( echo "${aFile2}" | awk '{    sub( /.(sh|js|json.njs|json|njs|html)/, "_v'${aTS:1}'.bak"          ); print }' )"  # Use _v and same .ext
          aFile2="$( echo "${aFile2}" | awk '{ print gensub( /.(sh|js|json.njs|json|njs|html)/, "_v'${aTS:1}'.\\1", 1 )        }' )"  # Use _v and same .ext
 #                                                   gensub( /.*([0-9][0-9])d([0-9][0-9]).*/  , "\\2 \\1", "g", a);
-#                                                                         'JPT10_Main0_x1.06`21117-1254_x21117-1254.bak'
-         echo "  - JPT13[113]  aFile2:'${aFile2}'"; # exit
+#                                                   'JPT10_Main0_x1.06`21117-1254_x21117-1254.bak'
+         echo "  - JPT13[129]  aFile2:'${aFile2}'"; # exit
 
 # ---------------------------------------------------------------
 
@@ -129,7 +144,7 @@ END{ }
 #        echo "    cp -p \"${aFile}\" \"${aFile2}\""
 
 #        echo "    cp -p  '${aFile}'  '${aFile2/.sh/${aTS}.sh}'"
-         echo "  - JPT13[114]  cp -p  '${aFile}'  '${aFile2}'"
+         echo "  - JPT13[146]  cp -p  '${aFile}'  '${aFile2}'"
          fi
 
 # ---------------------------------------------------------------
@@ -138,7 +153,7 @@ END{ }
 
 #        echo             "    cp -p  '${aFile}'  '${aFile2/.sh/${aTS}.sh}'"
 #        echo             "    cp -p  '${aFile}'  '${aFile2}'"
-#        echo "  - JPT13[123]  cp -p  '${aFile}'  '${aFile2}'"
+#        echo "  - JPT13[155]  cp -p  '${aFile}'  '${aFile2}'"
 
    if [ "${aFile}" == "${aFile2}" ]; then
          echo ""; echo " ** Failed to make backup copy. Aborting"; echo ""; exit
@@ -153,7 +168,7 @@ END{ }
          cat "${aFile2}"                | awk "${aAWKscr2}" >"${aFile}"
 
          echo ""
-         echo "  - JPT13[131]  script '${aFile}'   has been formatted."
+         echo "  - JPT13[170]  script '${aFile}'   has been formatted."
 #        echo ""
 
          fi

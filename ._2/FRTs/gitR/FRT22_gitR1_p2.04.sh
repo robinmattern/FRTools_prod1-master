@@ -101,13 +101,12 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 27, 2022  5:04p"; aVtitle="formR gitR Tools"                                               # .(21113.05.6 RAM Add aVtitle for Version in Begin)
+        aVdt="Nov 27, 2022  5:04p"; aVtitle="formR gitR Tools"                                              # .(21113.05.6 RAM Add aVtitle for Version in Begin)
         aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
-        LIB="GITR"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                     # .(80923.01.1)
+        LIB="GITR"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                    # .(80923.01.1)
 
-                                                                                                               ##.(21113.05.7 RAM Use JPT12_Main2Fns_p1.07.sh)
-        aFns="$( dirname "${BASH_SOURCE}")/../../JPTs/JPT12_Main2Fns_p1.07.sh";   if [ ! -f "${aFns}" ]; then  # .(21113.05.7 RAM Use JPT12_Main2Fns_p1.07.sh)
+        aFns="$( dirname "${BASH_SOURCE}")/../../JPTs/JPT12_Main2Fns_p1.07.sh"; if [ ! -f "${aFns}" ]; then # .(21113.05.7 RAM Use JPT12_Main2Fns_p1.07.sh)
         echo -e "\n ** RSS1[ 71]  JPT Fns script, '${aJFns}', NOT FOUND\n"; exit; fi; #fi
         source "${aFns}";
 

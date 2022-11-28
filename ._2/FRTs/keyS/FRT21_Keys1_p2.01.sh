@@ -3,8 +3,9 @@
 ##=========+====================+================================================+
 ##RD         Keys               | Manage Private and Public Keys
 ##RFILE    +====================+=======+=================+======+===============+
-##FD   JPT21-Keys.sh            |   9479|  7/07/21  1:48a |   136| v1.5.81008.01
-##DESC     .--------------------+-------+-----------------+------+---------------+
+##FD   JPT21-Keys.sh            |   9479|  7/07/21 13:48|   136| v1.05.81008.01
+##FD   FRT21_Keys1.sh           |  54989| 11/28/22 13:41|   879| p2.01-21128.1341
+##DESC     .--------------------+-------+---------------+------+---------------+
 #            Use the commands in this script to manage key files for accessing
 #            remote servers with SSH. See [ "${aCmd}" == "Help" ]
 ##LIC      .--------------------+----------------------------------------------+
@@ -42,9 +43,9 @@
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-    bDebug=0
-    bSpace=1
-    aLstSp="echo "; if [ "${OS:0:3}" == "Win" ]; then aLstSp=""; fi                                         # .(10706.09.1)
+     bDebug=0
+     bSpace=1
+     aLstSp="echo "; if [ "${OS:0:3}" == "Win" ]; then aLstSp=""; fi                                        # .(10706.09.1)
 
      aVdt="Jul 18 2021 20:30"                                                                               # .(20601.01.1 RAM)
 
@@ -175,7 +176,7 @@ function sayMsg( ) {  aMsg="$1"; aSp=""; # aSp=" -- space --";
   if [ "${aCmd2}" == "te-ho"    ]; then aCmd="Test SSH Host";       a=2; fi
   if [ "${aCmd3}" == "te-ss-ho" ]; then aCmd="Test SSH Host";       a=3; fi
 
-#         sayMsg "Keys[  1]  aCmd: '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}'" 2
+#         sayMsg "keyS1[179]  aCmd: '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}'" 2
 
 # ----------------------------------------------------------------------------------------------------------
 #
@@ -271,7 +272,7 @@ function sayMsg( ) {  aMsg="$1"; aSp=""; # aSp=" -- space --";
      if [ "${aArg7:0:2}" == "de" ]; then bDebug=1;                                                                                                 aArg7="$aArg8"; fi
      if [ "${aArg8:0:2}" == "de" ]; then bDebug=1;                                                                                                                 fi
 
-#         sayMsg "Keys[  5]  aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 2
+#         sayMsg "keyS1[275]  aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 2
 
           aServer=${THE_SERVER}; if [ "${aServer}" == "" ]; then aServer="${SCN_SERVER}"; fi
           aOS="linux"; if [ "${aServer:7:1}" == "w" ]; then aOS="windows"; fi
@@ -281,14 +282,14 @@ function sayMsg( ) {  aMsg="$1"; aSp=""; # aSp=" -- space --";
 
 # ----------------------------------------------------------------------------------------------------------
 
-     sayMsg "Keys[ 20]  Begin Keys Commands"
+     sayMsg "keyS1[285]  Begin Keys Commands"
 
 
 #    SHOW KEYS
 #
 # == ========= ============================================================================================================
 
-     sayMsg "Keys[ 30]  Show Keys"
+     sayMsg "keyS1[292]  Show Keys"
   if [ "${aCmd}" == "Show Keys" ]; then
 
      cd ~/.ssh
@@ -397,11 +398,11 @@ if [ "${aFile/pub/}" != "${aFile}" ]; then
 #
 # == ============ =========================================================================================================
 
-     sayMsg "Keys[ 40]  Make SSH Key"
+     sayMsg "keyS1[401]  Make SSH Key"
 
   if [ "${aCmd}" == "Make SSH Key" ]; then
 
-#    sayMsg "Keys[ 42]  Make SSH Key '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}'" 2
+#    sayMsg "keyS1[405]  Make SSH Key '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}'" 2
 
   if [ "$1" == "" ]; then
      echo "";
@@ -453,10 +454,10 @@ if [ "${aFile/pub/}" != "${aFile}" ]; then
    if [ "${aHostUser}" != "" ];                                    then aHostUser="_${aHostUser}"; fi
    if [ "${aResource}" != "" ];                                    then aResource="_${aResource}"; fi
 
-     aDate=$( date '+%y%m%d' );                                              # sayMsg "Keys[ 43]  aDate: '${aDate}'" 2
-#    aKeyFile=${aKeyOwner}@${aHost}_${aHostUser}${aRepoName}_v${aDate};        sayMsg "Keys[ 44]  aKeyFile: '${aKeyFile}'" 2
-#    aKeyFile=${aKeyOwner}@${aHost}${aHostUser}${aResource}_v${aDate};         sayMsg "Keys[ 44]  aKeyFile: '${aKeyFile}'"
-     aKeyFile=${aKeyOwner}@${aHost}${aHostUser}${aResource}_a${aDate};         sayMsg "Keys[ 44]  aKeyFile: '${aKeyFile}'"  # .(10706.01.1 RAM Use _a)
+     aDate=$( date '+%y%m%d' );                                              # sayMsg "keyS1[457]  aDate: '${aDate}'" 2
+#    aKeyFile=${aKeyOwner}@${aHost}_${aHostUser}${aRepoName}_v${aDate};        sayMsg "keyS1[458]  aKeyFile: '${aKeyFile}'" 2
+#    aKeyFile=${aKeyOwner}@${aHost}${aHostUser}${aResource}_v${aDate};         sayMsg "keyS1[459]  aKeyFile: '${aKeyFile}'"
+     aKeyFile=${aKeyOwner}@${aHost}${aHostUser}${aResource}_a${aDate};         sayMsg "keyS1[460]  aKeyFile: '${aKeyFile}'"  # .(10706.01.1 RAM Use _a)
 
 #    -----------------------------------------------------------------
 
@@ -601,7 +602,7 @@ function pickFile() {
 #
 # == ============== =======================================================================================================
 
-     sayMsg "Keys[ 50]  Delete SSH Key"
+     sayMsg "keyS1[605]  Delete SSH Key"
 
   if [ "${aCmd}" == "Delete SSH Key" ]; then
 
@@ -643,7 +644,7 @@ function pickFile() {
 #
 # == ============ =========================================================================================================
 
-     sayMsg "Keys[ 50]  Copy SSH Key"
+     sayMsg "keyS1[647]  Copy SSH Key"
   if [ "${aCmd}" == "Copy SSH Key" ]; then
 
          pickFile "copy"
@@ -668,7 +669,7 @@ function pickFile() {
 #
 # == ============== =======================================================================================================
 
-     sayMsg "Keys[ 60]  List SSH Hosts"
+     sayMsg "keyS1[672]  List SSH Hosts"
   if [ "${aCmd}" == "List SSH Hosts" ]; then
 
           cd ~/.ssh
@@ -707,9 +708,9 @@ END               { if (aHost > "") {                                           
 EOF
 #         ------------------------------------------
 
-#       sayMsg "Keys[ 62]  aPrg:" 1; sayMsg "Keys[ 62]  --------------------" 1; sayMsg "Keys[ 62]  ${aPrg[@]}" 3;                         sayMsg "Keys[ 62]  -----------------" 1
-#       sayMsg "Keys[ 63]  aPrg:" 1; sayMsg "Keys[ 63]  --------------------" 1; sayMsg "Keys[ 63]  ${aPrg}" 3;                            sayMsg "Keys[ 63]  -----------------" 1
-#       sayMsg "Keys[ 64]  aPrg:" 1; sayMsg "Keys[ 64]  --------------------" 1; sayMsg "Keys[ 64]  $( cat "/C/Home/_0/bin/@tmp.awk" )" 3; sayMsg "Keys[ 64]  -----------------" 1
+#       sayMsg "keyS1[711]  aPrg:" 1; sayMsg "keyS1[711]  --------------------" 1; sayMsg "keyS1[711]  ${aPrg[@]}" 3;                         sayMsg "keyS1[711]  -----------------" 1
+#       sayMsg "keyS1[712]  aPrg:" 1; sayMsg "keyS1[712]  --------------------" 1; sayMsg "keyS1[712]  ${aPrg}" 3;                            sayMsg "keyS1[712]  -----------------" 1
+#       sayMsg "keyS1[713]  aPrg:" 1; sayMsg "keyS1[713]  --------------------" 1; sayMsg "keyS1[713]  $( cat "/C/Home/_0/bin/@tmp.awk" )" 3; sayMsg "keyS1[713]  -----------------" 1
 
         IFS=$'\n'
 #       mHosts=$( cat ~/.ssh/config | awk -f "/C/Home/_0/bin/@tmp.awk" )
@@ -728,7 +729,7 @@ EOF
 #          ssh-keygen -lf   ${aFile}
 #          exit
 
-#          sayMsg "Keys[ 63]  {#mHosts} ${#mHosts[@]}" 1
+#          sayMsg "keyS1[732]  {#mHosts} ${#mHosts[@]}" 1
 
   if [ "${mHosts}" == "" ]; then
      sayMsg "No Hosts are definfed in ~/.ssh/config" 2
@@ -739,14 +740,14 @@ EOF
      echo "     -------------------------------------------------------  --------------------------------------------------"
 
   for aHost in "${mHosts[@]}"; do
-#    sayMsg "Keys[ 64]  aHost '${aHost}'" 1
+#    sayMsg "keyS1[743]  aHost '${aHost}'" 1
 
-     aFile=${aHost:100}; aFile=${aFile//|/}; aFile1="${aFile/\~/${HOME}}";  # sayMsg "Keys[ 65]  aFile: '${aFile}', aFile1: '${aFile1}'" 1
+     aFile=${aHost:100}; aFile=${aFile//|/}; aFile1="${aFile/\~/${HOME}}";  # sayMsg "keyS1[745]  aFile: '${aFile}', aFile1: '${aFile1}'" 1
      aName="${aHost:0:49} "; if [ "${aName}" == "" ]; then aName="...                                             "; fi;
 
      aHostName="${aHost:70:29} "
 
-     aUserID="${aHost:50:19} ";                                             # sayMsg "Keys[ 66]  aName: '${aName}', aHostName: '${aHostName}', aUserID: '${aUserID}'" 1
+     aUserID="${aHost:50:19} ";                                             # sayMsg "keyS1[750]  aName: '${aName}', aHostName: '${aHostName}', aUserID: '${aUserID}'" 1
 
      aPassword=""                                                                                           # .(10707.02.1 Beg RAM Added Password)
  if [ "${aFile1:0:8}" == "Password" ]; then
@@ -781,7 +782,7 @@ EOF
 #
 # == ============ =========================================================================================================
 
-     sayMsg "Keys[ 70]  Set SSH Hosts"
+     sayMsg "keyS1[785]  Set SSH Hosts"
   if [ "${aCmd}" == "Set SSH Host" ]; then
 
   if [ "$1" == "" ]; then
@@ -804,7 +805,7 @@ EOF
      aDoit="";  if [ "${bDoit}"  == "1" ]; then aDoit="doit ";   fi
      aDebug=""; if [ "${bDebug}" == "1" ]; then aDebug="debug "; fi
 
-#    sayMsg "Keys[ 72]  Set SSH Host: node setSSH_Host.njs ${aArg1} \"${aArg2}\" \"${aArg3}\" \"${aArg4}\"; aDebug: '${aDebug}' aDoit: '${aDoit}'" 1
+#    sayMsg "keyS1[808]  Set SSH Host: node setSSH_Host.njs ${aArg1} \"${aArg2}\" \"${aArg3}\" \"${aArg4}\"; aDebug: '${aDebug}' aDoit: '${aDoit}'" 1
 
      aBinDir=${0/\/keys/};
 #    -------------------------------------------------------------
@@ -849,10 +850,10 @@ if [ "${nKeyNo}" != "" ]; then
 #
 # == ============= ========================================================================================================
 
-     sayMsg "Keys[ 80]  Test SSH Host"
+     sayMsg "keyS1[853]  Test SSH Host"
   if [ "${aCmd}" == "Test SSH Host" ]; then
 
-         sayMsg "Keys[ 81]  Test SSH Host" 1
+         sayMsg "keyS1[856]  Test SSH Host" 1
 
      ${aLstSp}                                                                                              # .(10706.09.13)
      fi # eoc Test SSH Host ---------------------------------------------------------------------------
@@ -862,10 +863,10 @@ if [ "${nKeyNo}" != "" ]; then
 #
 # == ============ =========================================================================================================
 
-     sayMsg "Keys[ 90]  Next Command"; sayMsg ""
+     sayMsg "keyS1[866]  Next Command"; sayMsg ""
   if [ "${aCmd}" == "Next Command" ]; then
 
-         sayMsg "Keys[ 91]  Next Command" 1
+         sayMsg "keyS1[869]  Next Command" 1
 
      ${aLstSp}                                                                                              # .(10706.09.14)
      fi # eoc Next Command ----------------------------------------------------------------------------

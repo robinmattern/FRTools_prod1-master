@@ -1,9 +1,10 @@
 #!/bin/bash
 #*\
 ##=========+====================+================================================+
-##RD         frt                | FormR Tools MT Template
+##RD         frt command        | FormR Tools MT Template
 ##RFILE    +====================+=======+=================+======+===============+
 ##FD   FRT30_Doc0.sh            |  11350| 11/28/22 08:01|   188| p1.01-21128.0801
+##FD   FRT99_Template0.sh       |  10134| 11/28/22 13:47|   169| p1.01-21128.1347
 ##DESC     .--------------------+-------+-----------------+------+---------------+
 #            Use the commands in this script to document sample commands
 #
@@ -25,13 +26,13 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 28, 2022  8:01a"; aVtitle="OS Info Tools"
+        aVdt="Nov 28, 2022  1:47p"; aVtitle="OS Info Tools"
         aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21111.04.1)
 
         LIB=DOC; LIB_LOG=${DOC}_LOG; LIB_USER=${LIB}_USER
 
         aFns="$( dirname "${BASH_SOURCE}" )/../JPTs/JPT12_Main2Fns_p1.07.sh";  if [ ! -f "${aFns}" ]; then  # .(21113.05.9 RAM Use JPT12_Main2Fns_p1.07.sh)
-        echo -e "\n ** FRT10[ 87]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
+        echo -e "\n ** {JPT}[ 35]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
         source "${aFns}";
 
 #   +===== +================== +=========================================================== # ==========+
@@ -45,11 +46,11 @@
 
         setOS; bSpace=1;                                                                                    #  A space hasn't been displayed, print one next
         aLstSp="echo "; if [ "${aOSv/w}" != "${aOSv}" ]; then aLstSp=""; fi                                 # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse).(21120.02.2)
-#       echo "  - {DOC}[125]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
+#       echo "  - {JPT}[ 49]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
 
 #    -- --- ---------------  =  ------------------------------------------------------  #
 
-#       sayMsg   "{DOC}[132]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
+#       sayMsg   "{JPT}[ 53]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
 
 #====== =================================================================================================== #  ===========
 
@@ -61,7 +62,7 @@
 
 function Help() {
 
-        sayMsg    "{DOC}[144]  aCmd:  '${aCmd}', aCmd0: '$1', aCmd1: '${aCmd1}'" -1
+        sayMsg    "{JPT}[ 65]  aCmd:  '${aCmd}', aCmd0: '$1', aCmd1: '${aCmd1}'" -1
 
      if [ "${aCmd}" == "" ]; then bQuiet=0; sayMsg " ** Invalid gitR Command: '$1'" 3; aCmd="Help";  fi     # .(21117.01.2 RAM Works best)
      if [ "${aCmd}" == "Help" ]; then                                                                       # .(21117.01.3)
@@ -85,9 +86,9 @@ function Help() {
         getOpts "bdqgl"
         setCmds
 
-        sayMsg sp "{DOC}[191]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'"
-        sayMsg    "{DOC}[192]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$c' " 1
-#       sayMsg    "{DOC}[193]  aCmd:  '$aCmd',  aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' "
+        sayMsg sp "{JPT}[ 89]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'"
+        sayMsg    "{JPT}[ 90]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$c' " 1
+#       sayMsg    "{JPT}[ 91]  aCmd:  '$aCmd',  aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' "
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -97,13 +98,13 @@ function Help() {
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-        sayMsg "{DOC}[128]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'"
-        sayMsg "{DOC}[129]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
-        sayMsg "{DOC}[130]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" 1
+        sayMsg "{JPT}[101]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'"
+        sayMsg "{JPT}[102]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
+        sayMsg "{JPT}[103]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" 1
 
         Help ${aCmd0}
 
-        sayMsg "{DOC}[134]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" 1 # 2
+        sayMsg "{JPT}[107]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" 1 # 2
 
 #====== =================================================================================================== #  ===========
 
@@ -115,7 +116,7 @@ function Help() {
 
 function subFunction() {                                                                                    # .(21128.01.3 RAM Beg Add subFunction)
 
-        sayMsg "{DOC}[146]  subFunction[1]  Begin" 1
+        sayMsg "{JPT}[119]  subFunction[1]  Begin" 1
 
 
      } # eof subFunction                                                                                    # .(21128.01.3 RAM End)
@@ -127,10 +128,10 @@ function subFunction() {                                                        
 #
 #====== =================================================================================================== #
 
-        sayMsg "{DOC}[158]  Command1"
+        sayMsg "{JPT}[131]  Command1"
 
   if [ "${aCmd}" == "Command1" ]; then
-        sayMsg "{DOC}[161]  Command1" 1
+        sayMsg "{JPT}[134]  Command1" 1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -147,10 +148,10 @@ function subFunction() {                                                        
 #
 #====== =================================================================================================== #
 
-        sayMsg "{JPT}[178]  Command2" # sp
+        sayMsg "{JPT}[151]  Command2" # sp
 
   if [ "${aCmd}" == "{Command2}" ]; then
-        sayMsg "{JPT}[181]  Command2" 1
+        sayMsg "{JPT}[154]  Command2" 1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
