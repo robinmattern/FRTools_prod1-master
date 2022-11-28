@@ -4,6 +4,7 @@
 ##RD         frt                | FormR Tools MT Template
 ##RFILE    +====================+=======+=================+======+===============+
 ##FD   FRT30_Doc0.sh            |  11350| 11/28/22 08:01|   188| p1.01-21128.0801
+##FD   FRT30_docR0.sh           |  16049| 11/28/22 13:51|   274| p1.01-21128.1351
 ##DESC     .--------------------+-------+-----------------+------+---------------+
 #            Use the commands in this script to document sample commands
 #
@@ -17,7 +18,8 @@
 #                               |
 ##CHGS     .--------------------+-------+-------------------+------+-----------+
 # .(11002.01 10/02/21 RAM 10:35p| Created
-# .(21128.02 11/28/22 RAM  8:00p| Add docR Commands
+# .(21128.01 11/28/22 RAM  8:00p| Add docR Commands
+# .(21128.02 11/28/22 RAM  1:50p| Add docR Commands
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -25,13 +27,13 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 28, 2022  8:01a"; aVtitle="OS Info Tools"
+        aVdt="Nov 28, 2022  1:51p"; aVtitle="OS Info Tools"
         aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21111.04.1)
 
         LIB=DOC; LIB_LOG=${DOC}_LOG; LIB_USER=${LIB}_USER
 
         aFns="$( dirname "${BASH_SOURCE}" )/../JPTs/JPT12_Main2Fns_p1.07.sh";  if [ ! -f "${aFns}" ]; then  # .(21113.05.9 RAM Use JPT12_Main2Fns_p1.07.sh)
-        echo -e "\n ** FRT30[ 34]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
+        echo -e "\n ** FRT30[ 35]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
         source "${aFns}";
 
 #   +===== +================== +=========================================================== # ==========+
@@ -45,11 +47,11 @@
 
         setOS; bSpace=1;                                                                                    #  A space hasn't been displayed, print one next
         aLstSp="echo "; if [ "${aOSv/w}" != "${aOSv}" ]; then aLstSp=""; fi                                 # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse).(21120.02.2)
-#       echo "  - {DOC}[125]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
+#       echo  "  - FRT30[ 49]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
 
 #    -- --- ---------------  =  ------------------------------------------------------  #
 
-#       sayMsg   "{DOC}[132]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
+#       sayMsg    "FRT30[ 53]  aServer: '${aServer}', aOS: '${aOS}', bDebug: '${bDebug}'" 2
 
 #====== =================================================================================================== #  ===========
 
@@ -61,7 +63,7 @@
 
 function Help() {
 
-        sayMsg    "{DOC}[144]  aCmd:  '${aCmd}', aCmd0: '$1', aCmd1: '${aCmd1}'" -1
+        sayMsg    "FRT30[ 65]  aCmd:  '${aCmd}', aCmd0: '$1', aCmd1: '${aCmd1}'" -1
 
      if [ "${aCmd}" == "" ]; then bQuiet=0; sayMsg " ** Invalid gitR Command: '$1'" 3; aCmd="Help";  fi     # .(21117.01.2 RAM Works best)
      if [ "${aCmd}" == "Help" ]; then                                                                       # .(21117.01.3)
@@ -71,13 +73,13 @@ function Help() {
         echo ""
         echo "  Useful DocR Commands   (${aVer})                                 (${aVdt})"
         echo "  -------------------------------------------------------------- -----------------------------------"
-        echo "    Doc Start {title}                                            Begin a document"            # .(21128.01.1 RAM Beg Add)
-        echo "    Doc Type [ text | markdown ]                                 Set the type"
-        echo "    Doc Title {title}                                            Begin a document"
-        echo "    Doc Note  {note}                                             Write a Note"
-        echo "    Doc Set Pause [ on | off ]                                   Set pausing before code"
-        echo "    Doc Code {code}                                              Run some code"
-        echo "    Doc Alert {alert}                                            Write an alert"              # .(21128.01.1 RAM End)
+        echo "    docR Start {title}                                            Begin a document"            # .(21128.01.1 RAM Beg Add)
+        echo "    docR Type [ text | markdown ]                                 Set the type"
+        echo "    docR Title {title}                                            Begin a document"
+        echo "    docR Note  {note}                                             Write a Note"
+        echo "    docR Set Pause [ on | off ]                                   Set pausing before code"
+        echo "    docR Code {code}                                              Run some code"
+        echo "    docR Alert {alert}                                            Write an alert"              # .(21128.01.1 RAM End)
         ${aLstSp}; exit                                                                                     # .(10706.09.3)
         fi
         } # eof Help
@@ -93,9 +95,9 @@ function Help() {
 
         setCmds
 
-        sayMsg sp "{DOC}[191]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'" -1
-        sayMsg    "{DOC}[192]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$c' " -1
-#       sayMsg    "{DOC}[193]  aCmd:  '$aCmd',  aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' "
+        sayMsg sp "FRT30[ 97]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'" -1
+        sayMsg    "FRT30[ 98]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$c' " -1
+#       sayMsg    "FRT30[ 99]  aCmd:  '$aCmd',  aCmd1: '$aCmd1', aCmd2: '$aCmd2', aCmd3: '$aCmd3', aCmd0: '$aCmd0' "
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -105,23 +107,23 @@ function Help() {
         getCmd  "start"     "*"        "Doc Start"      # Any 2nd cmd                                       # .(21128.01.2 RAM Beg Left arg must be lowercase)
 #       getCmd  "start"     "*"        "Doc Start"   1  # Sets dBug=1                                       # .(21128.01.2 RAM Beg Left arg must be lowercase)
         getCmd  "type"      "*"        "Doc Type"
-        getCmd  "alert"     "*"        "Doc Alert"  
+        getCmd  "alert"     "*"        "Doc Alert"
         getCmd  "title"     "*"        "Doc Title"
         getCmd  "note"      "*"        "Doc Note"
-        getCmd  "set"   "pause"  "on"  "Doc Set Pause" 
-        getCmd  "set"   "pause"  "off" "Doc Set Pause" 
+        getCmd  "set"   "pause"  "on"  "Doc Set Pause"
+        getCmd  "set"   "pause"  "off" "Doc Set Pause"
         getCmd  "code"      "*"        "Doc Code"
-        getCmd  "end"       "*"        "Doc End"                                                            # .(21128.01.2 RAM End)
+        getCmd  "end"       "*"        "Doc End"  1                                                          # .(21128.01.2 RAM End)
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-        sayMsg "{DOC}[128]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'"
-        sayMsg "{DOC}[129]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
-        sayMsg "{DOC}[130]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" -1
+        sayMsg "FRT30[119]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'"
+        sayMsg "FRT30[120]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
+        sayMsg "FRT30[121]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" -1
 
         Help ${aCmd0}
 
-        sayMsg "{DOC}[134]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" -1 # 2
+        sayMsg "FRT30[125]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" 1 # 2
 
 #====== =================================================================================================== #  ===========
 
@@ -133,7 +135,7 @@ function Help() {
 
 function subFunction() {                                                                                    # .(21128.01.3 RAM Beg Add subFunction)
 
-        sayMsg "{DOC}[146]  subFunction[1]  Begin" 1
+        sayMsg "FRT30[137]  subFunction[1]  Begin" 1
 
 
      } # eof subFunction                                                                                    # .(21128.01.3 RAM End)
@@ -143,10 +145,10 @@ function subFunction() {                                                        
 #       DOC START Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "{DOC}[158]  Doc Start (${aCmd})" -1
+        sayMsg "FRT30[147]  Doc Start (${aCmd})" -1
 
   if [ "${aCmd}" == "Doc Start" ]; then
-#       sayMsg "{DOC}[161] Doc Start" -1
+#       sayMsg "FRT30[150]  Doc Start" -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -162,18 +164,18 @@ function subFunction() {                                                        
 #       DOC NOTE Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "{DOC}[158]  Doc Note (${aCmd})" -1
+        sayMsg "FRT30[166]  Doc Note (${aCmd})" -1
 
   if [ "${aCmd}" == "Doc Note" ]; then
-#       sayMsg "{DOC}[161] Doc Note" -1
+#       sayMsg "FRT30[169] Doc Note" -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-        echo "" 
+        echo ""
 #       echo "#       -------------------  =  ------------------------------------------------------  #  ---------------- #"
         echo "        ${aArg1}"
         echo "#       ----------------------------------------------------------------------------------------- "
-#       echo "" 
+#       echo ""
 
         ${aLstSp}
      fi # eoc Doc Start                                                                                     # .(21128.01.4 End)
@@ -183,21 +185,21 @@ function subFunction() {                                                        
 #       DOC CODE Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "{DOC}[158]  Doc Code (${aCmd})" -1
+        sayMsg "FRT30[187]  Doc Code (${aCmd})" -1
 
   if [ "${aCmd}" == "Doc Code" ]; then
-        sayMsg "{DOC}[161] Doc Code" -1
+        sayMsg "FRT30[190]  Doc Code" -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-        shift 
+        shift
 #       echo "        $@ (${FRT_docR_Pause})"
 #       echo "#       -------------------  =  ------------------------------------------------------  #"
 
-  if [ "${FRT_docR_Pause}" != "1" ]; then 
+  if [ "${FRT_docR_Pause}" != "1" ]; then
  #      read -s -n 1 -p "        Press any key..."; echo ""
         read -s -n 1 -p "        $ $@  ..."; echo ""
-        fi 
+        fi
         echo "#       -------------------  =  ------------------------------------------------------  #"
                     "$@" | awk '{print "        " $0 }'
         echo "#       -------------------  =  ------------------------------------------------------  #"
@@ -210,10 +212,10 @@ function subFunction() {                                                        
 #       DOC SET PAUSE Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "{DOC}[158]  Doc Set Pause (${aCmd})" -1
+        sayMsg "FRT30[214]  Doc Set Pause (${aCmd})" -1
 
   if [ "${aCmd}" == "Doc Set Pause" ]; then
-        sayMsg "{DOC}[161] Doc Set Pause" -1
+        sayMsg "FRT30[217] Doc Set Pause" -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -228,10 +230,10 @@ function subFunction() {                                                        
 #       DOC END Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "{DOC}[158]  Doc End (${aCmd})" -1
+        sayMsg "FRT30[232]  Doc End (${aCmd})" -1
 
   if [ "${aCmd}" == "Doc End" ]; then
-        sayMsg "{DOC}[161] Doc End" -1
+        sayMsg "FRT30[235] Doc End" -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
