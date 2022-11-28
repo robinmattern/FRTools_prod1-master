@@ -950,6 +950,7 @@ END{ }
         git pull | awk '/changed|Already/ { print "   "$0 }'
 
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
+        if [  -d  "../${aProjDir}" ]; then aProjDir="../${aProjDir}"; fi                                    # .(21127.03.2)  
         chmod -R 755 "${aProjDir}" *.sh
         echo -e "\n * FRTools script permissions have been reset"
 
