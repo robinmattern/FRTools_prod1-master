@@ -20,7 +20,7 @@
 ##FD   FRT10_Main0.sh           |  23981| 11/19/22 19:22|   385| p1.08-21119.1922
 ##FD   FRT10_Main0.sh           |  24904| 11/20/22 13:55|   392| p1.08-21120.1355
 ##FD   FRT10_Main0.sh           |  28576| 11/22/22 09:38|   462| p1.08-21122.0938
-##FD   FRT10_Main0.sh           |  30677| 11/27/22 17:03|   479| p1.08-21127.1703
+##FD   FRT10_Main0.sh           |  30525| 11/27/22 19:40|   483| p1.08-21127.1940
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to manage FormR app resources.
 #
@@ -66,6 +66,7 @@
 # .(21126.01 11/26/22 RAM  2:00p| Check SYSTEM path if set path was successful
 # .(21126.08 11/26/22 RAM  6:11p| Add -user option to 'frt set path'
 # .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH
+# .(21127.07 11/27/22 RAM  7:40p| Surpress Info Path Add msg if FRT setPath
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -73,14 +74,14 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-     aVdt="Nov 27, 2022  5:03p"; aVtitle="formR Tools"                                                      # .(21113.05.8 RAM Add aVtitle for Version in Begin)
+     aVdt="Nov 27, 2022  7:40p"; aVtitle="formR Tools"                                                      # .(21113.05.8 RAM Add aVtitle for Version in Begin)
      aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
      LIB="FRT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
 
 #    aFns="$( dirname "${BASH_SOURCE}"         )/FRT12_Main2Fns_p1.06_v21027.sh";  if [ ! -f "${aFns}" ]; then  ##.(21113.05.9 RAM Use FRT12_Main2Fns_p1.06_v21027.sh)
      aFns="$( dirname "${BASH_SOURCE}" )/../JPTs/JPT12_Main2Fns_p1.07.sh";         if [ ! -f "${aFns}" ]; then  # .(21113.05.9 RAM Use JPT12_Main2Fns_p1.07.sh)
-     echo -e "\n ** FRT10[ 83]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
+     echo -e "\n ** FRT10[ 84]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
      source "${aFns}";
 
 # +------- +------------------ +----------------------------------------------------------- # ------------+ ------------------- # --------------+
@@ -94,15 +95,15 @@
 
      setOS;                                                                                                 # .(20620.04.8 RAM A space hasn't been displayed, print one next; was 1)
      aLstSp="echo "; if [ "${aOSv/w}" != "${aOSv}" ]; then aLstSp=""; fi                                    # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse).(21120.02.1)
-#    echo "  - FRT10[ 97]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
+#    echo "  - FRT10[ 98]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
 
 #    -- --- ---------------  =  ------------------------------------------------------  #
 
 #    aOSv=gfw1 | w10p | w08s
 #    aOSv=rh62 | rh70 | uv14 | ub16
 
-#    sayMsg    "FRT10[104]  aServer: '${aServer}', aOSv: ${aOSv}, aOS: '${aOS}', bDebug: '${bDebug}'" 1
-#    sayMsg    "FRT10[105]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4', bQuiet: '${bQuiet}', bDebug: '${bDebug}'" 2
+#    sayMsg    "FRT10[105]  aServer: '${aServer}', aOSv: ${aOSv}, aOS: '${aOS}', bDebug: '${bDebug}'" 1
+#    sayMsg    "FRT10[106]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4', bQuiet: '${bQuiet}', bDebug: '${bDebug}'" 2
 
 #====== =================================================================================================== #  ===========
 
@@ -190,34 +191,34 @@ function Help( ) {
      setCmds         0  # dBug: JPFns[262] and in JPFns.getCmd[270, 285]
 
   if [ "1" == "0" ]; then
-     echo   "--- FRT10[192]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4',  bQuiet: '${bQuiet}', bDebug: '${bDebug}'"; echo ""
+     echo   "--- FRT10[194]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4',  bQuiet: '${bQuiet}', bDebug: '${bDebug}'"; echo ""
 
-     echo   "--- FRT10[194]  Hello Robin          -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
-     sayMsg     "FRT10[195]  Hello Robin"
-     sayMsg     "FRT10[196]  Hello Robin" 1
-#    sayMsg     "FRT10[197]  Hello Robin" 2
+     echo   "--- FRT10[196]  Hello Robin          -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
+     sayMsg     "FRT10[197]  Hello Robin"
+     sayMsg     "FRT10[198]  Hello Robin" 1
+#    sayMsg     "FRT10[199]  Hello Robin" 2
 
-     echo   "--- FRT10[199]  sp Hello Robin       -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
-     sayMsg  sp "FRT10[200]  sp Hello Robin"
-     sayMsg  sp "FRT10[201]  sp Hello Robin" 1
-#    sayMsg  sp "FRT10[202]  sp Hello Robin" 2
+     echo   "--- FRT10[201]  sp Hello Robin       -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
+     sayMsg  sp "FRT10[202]  sp Hello Robin"
+     sayMsg  sp "FRT10[203]  sp Hello Robin" 1
+#    sayMsg  sp "FRT10[204]  sp Hello Robin" 2
 
-     echo   "--- FRT10[204]  Hello Robin sp       -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
-     sayMsg     "FRT10[205]  Hello Robin sp" sp
-     sayMsg     "FRT10[206]  Hello Robin sp" sp 1
-#    sayMsg     "FRT10[207]  Hello Robin sp" sp 2
+     echo   "--- FRT10[206]  Hello Robin sp       -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
+     sayMsg     "FRT10[207]  Hello Robin sp" sp
+     sayMsg     "FRT10[208]  Hello Robin sp" sp 1
+#    sayMsg     "FRT10[209]  Hello Robin sp" sp 2
 
-     echo   "--- FRT10[209]  sp Hello Robin sp    -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
-     sayMsg  sp "FRT10[210]  sp Hello Robin sp" sp
-     sayMsg  sp "FRT10[211]  sp Hello Robin sp" sp 1
-     sayMsg  sp "FRT10[212]  sp Hello Robin sp" sp 2
+     echo   "--- FRT10[211]  sp Hello Robin sp    -- bSpace: '${bSpace}', bQuiet: '${bQuiet}', bDebug: '${bDebug}'"
+     sayMsg  sp "FRT10[212]  sp Hello Robin sp" sp
+     sayMsg  sp "FRT10[213]  sp Hello Robin sp" sp 1
+     sayMsg  sp "FRT10[214]  sp Hello Robin sp" sp 2
 
      exit
      fi
 
-     sayMsg sp "FRT10[217]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'";
-     sayMsg    "FRT10[218]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$bQuiet' " -1  # .(20601.02.3 RAM Was bQuiet: '$c' ??)
-#    sayMsg    "FRT10[219]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}'" -1
+     sayMsg sp "FRT10[219]  \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', \$6: '$6', \$7: '$8'";
+     sayMsg    "FRT10[220]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '$bDoit', bDebug: '$bDebug', bQuiet: '$bQuiet' " -1  # .(20601.02.3 RAM Was bQuiet: '$c' ??)
+#    sayMsg    "FRT10[221]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}'" -1
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -240,12 +241,12 @@ function Help( ) {
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-     sayMsg    "FRT10[242]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
-     sayMsg sp "FRT10[243]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" -1
+     sayMsg    "FRT10[244]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'"
+     sayMsg sp "FRT10[245]  aCmd:  '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}" -1
 
      Help ${aCmd0}
 
-     sayMsg    "FRT10[247]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bGlobal: '${bGlobal}'" sp -1
+     sayMsg    "FRT10[249]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bGlobal: '${bGlobal}'" sp -1
 
 #====== =================================================================================================== #  ===========
 
@@ -255,11 +256,11 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-#      sayMsg "FRT10[257]  JPT Commands (${aArg1:0:3}) aCmd: '${aCmd}', \$@: '$@'" 1
+#      sayMsg "FRT10[259]  JPT Commands (${aArg1:0:3}) aCmd: '${aCmd}', \$@: '$@'" 1
 
      if [ "${aCmd:0:3}" == "JPT" ]; then
 
-#       sayMsg "FRT10[261]  jpt: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" -1
+#       sayMsg "FRT10[263]  jpt: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" -1
 
 #       aArgs="$( echo "$@" | tr '[:upper:]' '[:lower:]' )"                                                 #
 
@@ -272,8 +273,8 @@ function Help( ) {
 #       if [ "$@" == "rss"            ];    then aSubCmd="rss"; fi                                          # .(21119.05.2)
 
         shift;
-#       sayMsg     "FRT10[274]  JPT: JPT00_Main0.sh \"$@\"" 2
-#       echo   "  - FRT10[275]  JPT: JPT00_Main0.sh   ${aSubCmd} \"$@\""; exit
+#       sayMsg     "FRT10[276]  JPT: JPT00_Main0.sh \"$@\"" 2
+#       echo   "  - FRT10[277]  JPT: JPT00_Main0.sh   ${aSubCmd} \"$@\""; exit
 
         "$( dirname $0 )/../JPTs/JPT00_Main0.sh"  ${aSubCmd}  "$@"
 
@@ -290,11 +291,11 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-#       sayMsg "FRT10[292]  gitR Commands (${aArg1:0:3}) aCmd: '${aCmd}'" 1                                 # .(20429.03.2 Beg RAM Added)
+#       sayMsg "FRT10[294]  gitR Commands (${aArg1:0:3}) aCmd: '${aCmd}'" 1                                 # .(20429.03.2 Beg RAM Added)
 
      if [ "${aCmd}"    ==  "gitR" ]; then
 
-        sayMsg "FRT10[296]  gitR:  '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" -1
+        sayMsg "FRT10[298]  gitR:  '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" -1
 
         shift
 # echo "$( dirname $0 )/gitR/FRT22_gitR1_p2.02.sh"  "${aArg1}" "${aArg2}" "${aArg3}" "${aArg4}"
@@ -316,11 +317,11 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-#       sayMsg "FRT10[318]  keyS Commands (${aArg1:0:3})"                                                   # .(20429.02.2 Beg RAM Added)
+#       sayMsg "FRT10[320]  keyS Commands (${aArg1:0:3})"                                                   # .(20429.02.2 Beg RAM Added)
 
      if [ "${aCmd}"     == "keyS" ]; then
 
-        sayMsg "FRT10[322]  keyS: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
+        sayMsg "FRT10[324]  keyS: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
 
         shift
        "$( dirname $0 )/keyS/FRT21_Keys1_p2.01.sh"  "$@"
@@ -338,11 +339,11 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-#       sayMsg "FRT10[340]  appR Commands (${aArg1:0:3})"                                                   # .(20429.02.2 Beg RAM Added)
+#       sayMsg "FRT10[342]  appR Commands (${aArg1:0:3})"                                                   # .(20429.02.2 Beg RAM Added)
 
      if [ "${aCmd}"     == "appR" ]; then
 
-        sayMsg "FRT10[344]  appR:   '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 1
+        sayMsg "FRT10[346]  appR:   '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 1
 
         shift
 # echo "$( dirname $0 )/appR/FRT23_FRApp1_p1.06.sh"  "$@"                                                   ##.(20601.01.5)
@@ -365,7 +366,7 @@ function Help( ) {
 #    if [ "${1:0:3}" == "pro" ]; then                                                                       ##.(20429.02.2)
      if [ "${aCmd}"     == "proX" ]; then                                                                   # .(20429.02.2 RAM Beg Added)
 
-        sayMsg "FRT10[367]  proX: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
+        sayMsg "FRT10[369]  proX: '${aArg1}' '${aArg2}' '${aArg3}' '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'"
 
         shift
 #      "$( dirname $0 )/proX/FRT24_Proxy_v1.06\`20620-1041.sh"  "$@"
@@ -385,7 +386,7 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-        sayMsg    "FRT10[387]  Set Var Command" sp;
+        sayMsg    "FRT10[389]  Set Var Command" sp;
 
   if [ "${aCmd}" == "Set Var" ]; then
 
@@ -394,7 +395,7 @@ function Help( ) {
                 aInfoScr="._2/JPTs/RSS/Info/RSS22_Info.sh"; bOK=0                                           # .(21122.02.1 RAM Fix backsplashed)
 
   if [ "${aArg2}" == "path" ]; then
-#       sayMsg    "FRT10[396]  SetVar" 1
+#       sayMsg    "FRT10[398]  SetVar" 1
 
      if [ -f "${aInfoScr}" ] && [ -d ".git" ]; then bOK=1; fi
      if [ "${bOK}" == "0" ]; then
@@ -421,9 +422,10 @@ function Help( ) {
 
      if [ "${bDoit}" == "1" ] ; then
 
-#          echo     "${aInfoScr}" path add -doit "${aPath1}"; exit
-                    "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                     # .(21126.08.4)
-               if [ "$?" == "1" ]; then exit; fi                                                            # .(21122.01.5 if no change to path)
+#          echo       "${aInfoScr}" path add -doit "${aPath1}"; exit
+    export bQuiet=1;  "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                   # .(21126.08.4).(21127.07.03)
+
+           if [ "$?" == "1" ]; then exit; fi                                                                # .(21122.01.5 if no change to path)
 
 #          aPath2="$( "${aInfoScr}" path show "\._2"         )"                                             ##.(21126.01.1)
            aPath2="$( "${aInfoScr}" path show "FRTools" -sys )"                                             # .(21126.01.1 RAM Need to check SYSTEM paths)
@@ -431,9 +433,10 @@ function Help( ) {
      if [ "${aPath2}" != "" ]; then
      if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi
 
-
-         aTodo="restwart this session"; if [ "${aOSv:0:1}" == "w" ]; then aToDo="login again"; fi           # .(21126.09.2)
-        echo ""; echo "    The Path to FRTools has been set to:"; echo "              '${aPath2:8}'."
+#          aToDo="restart this session"; if [ "${aOSv:0:1}" == "w" ]; then aToDo="login again"; fi          ##.(21126.09.2).(21126.09.5)
+           aToDo="login again";          if [ "${aOSv:0:1}" == "g" ]; then aToDo="restart this session"; fi # .(21126.09.5)
+#                echo "";
+                 echo "    The Path to FRTools has been set to:"; echo "              '${aPath2:8}'."
                  echo ""
                  echo "  * Please ${aToDo} for the Path to take effect."                                    # .(21126.09.3)
       else
@@ -459,11 +462,11 @@ function Help( ) {
 #
 #====== =================================================================================================== #
 
-        sayMsg    "FRT10[461]  Next Command" sp;
+        sayMsg    "FRT10[465]  Next Command" sp;
 
   if [ "${aCmd}" == "Next Command" ]; then
 
-        sayMsg    "FRT10[465]  Next Command" 1
+        sayMsg    "FRT10[469]  Next Command" 1
 
      ${aLstSp}
      fi # eoc Next Command                                                                                  # .(20102.01.2 End)

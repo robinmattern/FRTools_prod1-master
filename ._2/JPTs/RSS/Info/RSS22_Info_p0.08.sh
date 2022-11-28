@@ -9,7 +9,8 @@
 ##FD   RSS22-Info.sh            |  19554| 11/13/22 17:25|   344| p0.08.21113-1725
 ##FD   RSS22_Info.sh            |  25926| 11/20/22 13:43|   434| p0.08-21120.1343
 ##FD   RSS22_Info.sh            |  34136| 11/22/22 09:34|   523| p0.08-21122.0934
-##FD   RSS22_Info.sh            |  55137| 11/27/22 17:27|   799| p0.08-21127.1727
+##FD   RSS22_Info.sh            |  54325| 11/27/22 19:41|   808| p0.08-21127.1941
+##FD   RSS22_Info.sh            |  54407| 11/27/22 19:42|   809| p0.08-21127.1942
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #
 #
@@ -37,25 +38,26 @@
 # .(21121.01 11/21/22 RAM  4:30p| Fix searching for a path in windows
 # .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or profile
 # .(21122.01 11/22/22 RAM  9:00a| Add Parse args
-# .(21124.01 11/24/22 RAM  2:00p| Get $PATH with REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH 
+# .(21124.01 11/24/22 RAM  2:00p| Get $PATH with REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH
 # .(21124.02 11/24/22 RAM  2:00p| Check if PATH length > 2047
 # .(21125.01 11/25/22 RAM  2:00p| Update path with REG ADD "...
 # .(21125.02 11/25/22 RAM  2:00p| Don't cvt2winPath slashes in OS = windows
-# .(21125.03 11/25/22 RAM  7:00p| IGNORECASE when searching info show path 
+# .(21125.03 11/25/22 RAM  7:00p| IGNORECASE when searching info show path
 # .(21125.04 11/25/22 RAM  7:35p| Add Command comment seperators
-# .(21125.06 11/25/22 RAM  8:15p| Add -sys, -user and -bash options to Path show 
-# .(21126.02 11/26/22 RAM 12:00p| Handle slashes when searching info show path  
-# .(21126.03 11/26/22 RAM  1:00p| Display None found when searching info show path 
+# .(21125.06 11/25/22 RAM  8:15p| Add -sys, -user and -bash options to Path show
+# .(21126.02 11/26/22 RAM 12:00p| Handle slashes when searching info show path
+# .(21126.03 11/26/22 RAM  1:00p| Display None found when searching info show path
 # .(21126.04 11/26/22 RAM  2:00p| Add Show OS command
-# .(21126.06 11/26/22 RAM  5:30p| Fix extracted path from .bashrc 
+# .(21126.06 11/26/22 RAM  5:30p| Fix extracted path from .bashrc
 # .(21126.08 11/26/22 RAM  6:11p| Add -user option to 'frt set path'
-# .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH 
+# .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH
+# .(21127.07 11/27/22 RAM  7:40p| Surpress Info Path Add msg if FRT setPath
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-          aVdt="Nov 20, 2022  1:43p"; aVTitle="OS Info Tools"
+          aVdt="Nov 27, 2022  7:42p"; aVtitle="OS Info Tools"
           aVer="$( echo $0 | awk '{ match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21111.04.1)
 
           LIB=RSS; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER
@@ -268,12 +270,12 @@ aAwkPgm1='
 function cvt(a) { if (d == ";") { sub( /\/[cC]/, "C:", a ); gsub( /\//, "\\", a ) } return a }       # .(21120.06.1 RAM cvt path character)
 BEGIN  { d = ARGV[1]; aPath = d; bShow=ARGV[2] != "new"; ARGC=1; IGNORECASE=1; m=0 }                 # .(21114.01.1 RAM Beg Write Awk program to mark dups).(21125.03.1 RAM Added IGNORECASE).(21126.03.1)
 #      { print index( aPath, d $0 d ) " " aPath }
-       { n = index( aPath, d $0 d ); } # printf "%3d %s %5d\n", NR, n "   " cvt( $0 ), length( aPath) } 
+       { n = index( aPath, d $0 d ); } # printf "%3d %s %5d\n", NR, n "   " cvt( $0 ), length( aPath) }
        { if (n > 0) { if (bShow) { printf "%3d %s\n", NR, " x " cvt( $0 ) } }                           # .(21120.06.2)
                else { if (bShow) { printf "%3d %s\n", NR, "   " cvt( $0 ) }; aPath = aPath d $0; m++ }  # .(21120.06.3).(21126.03.2)
 #                                                                            aPath = aPath d $0         # .(21120.06.3)
           }
-END    { if (bShow != 1) { print aPath } 
+END    { if (bShow != 1) { print aPath }
            else { if (m == 0) { print "     * None found" } }                                        # .(21126.03.3 RAM Print "None found")
          }                                                                                           # .(21114.01.1 RAM End)
 '
@@ -291,29 +293,29 @@ END    { if (bShow != 1) { print aPath }
      if [ "$aCmd2" == "show"  ]; then
                                                aShell=${aArg2};                                                                             # .(21125.06.1 RAM Beg Show different paths)
            if [ "${aArg1:0:1}"  == "-" ]; then aShell=${aArg1}; aArg1="${aArg2}"; fi
-           if [ "${aShell:0:1}" != "-" ]; then aShell="-bash"; if [ "${aOSv:0:1}" == "w" ]; then aShell="-user"; fi; fi                                                                           # .(21125.06.1 RAM End)  
-#         echo "aArg1: '$aArg1', aShell: '$aShell'"; exit 
+           if [ "${aShell:0:1}" != "-" ]; then aShell="-bash"; if [ "${aOSv:0:1}" == "w" ]; then aShell="-user"; fi; fi                                                                           # .(21125.06.1 RAM End)
+#         echo "aArg1: '$aArg1', aShell: '$aShell'"; exit
 
-     if [ "${aShell}" == "-sys" ]; then                                                                          # .(21125.06.2                                                              
+     if [ "${aShell}" == "-sys" ]; then                                                                          # .(21125.06.2
            aOldPATH="$( cmd //c REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH )";     # .(21125.05.1 RAM Get Windows PATH)
            aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+_SZ +/, "" ); print }' )"; aDelim=";"; fi                                # .(21125.05.2)
-         
-     if [ "${aShell}" == "-user" ]; then                                                                         # .(21125.06.3   
+
+     if [ "${aShell}" == "-user" ]; then                                                                         # .(21125.06.3
            aOldPATH="$( cmd //c REG QUERY "HKEY_CURRENT_USER\Environment" -v PATH )"                                                        # .(21125.03.1 RAM Get Windows PATH)
            aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+_SZ +/, "" ); print }' )"; aDelim=";"; fi                                # .(21125.01.2)
 #          aOldPATH="$( echo "${aOldPATH}" | tr '[:upper:]' '[:lower:]' )"; aDelim=";"                                                      ##.(21125.03.2)
 
-     if [ "${aShell}" == "-bash" ]; then                                                                         # .(21125.06.4   
-           aOldPATH="$PATH"; aDelim=":"  
-           fi 
+     if [ "${aShell}" == "-bash" ]; then                                                                         # .(21125.06.4
+           aOldPATH="$PATH"; aDelim=":"
+           fi
 
-#   echo -e "\n    aOSv: ${aOSv}; aArg1: '${aArg1}'; PATH Length: ${#aOldPATH}\n----------------------------------------------------------------"          
-#                                     echo ${aOldPATH} | tr "${aDelim}" "\n" | awk '{ printf "%3d %s %5d\n", NR, " ? " $0, nLen; nLen = nLen + length($0) }'; echo ""; # exit 
+#   echo -e "\n    aOSv: ${aOSv}; aArg1: '${aArg1}'; PATH Length: ${#aOldPATH}\n----------------------------------------------------------------"
+#                                     echo ${aOldPATH} | tr "${aDelim}" "\n" | awk '{ printf "%3d %s %5d\n", NR, " ? " $0, nLen; nLen = nLen + length($0) }'; echo ""; # exit
 
 #    if [ "$aArg1" == ""      ]; then echo $PATH | tr : "\n" | awk             '{ print "  " $0 }'    ; fi         ##.(80929.01.1 Added print).(21114.01.2)
 #    if [ "$aArg1" == ""      ]; then echo $PATH       | tr : "\n"                              | awk "${aAwkPgm1}" "${aDelim}"; fi ##.(21114.01.2 RAM Use AwkPgm).(21120.06.6).(21125.01.3)
-     if [ "$aArg1" == ""      ]; then echo ${aOldPATH} | tr "${aDelim}" "\n" | awk 'NF > 0'     | awk "${aAwkPgm1}" "${aDelim}"; fi # .(21114.01.2 RAM Use AwkPgm).(21120.06.6).(21125.01.3).(21125.01.3 RAM Fuck you NF > 1 S.B NF > 0) 
-#    if [ "$aArg1" == ""      ]; then echo ${aOldPATH} | tr "${aDelim}" "\n" | awk '{ printf "%3d %s %5d\n", NR, "?   " $0, nLen; nLen = nLen + length($0) }'; fi 
+     if [ "$aArg1" == ""      ]; then echo ${aOldPATH} | tr "${aDelim}" "\n" | awk 'NF > 0'     | awk "${aAwkPgm1}" "${aDelim}"; fi # .(21114.01.2 RAM Use AwkPgm).(21120.06.6).(21125.01.3).(21125.01.3 RAM Fuck you NF > 1 S.B NF > 0)
+#    if [ "$aArg1" == ""      ]; then echo ${aOldPATH} | tr "${aDelim}" "\n" | awk '{ printf "%3d %s %5d\n", NR, "?   " $0, nLen; nLen = nLen + length($0) }'; fi
 
      if [ "$aArg1" != ""      ]; then aArg1="$( echo "${aArg1}" | awk '{ gsub( /\\/, "\\\\" ); gsub( /\//, "\\/" ); print }' )"; fi # echo "aArg1: ${aArg1}";fi # .(21126.02.1 RAM Handle slashes in aArg1)
 #    if [ "$aArg1" != ""      ]; then echo $PATH       | tr : "\n"           | awk '/'$aArg1'/  { print "  " $0 }'             ; fi ##.(80929.01.2 ?? if $aArg1 != "")
@@ -351,12 +353,12 @@ END    { if (bShow != 1) { print aPath }
             exit
             fi                                                                              # .(21124.02.1 RAM End)
 
-            nDups=$(( ${#aOldPATH} - ${#aNewPATH} )); # echo "nDups: '${nDups}'"; # exit    # .(21125.01.6 RAM Beg)  
+            nDups=$(( ${#aOldPATH} - ${#aNewPATH} )); # echo "nDups: '${nDups}'"; # exit    # .(21125.01.6 RAM Beg)
 
-    if [ "${nDups}" == "0" ]; then                                                        	          
+    if [ "${nDups}" == "0" ]; then
             echo -e "  * The New PATH will be the same as the Old PATH."
             exit
-            fi                                                                              # .(21125.01.6 RAM End)            
+            fi                                                                              # .(21125.01.6 RAM End)
       if [ "$3" == "-doit" ]; then
 
 #           echo "$0 vars set -doit PATH \"${aNewPATH}\""
@@ -366,12 +368,12 @@ END    { if (bShow != 1) { print aPath }
 
             echo -e "    About to remove ${nDups} chars from the global System PATH."
 
-    if [ "${aDelim}" == ":" ]; then                                                       	# .(21125.01.7)
-           "$0" vars set PATH -doit "${aNewPATH}"                                         	# .(21124.01.5 RAM Let's see if this works)
-      if [ "$?" == "1" ]; then exit; fi                                                   	# .(21124.01.6 RAM Exit if it doesn't)
-          else                                                                            	# .(21125.01.8)             
-            cmd //c REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH -d "${aNewPath}" # .(21125.01.9)            
-            fi                                                                            	# .(21125.01.10)             
+    if [ "${aDelim}" == ":" ]; then                                                         # .(21125.01.7)
+           "$0" vars set PATH -doit "${aNewPATH}"                                           # .(21124.01.5 RAM Let's see if this works)
+      if [ "$?" == "1" ]; then exit; fi                                                     # .(21124.01.6 RAM Exit if it doesn't)
+          else                                                                              # .(21125.01.8)
+            cmd //c REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH -d "${aNewPath}" # .(21125.01.9)
+            fi                                                                              # .(21125.01.10)
             echo -e "    The new PATH has been reset (${#aNewPATH} chars).\n"
          else
             echo -e "    The Old PATH will have (${nDups}) chars removed from the new PATH (${#aNewPATH} chars)\n"; echo "${aNewPATH}"
@@ -397,10 +399,10 @@ END    { if (bShow != 1) { print aPath }
             if [ "$3" == "-doit" ]; then bDoit=1;     aPath="$4"; fi
             if [ "$4" == "-doit" ]; then bDoit=1; fi; aPath="$( echo "${aPath}" | awk '{ gsub(/^ +| +$/, "" ); print }' )"
                                           aShell="-sys"                                     # .(21126.08.5)
-            if [ "$4"  == "-user" ]; then aShell="-user"; fi                                # .(21126.08.6) 
-            if [ "$4"  == "-bash" ]; then aShell="-bash"; fi                                # .(21126.08.7) 
-            if [ "$5"  == "-user" ]; then aShell="-user"; fi                                # .(21126.08.14) 
-            if [ "$5"  == "-bash" ]; then aShell="-bash"; fi                                # .(21126.08.15) 
+            if [ "$4"  == "-user" ]; then aShell="-user"; fi                                # .(21126.08.6)
+            if [ "$4"  == "-bash" ]; then aShell="-bash"; fi                                # .(21126.08.7)
+            if [ "$5"  == "-user" ]; then aShell="-user"; fi                                # .(21126.08.14)
+            if [ "$5"  == "-bash" ]; then aShell="-bash"; fi                                # .(21126.08.15)
 
 #           -----------------------------------------------------------
 
@@ -411,11 +413,11 @@ END    { if (bShow != 1) { print aPath }
 #           aOldPath="$( echo "${PATH}"     | awk '{ n = length($0); print substr( $0, 1, n < 80 ? n : 80 ) "..." }' )"  # Find 1st 80 chars in $PATH
 #           aOldPath="$( echo "${aPath}"    | awk '{ gsub( /:/, ";"); gsub( /\/[cC]/, "C:" ); gsub( /\//, "\\" ); print }' )"
 #           aOldPATH="${PATH}"                                                                                                              ##.(21124.01.6)
-      if [ "${aShell}" == "-sys" ]; then 
+      if [ "${aShell}" == "-sys" ]; then
             aOldPATH="$( cmd //c REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH )"; fi # .(21124.01.6 RAM Get Windows PATH)
-      if [ "${aShell}" == "-user" ]; then 
+      if [ "${aShell}" == "-user" ]; then
             aOldPATH="$( cmd //c REG QUERY "HKEY_CURRENT_USER\Environment" -v PATH )"           # .(21126.08.8)
-            fi                                                                                  
+            fi
 #           aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+REG_SZ +/, ""); print }' )" # {aOldPATH:105}"                           ##.(21124.01.7).(21126.08.12)
             aOldPATH="$( echo "${aOldPATH}" | awk '/PATH/ { sub( /.+_SZ +/, ""   ); print }' )" # {aOldPATH:105}"                           ##.(21126.08.12)
 
@@ -429,14 +431,14 @@ END    { if (bShow != 1) { print aPath }
 #           aOldPath="$( cvt2winPath "${aOldPATH}" ${aOSv:0:1} )"                               ##.(21121.01.1 For display)
 # echo "--- aOldPATH: '${aOldPATH}'"
             aOldPath="$( cvt2winPath "${aOldPATH}" "x" )"                                       ##.(21121.01.1 For display).(21125.02.1 RAM It is a Windows path)
-# echo "--- aOldPath: '${aOldPath}'"; exit 
+# echo "--- aOldPath: '${aOldPath}'"; exit
 
             echo "    Old PATH: '${aOldPath}'"                                                  # .(21124.01.8 RAM Display 1st nLen chars of aOldPATH ??)
 # echo "--- aPath: '${aPath}'";
             aPath="$( cvt2winPath "${aPath}" "w" 1 )"                                           # .(21125.02.2 RAM Convert the GFW path)
-# echo "--- aPath: '${aPath}'"; exit 
+# echo "--- aPath: '${aPath}'"; exit
 #           echo "    aAwkPgm: '{ sub( /"${aPath//\//\\\/}";/, \"\" ); print }'"; exit          ##Look for Unix path
-#           echo "    aAwkPgm: '{ sub( /"${aPath//\\/\\\\}";/, \"\" ); print }'"; exit          ##Look for Windows path 
+#           echo "    aAwkPgm: '{ sub( /"${aPath//\\/\\\\}";/, \"\" ); print }'"; exit          ##Look for Windows path
 
 #           aNewPATH="$( echo "${PATH}"     | awk '{ sub( /'${aPath//\//\\\/}':/, "" ); print }' )" ##.(21121.01.2 Find aPath in PATH and remove it if found)
             aNewPATH="$( echo "${aOldPATH}" | awk '{ sub( /'${aPath//\\/\\\\}';/, "" ); print }' )" # .(21121.01.2 Find aPath in PATH and remove it if found).(21125.01.21)
@@ -502,42 +504,45 @@ END    { if (bShow != 1) { print aPath }
 
       if [ "${aDelim}" == ":" ]; then                                                       # .(21125.01.11)
 
-                 "$0" vars set PATH -doit "$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} 1)"     # Convert to Windows path, but no length chop
-      if [ "$?" == "1" ]; then exit 1; fi
+                 "$0" vars set PATH -doit "$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} 1)"     # Convert to Linux path, but no length chop
 
-          else                                                                              # .(21125.01.12)             
-#           cmd="$( dirname $0)/../../../bin/nircmd.exe elevatecmd execmd"                  # .(21125.01.13)  
-            aDir="$( dirname "${BASH_SOURCE}" )"; 
-#          $cmd "REG ADD \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \"${aNewPATH}\"" # .(21125.01.14)            
-#     echo $cmd "\"REG ADD \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \"${aNewPATH}\"\"" # .(21125.01.14)            
-#     echo $cmd "\"REG ADD \\\"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \\\"${aNewPATH}\\\"\"" # .(21125.01.14)            
+            if [ "$?" == "1" ]; then exit 1; fi
+
+          else  # Windows                                                                   # .(21125.01.12)
+
+#           cmd="$( dirname $0)/../../../bin/nircmd.exe elevatecmd execmd"                  # .(21125.01.13)
+            aDir="$( dirname "${BASH_SOURCE}" )";
+#          $cmd "REG ADD \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \"${aNewPATH}\"" # .(21125.01.14)
+#     echo $cmd "\"REG ADD \"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \"${aNewPATH}\"\"" # .(21125.01.14)
+#     echo $cmd "\"REG ADD \\\"HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment\" -v PATH -d \\\"${aNewPATH}\\\"\"" # .(21125.01.14)
 
      if [ "${aShell}" == "-sys"  ]; then                                                    # .(21126.08.9 RAM Beg)
-           aHKey="HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"; fi 
-     if [ "${aShell}" == "-user" ]; then 
+           aHKey="HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"; fi
+     if [ "${aShell}" == "-user" ]; then
            aHKey="HKEY_CURRENT_USER\\Environment"
            aOSname="Windows User"
            fi                                                                               # .(21126.08.9 RAM End)
            aREGA="REG ADD \"${aHKey}\" /v \"PATH\" /t REG_SZ /d \"${aNewPATH}\" /f"
-#          echo  nircmd.exe elevatecmd execmd  "${aREGA}"; exit                             # Works in DOS      
-           echo  "@echo off"                                 >"${aDir}/@regAdd.bat"  
+#          echo  nircmd.exe elevatecmd execmd  "${aREGA}"; exit                             # Works in DOS
+           echo  "@echo off"                                 >"${aDir}/@regAdd.bat"
            echo  "nircmd.exe elevatecmd execmd ${aREGA}"    >>"${aDir}/@regAdd.bat"         # .(21125.01.x This finally works works in BASH
 
-#                         echo  nircmd.exe elevatecmd execmd  "${aREGA//\\/\\\\}";  exit    # 
+#                         echo  nircmd.exe elevatecmd execmd  "${aREGA//\\/\\\\}";  exit    #
 # aRes="$( ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aREGA}" 2>&1 )"            # .(21113.04.4 RAM This doesn't work!!)
 #          ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aREGA//\\/\\\\}"           # .(21113.04.4 RAM This doesn't work!!)
 #          ${aDir}/../../../bin/nircmd.exe elevatecmd execmd  "${aDir}/@regAdd.bat"         # .(21113.04.4 RAM This doesn't work!!)
-                                                              "${aDir}/@regAdd.bat"         # .(21125.01.x)
-                                                           rm "${aDir}/@regAdd.bat"         # .(21125.01.x RAM delete .bat file) 
-            fi                                                                              # .(21125.01.15)             
+                                                              "${aDir}/@regAdd.bat"         # .(21125.01.6)
+                                                           rm "${aDir}/@regAdd.bat"         # .(21125.01.7 RAM delete .bat file)
+            fi # eif windows                                                                # .(21125.01.8)
 #           echo -e "    The path, '${aPath}', has been added to the global PATH."
-         else
-          
-            if [ "${aShell}" == "-user" ]; then aOSname="Windows User"; fi                  # .(21126.09.2)              
+
+         else # if bDoit=0
+
+            if [ "${aShell}" == "-user" ]; then aOSname="Windows User"; fi                  # .(21126.09.2)
             echo    "    The path, '$( cvt2winPath "${aPath}" ${aOSv:0:1} )', will be added to the ${aOSname} PATH."
 #           echo -e "    The path, '${aPath}', will be added to the ${aOSname} PATH."
-            fi
-            fi # eif "${aOldPath}" != "${aNewPath}"
+
+            fi # eif "${aOldPath}" != "${aNewPath}" no need to change
 
             bCmdRan="1"                                                                     # .(81014.03.8)
             fi                          # eif aCmd2 == path add                             # .(21114.05.1 RAM End)
@@ -585,7 +590,7 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 #    +---- +------------------ +-----------------------------------------------------------
 
    if [ "${bDoit}" == "1" ]; then aVerb="has been"; #aToDo="      Please run: source ~/${aBashrc}"       # .(21114.02.12).(21121.03.4)
-                                                     aToDo="      Please logout and login again"         # .(21121.03.4)
+                                                     aToDo="      Please login again"                    # .(21121.03.4)
          cd ~
          aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                    # .(21121.03.2)
 
@@ -597,8 +602,13 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
       else                                                                                               # .(21114.02.13)
                                  aVerb="will be"; aToDo=""                                               # .(21114.02.14)
          fi                                                                                              # .(21114.02.15)
-         echo -e "    The Var, '${aVar}' ${aVerb} set in your bash profile. $aToDo"                      # .(21114.02.16)
-         }                                                                                               # .(21112.03.1 RAM End)
+#        ------------------------------
+
+         if [ "${bQuiet}" != "1" ]; then                                                                 # .(21127.07.1 RAM Don't speak if setPath)
+            echo -e "    The Var, '${aVar}' ${aVerb} set in your bash profile. $aToDo"                   # .(21114.02.16)
+            fi                                                                                           # .(21127.07.2)
+
+         } # eof setBashrc                                                                               # .(21112.03.1 RAM End)
 #    +---- +------------------ +----------------------------------------------------------- # --------+
 
 #        aArg2="$4"; aArg3="$5";            bDoit=0                                                     # .(21114.02.1 RAM Beg Add bDoit)
@@ -675,15 +685,15 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
      if [ "$aCmd2" != "show" ]; then aArg1=$aCmd2; aCmd2=show; fi
      if [ "$aArg1" == "os"   ]; then aArg1="OS"; fi                                         # .(21126.04.2 RAM)
 
-     if [ "$aCmd2" == "show" ] && [ "$aArg1" != "OS" ]; then                                # .(21126.04.2) 
-     
-#    if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { print "  "$0 }'; fi      # .(21126.04.3) 
-     if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { a=$0; if (substr( a,1,5 ) == "PATH=") { a = substr( a,1,80 ) "... (" (length($0)-5) " chars)" }; print "  " a }'; fi # .(21126.04.3) 
+     if [ "$aCmd2" == "show" ] && [ "$aArg1" != "OS" ]; then                                # .(21126.04.2)
+
+#    if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { print "  "$0 }'; fi      # .(21126.04.3)
+     if [ "$aArg1" == ""     ]; then       set | awk '/^[A-Z]+=/ { a=$0; if (substr( a,1,5 ) == "PATH=") { a = substr( a,1,80 ) "... (" (length($0)-5) " chars)" }; print "  " a }'; fi # .(21126.04.3)
 
      if [ "$aArg1" != ""     ]; then
          if [ "${aArg1:0:1}" == "!" ]; then aArg1="${aArg1:1}.+="; else aArg1="^${aArg1}"; fi
              if [ "$bTest" == 1 ]; then
-               echo "set | awk '/^[A-Z]+=/' | awk 'BEGIN {IGNORECASE=1}  /$aArg1/" | awk '{ print "  "$0 }'; echo ""; 
+               echo "set | awk '/^[A-Z]+=/' | awk 'BEGIN {IGNORECASE=1}  /$aArg1/" | awk '{ print "  "$0 }'; echo "";
             fi
                          set | awk '/^[A-Z]+=/' | awk 'BEGIN {IGNORECASE=1} /'$aArg1'/       { print "  "$0 }'
 
@@ -699,7 +709,7 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 #
 #====== =================================================================================================== #
 
-     if [ "$aArg1" == "OS" ]; then                                                          #.(21126.04.1 RAM Beg New Cmd) 
+     if [ "$aArg1" == "OS" ]; then                                                          #.(21126.04.1 RAM Beg New Cmd)
 
           set  |  awk 'BEGIN {IGNORECASE=1} /^OS/ { print "  "$0 }'
           echo "  aOSv='${aOSv}'"
