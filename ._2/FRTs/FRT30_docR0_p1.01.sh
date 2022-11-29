@@ -76,16 +76,16 @@ function Help() {
         echo ""
         echo "  Useful DocR Commands   (${aVer})                                 (${aVdt})"
         echo "  -------------------------------------------------------------- -----------------------------------"
-        echo "    docR Start {title}                                            Begin a document"           # .(21128.01.1 RAM Beg Add)
-        echo "    docR Type [ text | markdown ]                                 Set the type"
-        echo "    docR Title {title}                                            Begin a document"
-        echo "    docR Line                                                     Write a Line "              # .(21128.02.4)
-        echo "    docR Space                                                    Write a Blank Line "        # .(21128.02.7)
-        echo "    docR Note  {note}                                             Write a Note"
-        echo "    docR Step  {step}                                             Write a Step"               # .(21128.02.1)
-        echo "    docR Set Pause [ on | off ]                                   Set pausing before code"
-        echo "    docR Code {code}                                              Run some code"
-        echo "    docR Alert {alert}                                            Write an alert"             # .(21128.01.1 RAM End)
+        echo "    docR Start {title}                                           Begin a document"            # .(21128.01.1 RAM Beg Add)
+        echo "    docR Type [ text | markdown ]                                Set the type"
+        echo "    docR Title {title}                                           Begin a document"
+        echo "    docR Line                                                    Write a Line "               # .(21128.02.4)
+        echo "    docR Space                                                   Write a Blank Line "         # .(21128.02.7)
+        echo "    docR Note  {note}                                            Write a Note"
+        echo "    docR Step  {step}                                            Write a Step"                # .(21128.02.1)
+        echo "    docR Set Pause [ on | off ]                                  Set pausing before code"
+        echo "    docR Code {code}                                             Run some code"
+        echo "    docR Alert {alert}                                           Write an alert"              # .(21128.01.1 RAM End)
         ${aLstSp}; exit                                                                                     # .(10706.09.3)
         fi
         } # eof Help
