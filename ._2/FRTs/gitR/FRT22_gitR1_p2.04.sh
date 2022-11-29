@@ -50,10 +50,10 @@
 #            Rename             | Remote
 #            Delete             | Remote                                                                    # .(11127.01.1 RAM Was: Remove)
 #                               |
-#            Var                | 
-#            Var List           | 
-#            Var Set            | 
-#            Var Get            | 
+#            Var                |
+#            Var List           |
+#            Var Set            |
+#            Var Get            |
 
 #            setBranch          |
 #            setProjVars        |
@@ -93,14 +93,15 @@
 # .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin
 # .(21117.01 11/17/22 RAM 12:00p| Improve gitR Helps
 # .(21120.02 11/20/22 RAM  1:55p| Fix aOSv and aLstSp
-# .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer 
-# .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits 
+# .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer
+# .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits
 # .(21118.02 11/27/22 RAM  3:00p| Use gitR_clone_p1.04
-# .(21127.03 11/27/22 RAM  4:45p| Improve Git Pull -hard 
-# .(21127.03 11/27/22 RAM  9:15p| More improvements to Git Pull -hard 
-# .(21128.05 11/27/22 RAM  6:30p| Sort list commits 
-# .(21128.06 11/27/22 RAM  7:30p| Implement vars set/get 
+# .(21127.03 11/27/22 RAM  4:45p| Improve Git Pull -hard
+# .(21127.03 11/27/22 RAM  9:15p| More improvements to Git Pull -hard
+# .(21128.05 11/27/22 RAM  6:30p| Sort list commits
+# .(21128.06 11/27/22 RAM  7:30p| Implement vars set/get
 # .(21129.02 11/27/22 RAM  8:45a| Display full git pull and clone result
+# .(21129.03 11/27/22 RAM  4:00p| Improve how script permissions are reset
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -395,7 +396,7 @@ function setProjVars( ) {
         aStage=""
         aApp=""
 
-# if [ "${aOS}" == "windows" ] || [ "${aOS}" == "GitBash" ]; then                                           ##.(21122.03.4 RAM Added || [ "${aOS}" == "GitBash" ]) 
+# if [ "${aOS}" == "windows" ] || [ "${aOS}" == "GitBash" ]; then                                           ##.(21122.03.4 RAM Added || [ "${aOS}" == "GitBash" ])
   if [ "${aOSv/w}" != "${aOSv}" ]; then                                                                     # .(21122.03.4 RAM What we've been using)
 
           aDir=$( pwd -P );                  aVMs="/C/WEBs/SCN2/Files/VMs"; aWebs="SCN2"
@@ -437,7 +438,7 @@ function setProjVars( ) {
 
         sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'" -1 # 2
 
-        aRoot=${aVMs}/${aVM}                     # or "" if linux  
+        aRoot=${aVMs}/${aVM}                     # or "" if linux
   if [ "${aOS}"  == "linux" ]; then aRoot=""; fi
 #       aRoot="";  aDir="/webs/nodeapps/NuSvs/Main-dev04/server1"
 
@@ -572,7 +573,7 @@ function  shoGitRemotes1( ) {
 
         sayMsg "shoGitRemotes1[ 5 ]  cd: $( pwd )"
         mRemotes=$( bash -c '( git remote -v )' 2>&1 )  # So that no error message is disdplayed
-#       mRemotes=$( bash -c '( git remote -v )' 2>&1 | sort -k1.47r)  # .(21128.05.1 RAM Sort) 
+#       mRemotes=$( bash -c '( git remote -v )' 2>&1 | sort -k1.47r)  # .(21128.05.1 RAM Sort)
 
 #       mRemotes=$( git remote -v )
 
@@ -667,7 +668,7 @@ function shoGitRemotes2( ) {
 
         IFS=$'\n'
         mRemotes=( $( bash -c '( git remote -v )' 2>&1               ) )
-#       mRemotes=( $( bash -c '( git remote -v )' 2>&1 | sort -k1.47 ) ) ##.(21128.05.2 RAM Sort) 
+#       mRemotes=( $( bash -c '( git remote -v )' 2>&1 | sort -k1.47 ) ) ##.(21128.05.2 RAM Sort)
 
 #       mRemotes=$( git remote -v )
 
@@ -966,32 +967,59 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       PULL                                                                                                #
 #====== =================================================================================================== #
-        sayMsg "GitR1[938]  Pull"
+#       sayMsg "GitR1[938]  Pull (${aCmd})" 1
 
   if [ "${aCmd}" ==  "Pull" ]; then
         setProjVars
-        echo ""
 
-    if [ "${aArg1}" == "hard"   ]; then  aArg1="-hard"; fi                                                   # .(21127.03.2)
-    if [ "${aArg1}" == "--hard" ]; then  aArg1="-hard"; fi                                                   # .(21127.03.3)
-    if [ "${aArg1}" == "-hard"  ]; then                                                                      # .(21127.03.4 RAM Beg Added)
-#       git diff 
+    if [ "${aArg1}" == "hard"   ]; then aArg1="--hard"; fi                                                  # .(21127.03.2)
+    if [ "${aArg1}" == "-hard"  ]; then aArg1="--hard"; fi                                                  # .(21127.03.3)
+    if [ "${aArg1}" == "--hard" ]; then                                                                     # .(21127.03.4 RAM Beg Added)
+#       git diff
+#       echo "git reset --hard"
         git reset --hard | awk '{ print "   " $0 }'
+        bReset=1
+     else
+        bReset=0
         fi                                                                                                  # .(21127.03.5 RAM End)
-        sayMsg "GitR1[948]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
+        sayMsg "GitR1[948]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'"  1
 
-        git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'
+#       git pull 2>&1 | awk '/changed|Already/ { print "   " $0 }'                                          ##.(21129.02.1)
+        aResult="$( git pull 2>&1 | awk       '{ print "   " $0 }' )"                                       # .(21129.02.1 RAM Beg)
+        echo "${aResult}";
+        bErr=$( echo "${aResult}" | awk '/Aborting/ { print 1; exit }' ); if [ "${bErr}" != "1" ]; then bErr=0; fi
+        bOK=$(  echo "${aResult}" | awk '/Already/  { print 1; exit }' ); if [ "${bOK}"  != "1" ]; then bOK=0; fi
+#       echo "   --- \$bErr: ${bErr}"; # exit
+        sayMsg "GitR1[994]  bOK: '${bOK}', bReset: '${bReset}'" 1;
 
+    if [ "${bErr}" == "1" ]; then
+
+        echo -e "\n * Pull failed. Run: gitr pull -hard, to force pull of all repository files."
+        ${aLstSp}; exit
+        fi                                                                                                  # .(21129.02.1 RAM End)
+
+        echo "bOK: '${bOK}', bReset: '${bReset}'";
+    if [ "${bOK}" == "0" ] || [ "${bReset}" == "1" ]; then                                                  # .(21129.03.1)
+        echo "bOK: '${bOK}', bReset: '${bReset}'"; # exit
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
-        if [  -d  "../${aProjDir}" ]; then aProjDir="../${aProjDir}"; fi                                    # .(21127.03.6)  
-#       chmod -R 755 "${aProjDir}" *.sh                                                                     ##.(21127.03.7)  
-        chmod -R 755 "${aProjDir}"                                                                          # .(21127.03.7)  
-        echo -e "\n * FRTools script permissions have been reset"
 
-      else                                                                                                  # .(21111.02.1 RAM End)
-#       git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'
-        git pull 2>&1 | awk '{ print "   "$0 }'                                                             # .(21129.02.1)
-        fi
+function setA() { chmod 755 "$1"; echo "$1"; }
+
+        if [  -d  "../${aProjDir}" ]; then aProjDir="../${aProjDir}"; fi;                                   # .(21127.03.6)
+#       chmod -R 755 "${aProjDir}" *.sh                                                                     ##.(21127.03.7)
+#       chmod -R 755 "${aProjDir}"                                                                          # .(21127.03.7).(21129.03.3)
+#       find ${aProjDir}/._2/bin -type f       -iname "*"    -exec chmod 755 {} \;                          ##.(21129.03.2)
+ n=( $( find ${aProjDir}/._2/bin -type f  -not -iname "*.*"  | while read file; do setA "$file"; done ) )   # .(21129.03.2)
+#       find ${aProjDir}         -type f       -iname "*.sh" -exec chmod 755 {} \;                          ##.(21129.03.3)
+ m=( $( find ${aProjDir}         -type f       -iname "*.sh" | while read file; do setA "$file"; done ) )   # .(21129.03.3)
+
+        echo -e "\n * $(( ${#m[@]} + ${#m[@]} )) FRTools script permissions have been reset."               # .(21129.02.4 RAM End)
+
+#     else                                                                                                  ##.(21111.02.1 RAM End).(21129.02.2)
+#       git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'                                           ##.(21129.02.3)
+#       git pull 2>&1 | awk '{ print "   "$0 }'                                                             ##.(21129.02.4)
+
+        fi; fi                                                                                              # .(21129.03.4)
 
         ${aLstSp}                                                                                           # .(21127.08.2)
      fi # eif Pull
@@ -1229,7 +1257,7 @@ END{ }
 
         aCmd="git ls-remote ${aGit_Host}:${aGit_User}/${aGit_Repo}.git";
         mResults=$( bash -c "( ${aCmd} )" 2>&1               );
-#       mResults=$( bash -c "( ${aCmd} )" 2>&1 | sort -k1.47 ) # .(21128.05.3 RAM Sort) 
+#       mResults=$( bash -c "( ${aCmd} )" 2>&1 | sort -k1.47 ) # .(21128.05.3 RAM Sort)
 
 # if [ ${?} -ne 0 ]; then
 #       echo " ** Git Repo, ${aGit_Repo}, not found for Account, ${aGit_User}, using SSH_Key, ${aGit_Host}."
@@ -1257,7 +1285,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       LIST LOCAL/REMOTE COMMITS
 #====== =================================================================================================== #
-        sayMsg "GitR1[1222]  ${aCmd}, nDays: '${nDays}'"                                                                    # .(21122.04.0 nDays Not assigned yet) 
+        sayMsg "GitR1[1222]  ${aCmd}, nDays: '${nDays}'"                                                                    # .(21122.04.0 nDays Not assigned yet)
 
   if [ "${aCmd}" ==  "List All Commits"    ]; then aCmd="List Remote Commits"; fi                                           # .(20623.03.1)
   if [ "${aCmd}" ==  "List Local Commits"  ]; then aCmd="List Remote Commits"; fi                                           # .(20122.04.2)
@@ -1272,7 +1300,7 @@ END{ }
      if [ "${aArg3:0:2}" == $aDO ]; then nDays=$aArg4;                                 aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
      if [ "${aArg4:0:2}" == $aDO ]; then nDays=$aArg5;                                                 aArg4="$aArg6"; aArg5="$aArg7"; fi
      if [ "${aArg5:0:2}" == $aDO ]; then nDays=$aArg6;                                                                 aArg5="$aArg7"; fi
-     if [ "${aArg6:0:2}" == $aDO ]; then nDays=$aArg7;                                                                                 fi 
+     if [ "${aArg6:0:2}" == $aDO ]; then nDays=$aArg7;                                                                                 fi
                                                        fi;                                                                  # .(21122.04.1 RAM End)
      if [ "${nDays}"     == ""   ]; then nDays=14;     fi;                                                                  # .(21122.04.2 Added fi)
         setProjVars                                                                                                         # .(20122.01.1)
@@ -1282,8 +1310,8 @@ END{ }
 #       sayMsg "GitR1[1244]  nDays: '${nDays}', bLocal: '${bLocal}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 2
 #       sayMsg "GitR1[1245]  aStage: ${aStage}; aPath1: '${aPath1}'" 2
 
-        mResults=$( bash -c "( git branch )" 2>&1               ) # .(21128.05.4 RAM Sort) 
-#       mResults=$( bash -c "( git branch )" 2>&1 | sort -k1.47 ) ##.(21128.05.4 RAM Sort) 
+        mResults=$( bash -c "( git branch )" 2>&1               ) # .(21128.05.4 RAM Sort)
+#       mResults=$( bash -c "( git branch )" 2>&1 | sort -k1.47 ) ##.(21128.05.4 RAM Sort)
 
   if [ "${mResults:0:5}" == "fatal" ]; then
         sayMsg " ** Git Error." 3
