@@ -972,6 +972,7 @@ END{ }
 
   if [ "${aCmd}" ==  "Pull" ]; then
         setProjVars
+        echo ""
 
     if [ "${aArg1}" == "hard"   ]; then aArg1="--hard"; fi                                                  # .(21127.03.2)
     if [ "${aArg1}" == "-hard"  ]; then aArg1="--hard"; fi                                                  # .(21127.03.3)
@@ -991,7 +992,7 @@ END{ }
         bErr=$( echo "${aResult}" | awk '/Aborting/ { print 1; exit }' ); if [ "${bErr}" != "1" ]; then bErr=0; fi
         bOK=$(  echo "${aResult}" | awk '/Already/  { print 1; exit }' ); if [ "${bOK}"  != "1" ]; then bOK=0; fi
 #       echo "   --- \$bErr: ${bErr}"; # exit
-        sayMsg "GitR1[994]  bOK: '${bOK}', bReset: '${bReset}'" -1;
+        sayMsg "GitR1[994]  bOK: '${bOK}', bReset: '${bReset}'" 1;
 
     if [ "${bErr}" == "1" ]; then
 
@@ -999,7 +1000,6 @@ END{ }
         ${aLstSp}; exit
         fi                                                                                                  # .(21129.02.1 RAM End)
 
-#     echo "bOK: '${bOK}', bReset: '${bReset}'";
     if [ "${bOK}" == "0" ] || [ "${bReset}" == "1" ]; then                                                  # .(21129.03.1)
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
 
