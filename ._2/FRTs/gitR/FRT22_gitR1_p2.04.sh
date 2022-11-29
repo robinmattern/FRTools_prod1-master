@@ -100,6 +100,7 @@
 # .(21127.03 11/27/22 RAM  9:15p| More improvements to Git Pull -hard 
 # .(21128.05 11/27/22 RAM  6:30p| Sort list commits 
 # .(21128.06 11/27/22 RAM  7:30p| Implement vars set/get 
+# .(21129.02 11/27/22 RAM  8:45a| Display full git pull and clone result
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -988,7 +989,8 @@ END{ }
         echo -e "\n * FRTools script permissions have been reset"
 
       else                                                                                                  # .(21111.02.1 RAM End)
-        git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'
+#       git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'
+        git pull 2>&1 | awk '{ print "   "$0 }'                                                             # .(21129.02.1)
         fi
 
         ${aLstSp}                                                                                           # .(21127.08.2)

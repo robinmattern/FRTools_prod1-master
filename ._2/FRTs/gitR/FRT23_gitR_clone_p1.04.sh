@@ -34,6 +34,7 @@
 # .(21127.01 11/27/22 RAM  3:10p| Change name of gitr-config file
 # .(21127.02 11/27/22 RAM  3:10p| RDir may not exist
 # .(21127.08 11/27/22 RAM  8:30p| Added ${aLstSp} in various places 
+# .(21129.02 11/27/22 RAM  8:45a| Display full git pull and clone result
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -487,8 +488,8 @@ if [ "${bSSH}" == "0" ]; then
 
  if [ "${bAll}" == "1" ]; then
 
-#   git clone               "${aGitHub_URL}/${aProject}_${aStage}.git"  "${aRepoDir}"; nErr=$?  ##.(21105.01.9)
-    git clone               "${aGitHub_URL}/${aRepo}.git"               "${aRepoDir}"; nErr=$?  # .(21105.01.9)
+#   git clone               "${aGitHub_URL}/${aProject}_${aStage}.git"  "${aRepoDir}" 2>&1 | awk '{ print "   " $0 }'; nErr=$?  ##.(21105.01.9).(21129.02.2)
+    git clone               "${aGitHub_URL}/${aRepo}.git"               "${aRepoDir}" 2>&1 | awk '{ print "   " $0 }'; nErr=$?  # .(21105.01.9).(21129.02.2)
 #   git clone               "https://github.com/8020data/FRApps_prod-master.git"
 
     if [ "${nErr}" != "0" ]; then exit; fi
@@ -496,7 +497,7 @@ if [ "${bSSH}" == "0" ]; then
     cd "${aRepoDir}"
 
   else
-    git clone --no-checkout "${aGitHub_URL}/${aRepo}.git"               "${aRepoDir}"; nErr=$?  # .(21105.01.10)
+    git clone --no-checkout "${aGitHub_URL}/${aRepo}.git"               "${aRepoDir}" 2>&1 | awk '{ print "   " $0 }'; nErr=$?  # .(21105.01.10).(21129.02.3)
 #   git clone --no-checkout "github-ram:robinmattern/FRApps_prod-robin.git" FRApps;    nErr=$?
 
     if [ "${nErr}" != "0" ]; then exit; fi
@@ -510,8 +511,8 @@ if [ "${bSSH}" == "0" ]; then
 
 #   echo ""
 #   echo "git config --worktree core.sparse --- before -------------------------------------------------------"
-#   git config --worktree -l | awk '/sparse|exten/ { print "  " $0 }'
-#   git config --local    -l | awk '/sparse|exten/ { print "  " $0 }'
+#   git config --worktree -l | awk '/sparse|exten/ { print "   " $0 }'
+#   git config --local    -l | awk '/sparse|exten/ { print "   " $0 }'
 
 if [ "${bCone}" == "0" ]; then
 
@@ -520,8 +521,9 @@ if [ "${bCone}" == "0" ]; then
 
     echo ""
     echo "git config --worktree core.sparse ---------------------------------------------------"
-    git config --worktree  -l | awk '/sparse|exten/ { print "  " $0 }'
-    git config --local     -l | awk '/sparse|exten/ { print "  " $0 }'
+    git config --worktree  -l | awk '/sparse|exten/ { print "   " $0 }'
+    git config --local     -l | awk '/sparse|exten/ { print "   " $0 }'
+
 
 #   echo ""; exit
 
@@ -544,7 +546,7 @@ for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
 
     echo ""
     echo "cat .git/info/sparse-checkout -----------------------------------------------------------"
-          cat .git/info/sparse-checkout | awk '{ print "  " $0 }'
+          cat .git/info/sparse-checkout | awk '{ print "   " $0 }'
 
 #   echo ""; exit
 
