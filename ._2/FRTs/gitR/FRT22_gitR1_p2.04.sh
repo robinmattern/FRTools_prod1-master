@@ -958,9 +958,10 @@ END{ }
 
   if [ "${aCmd}" ==  "Push" ]; then
 
-        git push | awk '/changed|Everything/ { print "  "$0 }'
+        echo ""
+        git push | awk '/changed|Everything/ { print "   " $0 }'
 
-#       echo ""
+        ${aLstSp}                                                                                           # .(21127.08.2)
      fi # eif Push
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -982,7 +983,7 @@ END{ }
      else
         bReset=0
         fi                                                                                                  # .(21127.03.5 RAM End)
-        sayMsg "GitR1[948]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'"  1
+        sayMsg "GitR1[948]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'"  -1
 
 #       git pull 2>&1 | awk '/changed|Already/ { print "   " $0 }'                                          ##.(21129.02.1)
         aResult="$( git pull 2>&1 | awk       '{ print "   " $0 }' )"                                       # .(21129.02.1 RAM Beg)
@@ -990,7 +991,7 @@ END{ }
         bErr=$( echo "${aResult}" | awk '/Aborting/ { print 1; exit }' ); if [ "${bErr}" != "1" ]; then bErr=0; fi
         bOK=$(  echo "${aResult}" | awk '/Already/  { print 1; exit }' ); if [ "${bOK}"  != "1" ]; then bOK=0; fi
 #       echo "   --- \$bErr: ${bErr}"; # exit
-        sayMsg "GitR1[994]  bOK: '${bOK}', bReset: '${bReset}'" 1;
+        sayMsg "GitR1[994]  bOK: '${bOK}', bReset: '${bReset}'" -1;
 
     if [ "${bErr}" == "1" ]; then
 
@@ -998,9 +999,8 @@ END{ }
         ${aLstSp}; exit
         fi                                                                                                  # .(21129.02.1 RAM End)
 
-        echo "bOK: '${bOK}', bReset: '${bReset}'";
+#     echo "bOK: '${bOK}', bReset: '${bReset}'";
     if [ "${bOK}" == "0" ] || [ "${bReset}" == "1" ]; then                                                  # .(21129.03.1)
-        echo "bOK: '${bOK}', bReset: '${bReset}'"; # exit
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
 
 function setA() { chmod 755 "$1"; echo "$1"; }
