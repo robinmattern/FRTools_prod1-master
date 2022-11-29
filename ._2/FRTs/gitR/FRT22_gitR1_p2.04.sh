@@ -992,7 +992,7 @@ END{ }
         bErr=$( echo "${aResult}" | awk '/Aborting/ { print 1; exit }' ); if [ "${bErr}" != "1" ]; then bErr=0; fi
         bOK=$(  echo "${aResult}" | awk '/Already/  { print 1; exit }' ); if [ "${bOK}"  != "1" ]; then bOK=0; fi
 #       echo "   --- \$bErr: ${bErr}"; # exit
-        sayMsg "GitR1[994]  bOK: '${bOK}', bReset: '${bReset}'" 1;
+#       sayMsg "GitR1[994]  bOK: '${bOK}', bReset: '${bReset}'" 1;
 
     if [ "${bErr}" == "1" ]; then
 
