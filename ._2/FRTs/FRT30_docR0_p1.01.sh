@@ -12,14 +12,17 @@
 #            Copyright (c) 2022 8020Data-FormR * Released under
 #            MIT License: http://www.opensource.org/licenses/mit-license.php
 ##FNCS     .--------------------+-------+-------------------+------+-----------+
-#            sayMsg             | {aMsg} {bDebug}: 1)echo  2)echo then quit, 3)??
-#            Help               | {aCmd} != "", echo {aCmd} error
+#            Help               | 
 #            Start              |
+#            Step               |
+#            Code               |
+#            End                |
 #                               |
 ##CHGS     .--------------------+-------+-------------------+------+-----------+
 # .(11002.01 10/02/21 RAM 10:35p| Created
 # .(21128.01 11/28/22 RAM  8:00p| Add docR Commands
 # .(21128.02 11/28/22 RAM  1:50p| Add docR Commands
+# .(21128.02 11/28/22 RAM  8:00p| Finish docR Commands
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -73,13 +76,16 @@ function Help() {
         echo ""
         echo "  Useful DocR Commands   (${aVer})                                 (${aVdt})"
         echo "  -------------------------------------------------------------- -----------------------------------"
-        echo "    docR Start {title}                                            Begin a document"            # .(21128.01.1 RAM Beg Add)
+        echo "    docR Start {title}                                            Begin a document"           # .(21128.01.1 RAM Beg Add)
         echo "    docR Type [ text | markdown ]                                 Set the type"
         echo "    docR Title {title}                                            Begin a document"
+        echo "    docR Line                                                     Write a Line "              # .(21128.02.4)
+        echo "    docR Space                                                    Write a Blank Line "        # .(21128.02.7)
         echo "    docR Note  {note}                                             Write a Note"
+        echo "    docR Step  {step}                                             Write a Step"               # .(21128.02.1)
         echo "    docR Set Pause [ on | off ]                                   Set pausing before code"
         echo "    docR Code {code}                                              Run some code"
-        echo "    docR Alert {alert}                                            Write an alert"              # .(21128.01.1 RAM End)
+        echo "    docR Alert {alert}                                            Write an alert"             # .(21128.01.1 RAM End)
         ${aLstSp}; exit                                                                                     # .(10706.09.3)
         fi
         } # eof Help
@@ -101,19 +107,23 @@ function Help() {
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-        getCmd  "he"                   "Help"
-#       getCmd  "start"                "Doc Start"                                                          ##.(21128.01.2 RAM No Workie)
-#       getCmd  "start"     "*"        "Doc Start"                                                          # .(21128.01.2 RAM No Workie)
-        getCmd  "start"     "*"        "Doc Start"      # Any 2nd cmd                                       # .(21128.01.2 RAM Beg Left arg must be lowercase)
-#       getCmd  "start"     "*"        "Doc Start"   1  # Sets dBug=1                                       # .(21128.01.2 RAM Beg Left arg must be lowercase)
-        getCmd  "type"      "*"        "Doc Type"
-        getCmd  "alert"     "*"        "Doc Alert"
-        getCmd  "title"     "*"        "Doc Title"
-        getCmd  "note"      "*"        "Doc Note"
-        getCmd  "set"   "pause"  "on"  "Doc Set Pause"
-        getCmd  "set"   "pause"  "off" "Doc Set Pause"
-        getCmd  "code"      "*"        "Doc Code"
-        getCmd  "end"       "*"        "Doc End"  1                                                          # .(21128.01.2 RAM End)
+        getCmd  "he"                 "Help"
+#       getCmd  "start"              "docR Start"                                                            ##.(21128.01.2 RAM No Workie)
+#       getCmd  "start"  "*"         "docR Start"                                                            # .(21128.01.2 RAM No Workie)
+        getCmd  "start"  "*"         "docR Start"      # Any 2nd cmd                                         # .(21128.01.2 RAM Beg Left arg must be lowercase)
+#       getCmd  "start"  "*"         "docR Start"   1  # Sets dBug=1                                         # .(21128.01.2 RAM Beg Left arg must be lowercase)
+        getCmd  "type"   "*"         "docR Type"
+        getCmd  "alert"  "*"         "docR Alert"
+        getCmd  "title"  "*"         "docR Title"
+        getCmd  "note"   "*"         "docR Note"
+        getCmd  "line"   "*"         "docR Line"                                                             # .(21128.02.5) 
+        getCmd  "space"  "*"         "docR Blank Line"                                                       # .(21128.02.8) 
+        getCmd  "bl"     "li"        "docR Blank Line"                                                       # .(21128.02.9) 
+        getCmd  "step"   "*"         "docR Step"                                                             # .(21128.02.2) 
+        getCmd  "se"     "pa"  "on"  "docR Set Pause On"  # 1
+        getCmd  "se"     "pa"  "of"  "docR Set Pause Off"
+        getCmd  "code"   "*"         "docR Code"
+        getCmd  "end"    "*"         "docR End"                                                              # .(21128.01.2 RAM End)
 
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -123,7 +133,7 @@ function Help() {
 
         Help ${aCmd0}
 
-        sayMsg "FRT30[125]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" 1 # 2
+        sayMsg "FRT30[125]  aCmd:  '${aCmd}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', bGlobal: '${bGlobal}'" -1 # 2
 
 #====== =================================================================================================== #  ===========
 
@@ -142,105 +152,148 @@ function subFunction() {                                                        
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== ==============================================================================  #  ================ # .(21128.01.4 RAM Beg Add Command)
-#       DOC START Command
+#       docR Start Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "FRT30[147]  Doc Start (${aCmd})" -1
+        sayMsg "FRT30[147]  docR Start (${aCmd})" -1
 
-  if [ "${aCmd}" == "Doc Start" ]; then
-#       sayMsg "FRT30[150]  Doc Start" -1
+  if [ "${aCmd}" == "docR Start" ]; then
+#       sayMsg "FRT30[150]  docR Start" -1
 
-#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
-
-        echo "#====== =================================================================================================== #"
-        echo "        ${aArg1}"
-        echo "#       -------------------  =  ------------------------------------------------------  #  ---------------- #"
+        echo "# ============================================================================================================================================== #"
+        echo "    ${aArg1}"
+        echo "  + -----------------------  =  ------------------------------------------------------  +  -------------- +"
 
         ${aLstSp}
-     fi # eoc Doc Start                                                                                     # .(21128.01.4 End)
+     fi # eoc docR Start                                                                                    # .(21128.01.4 End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-#====== ==============================================================================  #  ================ # .(21128.01.4 RAM Beg Add Command)
-#       DOC NOTE Command
+#====== ==============================================================================  #  ================ # .(21128.01.5 RAM Beg Add Command)
+#       docR Note Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "FRT30[166]  Doc Note (${aCmd})" -1
+        sayMsg "FRT30[166]  docR Note (${aCmd})" -1
 
-  if [ "${aCmd}" == "Doc Note" ]; then
-#       sayMsg "FRT30[169] Doc Note" -1
-
-#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
+  if [ "${aCmd}" == "docR Note" ]; then
+#       sayMsg "FRT30[169] docR Note" -1
 
         echo ""
-#       echo "#       -------------------  =  ------------------------------------------------------  #  ---------------- #"
-        echo "        ${aArg1}"
-        echo "#       ----------------------------------------------------------------------------------------- "
+        echo "         ${aArg1}"
+        echo "       + ------------------  =  ------------------------------------------------------  +  -------------- +"
 #       echo ""
 
         ${aLstSp}
-     fi # eoc Doc Start                                                                                     # .(21128.01.4 End)
+     fi # eoc docR Start                                                                                    # .(21128.01.5 End)
+#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
+
+#====== ==============================================================================  #  ================ # .(21128.02.9 RAM Beg Add Command)
+#       docR Line Command
+# ----- ------------------------------------------------------------------------------
+
+        sayMsg "FRT30[166]  docR Blank Line (${aCmd})" -1
+
+  if [ "${aCmd}" == "docR Blank Line" ]; then
+#       sayMsg "FRT30[169] docR Blank Line" -1
+
+        echo ""
+
+        ${aLstSp}
+     fi # eoc docR Blank                                                                                    # .(21128.02.9 End)
+#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
+
+#====== ==============================================================================  #  ================ # .(21128.02.6 RAM Beg Add Command)
+#       docR Line Command
+# ----- ------------------------------------------------------------------------------
+
+        sayMsg "FRT30[166]  docR Line (${aCmd})" -1
+
+  if [ "${aCmd}" == "docR Line" ]; then
+#       sayMsg "FRT30[169] docR Line" -1
+
+#       echo "       + ------------------  =  ------------------------------------------------------  +  -------------- +"
+
+        ${aLstSp}
+     fi # eoc docR Line                                                                                     # .(21128.02.6 End)
+#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
+
+#====== ==============================================================================  #  ================ # .(21128.02.3 RAM Beg Add Command)
+#       docR Step Command
+# ----- ------------------------------------------------------------------------------
+
+        sayMsg "FRT30[166]  docR Step (${aCmd})" -1
+
+  if [ "${aCmd}" == "docR Step" ]; then
+#       sayMsg "FRT30[169] docR Step" -1
+
+        echo "         - ${aArg1}"
+#       echo "       + ------------------  =  ------------------------------------------------------  +  -------------- +"
+
+        ${aLstSp}
+     fi # eoc docR Step                                                                                     # .(21128.02.3 End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== ==============================================================================  #  ================ # .(21128.01.6 RAM Beg Add Command)
-#       DOC CODE Command
+#       docR Code Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "FRT30[187]  Doc Code (${aCmd})" -1
+        sayMsg "FRT30[187]  docR Code (${aCmd})" -1
 
-  if [ "${aCmd}" == "Doc Code" ]; then
-        sayMsg "FRT30[190]  Doc Code" -1
+  if [ "${aCmd}" == "docR Code" ]; then
+        sayMsg "FRT30[190]  docR Code" -1
 
-#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
-
+        bPause=$( git config --global --get frt.docr.pause )
         shift
-#       echo "        $@ (${FRT_docR_Pause})"
+#       echo "        $@ (${bPause})"; exit 
 #       echo "#       -------------------  =  ------------------------------------------------------  #"
 
-  if [ "${FRT_docR_Pause}" != "1" ]; then
+        echo "       + ------------------  =  ------------------------------------------------------  +  -------------- +"
+        echo ""
+  if [ "${bPause}" == "1" ]; then
  #      read -s -n 1 -p "        Press any key..."; echo ""
-        read -s -n 1 -p "        $ $@  ..."; echo ""
+        read -s -n 1 -p "         $ $@"; echo ""
+     else
+        echo            "         # $@"; echo ""
         fi
-        echo "#       -------------------  =  ------------------------------------------------------  #"
-                    "$@" | awk '{print "        " $0 }'
-        echo "#       -------------------  =  ------------------------------------------------------  #"
-
+        aCmd="$@"; aCmd=${aCmd//\"/}
+        echo "       + ------------------  =  ------------------------------------------------------  +---------------- +"
+                     $@ | awk '{ print "       |" $0 }'
+        echo "       + ------------------  =  ------------------------------------------------------  +---------------- +"
+        echo "" 
         ${aLstSp}
-     fi # eoc Doc Code                                                                                     # .(21128.01.4 End)
+     fi # eoc docR Code                                                                                     # .(21128.01.6 End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== ==============================================================================  #  ================ # .(21128.01.7 RAM Beg Add Command)
-#       DOC SET PAUSE Command
+#       docR Set PAUSE Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "FRT30[214]  Doc Set Pause (${aCmd})" -1
+#       sayMsg "FRT30[214]  ${aCmd}" -1
 
-  if [ "${aCmd}" == "Doc Set Pause" ]; then
-        sayMsg "FRT30[217] Doc Set Pause" -1
+  if [ "${aCmd}" == "docR Set Pause On" ] || [ "${aCmd}" == "docR Set Pause Off" ]; then
+#       sayMsg "FRT30[217]  docR Set Pause ${aCmd:15:2}" 1
 
-#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
-
-      export FRT_docR_Pause=${aArg2}
-      echo  "FRT_docR_Pause: {FRT_docR_Pause}"
+        bOn=0; if [ "${aCmd:15:2}" == "On" ]; then bOn=1; fi 
+        git config --global --add  frt.docr.pause  ${bOn}
+        bPause=$( git config --global --get frt.docr.pause )
+#       sayMsg "FRT30[224]  frt.docr.pause: ${bPause}" 1
 
         ${aLstSp}
-     fi # eoc Doc End                                                                                       # .(21128.01.7 End)
+     fi # eoc docR End                                                                                      # .(21128.01.7 End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
-#====== ==============================================================================  #  ================ # .(21128.01.7 RAM Beg Add Command)
-#       DOC END Command
+#====== ==============================================================================  #  ================ # .(21128.01.8 RAM Beg Add Command)
+#       docR End Command
 # ----- ------------------------------------------------------------------------------
 
-        sayMsg "FRT30[232]  Doc End (${aCmd})" -1
+        sayMsg "FRT30[232]  docR End (${aCmd})" -1
 
-  if [ "${aCmd}" == "Doc End" ]; then
-        sayMsg "FRT30[235] Doc End" -1
+  if [ "${aCmd}" == "docR End" ]; then
+        sayMsg "FRT30[235] docR End" -1
 
-#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
-
-        echo "#====== =================================================================================================== #"
+        echo "# ============================================================================================================================================== #"
 
         ${aLstSp}
-     fi # eoc Doc End                                                                                       # .(21128.01.7 End)
+     fi # eoc docR End                                                                                      # .(21128.01.8 End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== =================================================================================================== #  ===========
