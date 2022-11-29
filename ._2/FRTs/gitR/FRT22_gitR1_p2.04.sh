@@ -50,7 +50,11 @@
 #            Rename             | Remote
 #            Delete             | Remote                                                                    # .(11127.01.1 RAM Was: Remove)
 #                               |
-#            sayMsg             | echo aMsg if bQuiet == 0, then exit if $2 = 2
+#            Var                | 
+#            Var List           | 
+#            Var Set            | 
+#            Var Get            | 
+
 #            setBranch          |
 #            setProjVars        |
 #            getCurRemote       |
@@ -94,6 +98,8 @@
 # .(21118.02 11/27/22 RAM  3:00p| Use gitR_clone_p1.04
 # .(21127.03 11/27/22 RAM  4:45p| Improve Git Pull -hard 
 # .(21127.03 11/27/22 RAM  9:15p| More improvements to Git Pull -hard 
+# .(21128.05 11/27/22 RAM  6:30p| Sort list commits 
+# .(21128.06 11/27/22 RAM  7:30p| Implement vars set/get 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -189,6 +195,7 @@ function Help( ) {
         echo ""
         echo "         Var List                                                List all local and global config variables"      # .(20501.02.1 RAM)
         echo "         Var Set {Name} {Value} [-g]                             Set [global] config value"                       # .(20501.02.12)
+        echo "         Var Get {Name}                                          Set [global] config value"                       # .(21128.06.1)
         echo ""
         echo "  Notes: Only two lowercase letter are needed for each command, seperated by spaces"
         echo "         One or more command options follow. Help for the command is dispayed if no options are given"
@@ -285,6 +292,7 @@ function Help( ) {
 
         getCmd "li" "va"        "List Vars"
         getCmd "se" "va"        "Set Var"
+        getCmd "ge" "va"        "Get Var"                                               # .(21128.06.2)
 
         getCmd "li" "co" "br"   "List Branch Commits"                                   # .(20627.01 RAM Create Cmd List Branch Commits)
 
@@ -563,6 +571,8 @@ function  shoGitRemotes1( ) {
 
         sayMsg "shoGitRemotes1[ 5 ]  cd: $( pwd )"
         mRemotes=$( bash -c '( git remote -v )' 2>&1 )  # So that no error message is disdplayed
+#       mRemotes=$( bash -c '( git remote -v )' 2>&1 | sort -k1.47r)  # .(21128.05.1 RAM Sort) 
+
 #       mRemotes=$( git remote -v )
 
 #       echo "\${?}: ${?}..."
@@ -655,7 +665,9 @@ function shoGitRemotes2( ) {
 #       fi
 
         IFS=$'\n'
-        mRemotes=( $( bash -c '( git remote -v )' 2>&1 ) )
+        mRemotes=( $( bash -c '( git remote -v )' 2>&1               ) )
+#       mRemotes=( $( bash -c '( git remote -v )' 2>&1 | sort -k1.47 ) ) ##.(21128.05.2 RAM Sort) 
+
 #       mRemotes=$( git remote -v )
 
 #       echo "\${?}: ${?}"
@@ -762,18 +774,34 @@ END{ }
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== =================================================================================================== #  ===========
-#       GIT SET VAR                                                                                         # .(20501.02.3 Beg RAM Added)
+#       GITR SET VAR                                                                                        # .(20501.02.3 Beg RAM Added)
 #====== =================================================================================================== #
 
   if [ "${aCmd}" == "Set Var" ]; then
         sayMsg "GitR1[767]  Git Set Var"
 
-        echo ""
-        echo "git set var"
+#       echo -e "]n   git set var '${aArg1}' '${aArg2}'"
+        git config --global --add "${aArg1}" "${aArg2}"
+        echo -e "\n  ${aArg1} is now set globally to \"${aArg2}\""
 
 #       echo ""
-        exit
+        ${aLstSp}; exit
      fi # eoc Set Var                                                                                       # .(20501.02.3 End)
+#    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
+
+#====== =================================================================================================== #  ===========
+#       GITR GET VAR                                                                                        # .(21128.06.3 Beg RAM Add Command)
+#====== =================================================================================================== #
+
+  if [ "${aCmd}" == "Get Var" ]; then
+        sayMsg "GitR1[767]  Git Get Var"
+
+#       echo -e "]n   git set var '${aArg1}' '${aArg2}'"
+        aArg2=$( git config --global --get "${aArg1}" )
+        echo -e "\n  ${aArg1}=${aArg2}"
+
+        ${aLstSp}; exit
+     fi # eoc Set Var                                                                                       # .(21128.06.3 RAM End)
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== =================================================================================================== #  ===========
@@ -1198,7 +1226,9 @@ END{ }
 #                 git ls-remote ${aGit_Host}:${aGit_User}/${aGit_Repo}.git | awk '{ printf "    %7s  %s\n", substr($1,1,7), $2 }'
 
         aCmd="git ls-remote ${aGit_Host}:${aGit_User}/${aGit_Repo}.git";
-        mResults=$( bash -c "( ${aCmd} )" 2>&1 );
+        mResults=$( bash -c "( ${aCmd} )" 2>&1               );
+#       mResults=$( bash -c "( ${aCmd} )" 2>&1 | sort -k1.47 ) # .(21128.05.3 RAM Sort) 
+
 # if [ ${?} -ne 0 ]; then
 #       echo " ** Git Repo, ${aGit_Repo}, not found for Account, ${aGit_User}, using SSH_Key, ${aGit_Host}."
 #     else
@@ -1223,7 +1253,7 @@ END{ }
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== =================================================================================================== #  ===========
-#       LIST REMOTE COMMITS
+#       LIST LOCAL/REMOTE COMMITS
 #====== =================================================================================================== #
         sayMsg "GitR1[1222]  ${aCmd}, nDays: '${nDays}'"                                                                    # .(21122.04.0 nDays Not assigned yet) 
 
@@ -1250,7 +1280,9 @@ END{ }
 #       sayMsg "GitR1[1244]  nDays: '${nDays}', bLocal: '${bLocal}', aArg1: '${aArg1}', aArg2: '${aArg2}', aArg3: '${aArg3}', aArg4: '${aArg4}', bDoit: '${bDoit}', bDebug: '${bDebug}', bQuiet: '${bQuiet}'" 2
 #       sayMsg "GitR1[1245]  aStage: ${aStage}; aPath1: '${aPath1}'" 2
 
-        mResults=$( bash -c "( git branch )" 2>&1 );
+        mResults=$( bash -c "( git branch )" 2>&1               ) # .(21128.05.4 RAM Sort) 
+#       mResults=$( bash -c "( git branch )" 2>&1 | sort -k1.47 ) ##.(21128.05.4 RAM Sort) 
+
   if [ "${mResults:0:5}" == "fatal" ]; then
         sayMsg " ** Git Error." 3
         sayMsg "    ${mResults}." 3
@@ -1283,7 +1315,7 @@ END{ }
      fi
         echo "    git log '${aPath}' ${aSince}--date=format:'%Y-%m-%d %H:%M' --oneline --format=\"%h %ad %cn %s\" "; echo ""
 
-if [ "${bLocal}" == "1" ]; then
+  if [ "${bLocal}" == "1" ]; then
         echo "    Local                    Branch              Date    Time   Commit   Author            Commit Message"
 #       aGit_Remote="${aStage} (local)"                                                                                     ##.(20122.01.3 RAM Was: "")
         aGit_Remote="${aStage}"                                                                                             # .(20122.01.3 RAM Was: "")
@@ -1305,7 +1337,8 @@ if [ "${bLocal}" == "1" ]; then
         aPrg="{ printf \" %s %-24s %-16s %16s  %7s  %-17s %s\n\", \"${aLorR}\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }"; # sayMsg "aPrg: ${aPrg}" 2   # .(11127.02.9).(20122.01.6)
 
 #       aPrg="${aPrg} END { printf \"%3d Commits for '${aPath}' since '${aSince:8} days ago'\", n }"; # sayMsg "aPrg: ${aPrg}" 2
-        aPrg="${aPrg} END { printf \"%3d Commits for '${aPath}' since %s\", n, d ? d : \"then\"   }"; # sayMsg "aPrg: ${aPrg}" 2
+#       aPrg="${aPrg} END { printf \"%3d Commits for '${aPath}' since %s\", n, d ? d : \"then\"   }"; # sayMsg "aPrg: ${aPrg}" 2
+        aPrg="${aPrg} END { printf \"    %s Commits for %-19s since: %-20s\", n, \"'${aPath}'\", (d ? d : \"then\") }"; # sayMsg "aPrg: ${aPrg}" 2
 
 #       git log ${aPath} -n 25                 --oneline --format="%h|%as|%cn|%s" | awk -F'[|]' '{ printf "    %7s  %10s  %-17s %s\n", $1, $2, $3, $4 }'
 #       git log ${aPath} --since="2021-07-25"  --oneline --format="%h|%as|%cn|%s" | awk -F'[|]' '{ printf "    %7s  %10s  %-17s %s\n", $1, $2, $3, $4 }'
@@ -1314,9 +1347,11 @@ if [ "${bLocal}" == "1" ]; then
 #       git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s"
 
   if [ "${aSince}" == "" ]; then
-        git log ${aPath}             --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}"   # .(21122.04.4 RAM Swap ! for |)
+#       git log ${aPath}             --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}"                ##.(21122.04.4 RAM Swap ! for |).(21128.05.5)
+        git log ${aPath}             --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}" | sort -k1.45  # .(21122.04.4 RAM Swap ! for |).(21128.05.5)
     else
-        git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}"   # .(21122.04.5)
+#       git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}" | sort         ##.(21122.04.5).(21128.05.6)
+        git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}" | sort -k1.45  # .(21122.04.5).(21128.05.6)
      fi
 
 #       mRecs=$( bash -c "( git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s" )" )

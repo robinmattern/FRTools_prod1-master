@@ -99,19 +99,19 @@ function  logIt() {
 
 function Help() {                                                                           #.(81014.03.1 Beg RAM Create function)
 #           echo "  $LIB Info Functions              $( echo $0 | awk '{ gsub( /.+_[ptuv]|.sh/, ""); print }' )"
-            echo "  RSS Info Tools   (${aVer})                    (${aVdt})"                # .(21111.04.2)
+            echo "  Usefull RSS Info Tools   (${aVer})            (${aVdt})"                # .(21111.04.2)
             echo "  ------------------------------------------  ---------------------------------"
-            echo "    RSS Path [Show]                           Show PATH"
-            echo "    RSS Path Add [System] {Path} [-doit]      Add {Path} to [System] PATH"
-            echo "    RSS Path Clean [System]      [-doit]      Remove Duplicate Paths from [System] PATH"
-            echo "    RSS Vars Show {Search}                    Show Environment Variables (Use ! for non-leading search string)"
-            echo "    RSS Vars Show OS                          Show Current OS Name"      # .(21126.04.1 RAM)
-            echo "    RSS Vars Set [System] {Name} {Value}      Set [System] Environment Variable"
-#           echo "    RSS Top                                   Show Top Running Programs (Unix only)"
-#           echo "    RSS Log Show                              Show $LIB Log"
-#           echo "    RSS Log Set {LogFile} {User}              Set $LIB log"
-#           echo "    RSS Log On                                Turn $LIB log on"
-#           echo "    RSS Log Off                               Turn $LIB log off"
+            echo "    RSS Info Path [Show] [-sys|-user|-bash]   Show PATH for Environment"
+            echo "    RSS Info Path Clean  [-sys|-user] [-doit] Remove Duplicate Paths from [System] PATH"
+            echo "    RSS Info Path Add  {Path} [-user] [-doit] Add {Path} to [System] PATH"
+            echo "    RSS Info Vars Set  {Name} {Value}         Set [System] Environment Variable"
+            echo "    RSS Info Vars Show {Search}               Show Environment Variables (Use ! for non-leading search string)"
+            echo "    RSS Info Vars Show  OS                    Show Current OS Variables"  # .(21126.04.1 RAM)
+#           echo "    RSS Info Top                              Show Top Running Programs (Unix only)"
+#           echo "    RSS Info Log Show                         Show $LIB Log"
+#           echo "    RSS Info Log Set {LogFile} {User}         Set $LIB log"
+#           echo "    RSS Info Log On                           Turn $LIB log on"
+#           echo "    RSS Info Log Off                          Turn $LIB log off"
             echo ""
             exit
         }
