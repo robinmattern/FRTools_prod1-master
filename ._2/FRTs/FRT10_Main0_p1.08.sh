@@ -72,6 +72,7 @@
 # .(21127.07 11/27/22 RAM  7:40p| Surpress Info Path Add msg if FRT setPath
 # .(21128.02 11/28/22 RAM  8:00p| Add docR Commands
 # .(21129.07 11/29/22 RAM  8:50p| Fix set path not found in wrong shell
+# .(21121.03 11/30/22 RAM  9:45a| Select .profile over .bashrc
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -415,11 +416,12 @@ function Help( ) {
 
      if [ "${bDoit}" == "0" ] ; then
 
-#       aBashrc=".bashrc"; if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                        # .(21121.03.8)
-        aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                        # .(21121.03.1 RAM Use alternate profile file)
+#       aBashrc=".bashrc";  if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                        ##.(21121.03.9)
+#       aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                        ##.(21121.03.9 RAM Use alternate hidden profile file).(21121.03.11)
+        aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                        # .(21121.03.11 Use .profile if it exists)
 
-#       aWhere="the ~/${aBashrc} file"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="the Windows System"; fi   ##.(21121.03.9).(21126.09.1)
-        aWhere="${aOS} Shell"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="Windows System Environment"; fi    # .(21121.03.9).(21126.09.1)
+#       aWhere="the ~/${aBashrc} file"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="the Windows System"; fi   ##.(21121.03.10).(21126.09.1)
+        aWhere="${aOS} Shell"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="Windows System Environment"; fi    # .(21121.03.10).(21126.09.1)
         aShell="-bash";        if [ "${aOSv:0:1}" == "w" ]; then aShell="-sys"; fi                          # .(21129.07.2)
         if [ "${aUser}" == "-user" ]; then aWhere="Windows User Environment"; aShell="-user"; fi            # .(21126.08.11).(21129.07.2)
         echo -e "\n    The Path to FRTools will be set in the ${aWhere} with: RSS Info Path Add \"{Path}\" ${aUser}"

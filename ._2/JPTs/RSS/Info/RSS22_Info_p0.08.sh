@@ -36,7 +36,7 @@
 # .(21114.05 11/14/22 RAM  7:55a| Add Path add
 # .(21120.06 11/20/22 RAM  1:40p| Add cvt to AwkPgm to deal with Windows' paths
 # .(21121.01 11/21/22 RAM  4:30p| Fix searching for a path in windows
-# .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or profile
+# .(21121.03 11/21/22 RAM  4:00p| Allow for .bashrc or .profile
 # .(21122.01 11/22/22 RAM  9:00a| Add Parse args
 # .(21124.01 11/24/22 RAM  2:00p| Get $PATH with REG QUERY "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" -v PATH
 # .(21124.02 11/24/22 RAM  2:00p| Check if PATH length > 2047
@@ -52,6 +52,7 @@
 # .(21126.08 11/26/22 RAM  6:11p| Add -user option to 'frt set path'
 # .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH
 # .(21127.07 11/27/22 RAM  7:40p| Surpress Info Path Add msg if FRT setPath
+# .(21121.03 11/30/22 RAM  9:45a| Select .profile over .bashrc
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -465,7 +466,8 @@ END    { if (bShow != 1) { print aPath }
 
         else # if aOSv is not Windows
 
-            aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi           # .(21121.03.1 RAM Use alternate profile file)
+#           aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi          ##.(21121.03.1 RAM Use alternate profile file).(21121.03.12)
+            aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi          # .(21121.03.12 Use .profile if it exists)
                                                         aOSname="~/${aBashrc} file"                # .(21121.03.2)
             aOldPATH="$( cat ~/${aBashrc}   | awk '!/^ *#/' | awk '/export PATH=/ { sub( /.+=/, "" ); print; exit }' )" # .(21121.03.3).(21126.06.1 RAM Exclude commented out lines).(21126.06.2 RAM 1st only only)
             aOldPATH="$( echo "${aOldPATH}" | awk '{ sub( /^ *["]/, "" ); sub( /["] *$/, "" ); print }' )"              # .(21126.06.2 RAM Remove trailing quotes)
@@ -589,14 +591,15 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
 
 #    +---- +------------------ +-----------------------------------------------------------
 
-   if [ "${bDoit}" == "1" ]; then aVerb="has been"; #aToDo="      Please run: source ~/${aBashrc}"       # .(21114.02.12).(21121.03.4)
+   if [ "${bDoit}" == "1" ]; then aVerb="has been"; #aToDo="      Please run: source ~/${aBashrc}"       ##.(21114.02.12).(21121.03.4)
                                                      aToDo="      Please login again"                    # .(21121.03.4)
          cd ~
-         aBashrc=".bashrc"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                    # .(21121.03.2)
+         aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                   ##.(21121.03.5).(21121.03.13)
+         aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                   # .(21121.03.13 Use .profile if it exists)
 
-         aTS=$( date '+%y%m%d.%H%M'); aBak="${aBashrc}_v${aTS}"                                          # .(21121.03.5)
-         mv  ${aBashrc}  ${aBak};                                                                        # .(21121.03.6)
-         cat ${aBak}  | awk "${aAwkPgm}" >${aBashrc}                                                     # .(21121.03.7)
+         aTS=$( date '+%y%m%d.%H%M'); aBak="${aBashrc}_v${aTS}"                                          # .(21121.03.6)
+         mv  ${aBashrc}  ${aBak};                                                                        # .(21121.03.7)
+         cat ${aBak}  | awk "${aAwkPgm}" >${aBashrc}                                                     # .(21121.03.8)
 #        cat ${aBashrc}
 #        source ${aBashrc}
       else                                                                                               # .(21114.02.13)
