@@ -3,9 +3,9 @@
     chmod -R 755 ._2
        ._2/bin/frt set path "$@"
 
-if [ ! -d /home/._0/bin ]; then mkdir /home/._0/bin; fi  
-if [ ! -f /home/._0/bin/setAccess ]; then 
+if [ ! -f /etc/issue ]; then exit; fi
+if [ ! -d /home/._0/bin ]; then mkdir -p /home/._0/bin; fi
+if [ ! -f /home/._0/bin/setAccess ]; then
     cp ._2/bin/setAccess  /home/.0/bin
     chmod 755 /home/._0/bin
-    fi    
-    
+    fi
