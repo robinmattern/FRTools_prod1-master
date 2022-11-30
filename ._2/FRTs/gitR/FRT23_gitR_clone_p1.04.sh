@@ -35,7 +35,7 @@
 # .(21127.02 11/27/22 RAM  3:10p| RDir may not exist
 # .(21127.08 11/27/22 RAM  8:30p| Added ${aLstSp} in various places 
 # .(21129.02 11/27/22 RAM  8:45a| Display full git pull and clone result
-
+# .(21130.01 11/30/22 RAM 10:20a| Only show 21 lines of config file
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
@@ -66,6 +66,7 @@
                                aRepoDir="$2"   # .(21118.02.1 RAM)
 
 #   -----------------------------------------------------------------
+     aLstSp="echo "; if [ "${aOSv/w}" != "${aOSv}" ]; then aLstSp=""; fi                                    # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse).(21120.02.1)
 
  if [ "${bHelp}" == "1" ]; then
     echo ""
@@ -96,8 +97,8 @@
     echo "      Apps[2]=\"/server3/1c3_my-react-custom-api/\""
     echo ""
     echo "      WebsDir=\"C:\\Repos\", or \"/webs\""
-    echo ""
-    exit
+
+    ${aLstsp}; exit
     fi
 #   -----------------------------------------------------------------
 
@@ -237,7 +238,7 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 #   echo "   Syntax: gitr clone {Project} [-all] [-doit]"
     echo ""
     echo "     ** Config file, '${aConfigFile}', not found."
-    echo ""
+#   echo ""
     fi                                                                                      # .(21101.02.2)
 
 #   -----------------------------------------------------------------
@@ -322,12 +323,12 @@ if [ "$c5" == " " ]; then
     echo "    in this config file just created: "
     echo ""
     echo "-------------------------------------------------------------------------------"
-     cat   "${aConfigFile}"
+     cat   "${aConfigFile}" | awk 'NR <= 21 { print "  " $0 }'                              # .(21130.01.1 RAM)
     echo "-------------------------------------------------------------------------------"
     echo ""
     echo "  Then run the command again, gitr clone ${aPrj} to view the settings."
 
-    {aLstSp}; exit
+    ${aLstSp}; exit
     fi                                                                                      # .(21101.02.4)
 #   -----------------------------------------
     fi
