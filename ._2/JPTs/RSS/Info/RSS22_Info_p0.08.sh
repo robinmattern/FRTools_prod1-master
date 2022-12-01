@@ -53,6 +53,7 @@
 # .(21126.09 11/26/22 RAM  7:20p| Modify System/Shell names for PATH
 # .(21127.07 11/27/22 RAM  7:40p| Surpress Info Path Add msg if FRT setPath
 # .(21121.03 11/30/22 RAM  9:45a| Select .profile over .bashrc
+# .(21201.03 12/01/22 RAM  9:25a| Run source ~/${bashrc} to set PATH
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -469,8 +470,8 @@ END    { if (bShow != 1) { print aPath }
 #           aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi          ##.(21121.03.1 RAM Use alternate profile file).(21121.03.12)
             aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi          # .(21121.03.12 Use .profile if it exists)
                                                         aOSname="~/${aBashrc} file"                # .(21121.03.2)
-            aOldPATH="$( cat ~/${aBashrc}   | awk '!/^ *#/' | awk '/export PATH=/ { sub( /.+=/, "" ); print; exit }' )" # .(21121.03.3).(21126.06.1 RAM Exclude commented out lines).(21126.06.2 RAM 1st only only)
-            aOldPATH="$( echo "${aOldPATH}" | awk '{ sub( /^ *["]/, "" ); sub( /["] *$/, "" ); print }' )"              # .(21126.06.2 RAM Remove trailing quotes)
+            aOldPATH="$( cat "~/${aBashrc}"  | awk '!/^ *#/' | awk '/export PATH=/ { sub( /.+=/, "" ); print; exit }' )" # .(21121.03.3).(21126.06.1 RAM Exclude commented out lines).(21126.06.2 RAM 1st only only)
+            aOldPATH="$( echo  "${aOldPATH}" | awk '{ sub( /^ *["]/, "" ); sub( /["] *$/, "" ); print }' )"              # .(21126.06.2 RAM Remove trailing quotes)
 
       if [ "$aOldPATH" != "" ]; then                                                               # if $PATH exists in .bashrc
             aNewPATH="${aPath}:${aOldPATH/${aPath}:/}"; aNewPath="$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} )"  #.(21121.01.3 Put aPath (back) in front of PATH))
@@ -509,7 +510,7 @@ END    { if (bShow != 1) { print aPath }
                  "$0" vars set PATH -doit "$( cvt2winPath "${aNewPATH}" ${aOSv:0:1} 1)"     # Convert to Linux path, but no length chop
 
             if [ "$?" == "1" ]; then exit 1; fi
-
+                  source "~/${aBashrc}"                                                     # .(21201.03.1 RAM Set PATH temporarily)
           else  # Windows                                                                   # .(21125.01.12)
 
 #           cmd="$( dirname $0)/../../../bin/nircmd.exe elevatecmd execmd"                  # .(21125.01.13)
