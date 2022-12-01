@@ -12,11 +12,11 @@ function setA() {
 #   if [ -d "${aDir}/.git" ]; then
 
   m=( $( find .       -type f       -iname "*.sh" | while read file; do setA "$file"; done ) )
-         echo -e "    Execute access set for ${#m[@]} scripts in folder: ${aDir}.";
+         echo -e "   Execute access set for ${#m[@]} scripts in folder: ${aDir}.";
 
     if [ "$( basename ${aDir} )" == "FRTools" ]; then
   n=( $( find ._2/bin -type f  -not -iname "*.*"  | while read file; do setA "$file"; done ) )
-         echo -e "    Execute access set for ${#n[@]} FRTools bin scripts.";
+         echo -e "   Execute access set for ${#n[@]} FRTools bin scripts.";
        fi
 
 #      else

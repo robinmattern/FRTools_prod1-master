@@ -102,6 +102,7 @@
 # .(21128.06 11/27/22 RAM  7:30p| Implement vars set/get
 # .(21129.02 11/27/22 RAM  8:45a| Display full git pull and clone result
 # .(21129.03 11/27/22 RAM  4:00p| Improve how script permissions are reset
+# .(21201.04 12/01/22 RAM  9:30a| Show two reset permission counts 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -1008,12 +1009,15 @@ function setA() { chmod 755 "$1"; echo "$1"; }
         if [  -d  "../${aProjDir}" ]; then aProjDir="../${aProjDir}"; fi;                                   # .(21127.03.6)
 #       chmod -R 755 "${aProjDir}" *.sh                                                                     ##.(21127.03.7)
 #       chmod -R 755 "${aProjDir}"                                                                          # .(21127.03.7).(21129.03.3)
+
 #       find ${aProjDir}/._2/bin -type f       -iname "*"    -exec chmod 755 {} \;                          ##.(21129.03.2)
  n=( $( find ${aProjDir}/._2/bin -type f  -not -iname "*.*"  | while read file; do setA "$file"; done ) )   # .(21129.03.2)
 #       find ${aProjDir}         -type f       -iname "*.sh" -exec chmod 755 {} \;                          ##.(21129.03.3)
  m=( $( find ${aProjDir}         -type f       -iname "*.sh" | while read file; do setA "$file"; done ) )   # .(21129.03.3)
 
-        echo -e "\n * $(( ${#m[@]} + ${#m[@]} )) FRTools script permissions have been reset."               # .(21129.02.4 RAM End)
+#       echo -e "\n * $(( ${#m[@]} + ${#m[@]} )) FRTools script permissions have been reset."               ##.(21129.02.4 RAM End).(21201.04.1)
+        echo -e "\n * ${#m[@]} FRTools script permissions have been reset."                                 # .(21201.04.1)
+        echo -e   " * ${#n[@]} FRTools bin script permissions have been reset."                             # .(21201.04.2).(21129.02.4 RAM End)
 
 #     else                                                                                                  ##.(21111.02.1 RAM End).(21129.02.2)
 #       git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'                                           ##.(21129.02.3)
