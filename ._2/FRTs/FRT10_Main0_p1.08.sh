@@ -74,6 +74,7 @@
 # .(21128.02 11/28/22 RAM  8:00p| Add docR Commands
 # .(21129.07 11/29/22 RAM  8:50p| Fix set path not found in wrong shell
 # .(21121.03 11/30/22 RAM  9:45a| Select .profile over .bashrc
+# .(21121.07 11/30/22 RAM 11:45a| Change Help FRT Rir to FRT Dir 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -81,7 +82,7 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-     aVdt="Nov 30, 2022 11:39a"; aVtitle="formR Tools"                                                      # .(21113.05.8 RAM Add aVtitle for Version in Begin)
+     aVdt="Dec 1, 2022 11:50a"; aVtitle="formR Tools"                                                      # .(21113.05.8 RAM Add aVtitle for Version in Begin)
      aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
      LIB="FRT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
@@ -181,7 +182,7 @@ function Help( ) {
      echo ""
      echo "         JPT {Cmd}"                                                          # .(21107.02.1)
      echo "         JPT RSS {Cmd}"                                                      # .(21107.02.2)
-     echo "             RSS Rir (RDir)"                                                 # .(21107.02.3)
+     echo "             RSS Dir (RDir)"                                                 # .(21107.02.3)
      echo "             RSS DirList (DirList)"                                          # .(21107.02.4)
      echo ""
      echo "  Notes: Only 3 lowercase letters are needed for each command, separated by spaces"
