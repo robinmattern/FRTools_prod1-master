@@ -6,6 +6,6 @@
 if [ ! -f /etc/issue ]; then exit; fi
 if [ ! -d /home/._0/bin ]; then mkdir -p /home/._0/bin; fi
 if [ ! -f /home/._0/bin/setAccess ]; then
-    cp ._2/bin/setAccess  /home/.0/bin
+    cp ._2/bin/setAccess  /home/._0/bin
     chmod 755 /home/._0/bin
     fi
