@@ -18,7 +18,7 @@ if [ "$( which docr )" != "" ]; then erase docr; fi
   docr code  "   $ nano /root/.profile"
   docr text  "       Remove "/webs/FRTools/._2/bin:" from export PATH="$PATH:..." in /root/.profile"
   docr text  "       CTRL-X"
-  docr code  "   $ logout"
+  docr code  "   $ logout "
   docr text  "   - In Bitvise, Open New terminal console"
   docr text  "   - Check the FRTools is not installed"
   docr code  "   $ frtools"
