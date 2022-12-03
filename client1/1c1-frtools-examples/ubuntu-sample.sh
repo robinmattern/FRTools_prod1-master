@@ -1,50 +1,81 @@
 #!/bin/bash
+#*\
+##=========+====================+================================================+
+##RD         ubuntu-sample      | Steps to
+##RFILE    +====================+=======+=================+======+===============+
+##FD   FRT30_Doc0.sh            |  11350| 11/28/22 08:01|   188| p1.01-21128.0801
+##FD   FRT99_Template0.sh       |  10134| 11/28/22 13:47|   169| p1.01-21128.1347
+##DESC     .--------------------+-------+-----------------+------+---------------+
+#            This script contains formR's docR steps to test and document the
+#            steps to install FRTools.  
+#               1. Revert the system back to no race of FRTools
+#               2. Clone the FRTools repository
+#               3. Run setPath to make all scripots avaiable from anywhere 
+#               4. Get a new version of the FRTools repository
+#               5. Other usefull commnds
+# 
+##LIC      .--------------------+----------------------------------------------+
+#            Copyright (c) 2022 8020Data-formR * Released under
+#            MIT License: http://www.opensource.org/licenses/mit-license.php
+#
+##CHGS     .--------------------+-------+-------------------+------+-----------+
+# .(11130.03 11/30/22 RAM 10:00p| Created
+# .(11201.06 12/01/22 RAM 11:53a| Updated for Bruce
+# .(11201.06 12/01/22 RAM  4:48p| Last 4 hours of work lost 
+# .(11201.06 12/02/22 RAM 10:00a| Rewrote lost changes 
 
-function docr() {
-  echo $2
-  }
-if [ "$( which docr )" != "" ]; then erase docr; fi
+##PRGM     +====================+===============================================+
+##ID 69.600. Main               |
+##SRCE     +====================+===============================================+
+#*/
+#========================================================================================================== #  ===============================  #
 
-  docr set pause off
-# docr set pause on
+function docR() {
+  if [ "$1" == "step" ]; then echo "   $2"; else echo $2; fi 
+     }
+          aDocRcmd="$( which docR >2&1 )"
+  if [ "${aDocRcmd/no docR/}" == ${aDocRcmd}" ]; then unset -f docr; fi
 
-  docr start "FRTools Ubuntu Install Script"
+  docR set pause off
+# docR set pause on
+                              
+  docR start "FRTools Ubuntu Install Script"
 
-  docr step  "1. Login to Remote Ubuntu Server"
-  docr text  "   - Open Bitvise Profile .tlp file"
-  docr text  "   - Click the Login button"
-  docr text  "   - Open New terminal console"
-  docr text  "   - In the remote terminal console, remove existing PATH"
-  docr code  "   $ nano /root/.profile"
-  docr text  "       Remove "/webs/FRTools/._2/bin:" from export PATH="$PATH:..." in /root/.profile"
-  docr text  "       CTRL-X"
-  docr code  "   $ logout"
-  docr text  "   - In Bitvise, Open New terminal console"
-  docr text  "   - Check the FRTools is not installed"
-  docr code  "   $ frtools"
-  docr text  "   - Remove the FRTools if present"
-  docr code  "   $ rm -R webs/FRTools"
-  docr code  "   $ rm    webs/frtools/*"
+  docR step  "1. Login to Remote Ubuntu Server"      1
+  docR step  "   - Open Bitvise Profile .tlp file"   2
+  docR step  "   - Click the Login button"           2
+  docR step  "   - Open New terminal console"        2
+  docR step  "   - In the remote terminal console, remove existing PATH" 2
+  docR code  "   $ nano /root/.profile"
+  docR text  "       Remove "/webs/FRTools/._2/bin:" from export PATH="$PATH:..." in /root/.profile"
+  docR text  "       CTRL-X"
+  docR code  "   $ logout"
+  docR step  "   - In Bitvise, Open New terminal console"
+  docR step  "   - Check the FRTools is not installed"
+  docR code  "   $ frtools"
+  docR step  "   - Remove the FRTools if present"
+  docR code  "   $ rm -R webs/FRTools"
+  docR code  "   $ rm    webs/frtools/*"
 
-  docr step  "2. Clone the FRTools Repository"
-  docr code  "   $ cd /webs"
-  docr note  "   $ git clone https://github.com/robinmattern/FRTools_prod1-master FRTools"
+  docR step  "2. Clone the FRTools Repository"
+  docR code  "   $ cd /webs"
+  docR note  "   $ git clone https://github.com/robinmattern/FRTools_prod1-master FRTools"
 
-  docr step  "3. Set the Path to the FRTools scripts"
-  docr code  "   $ cd /webs/FRTools"
-  docr code  "   $ chmod 755 setPath"
-  docr code  "   $ ./setPath"
-  docr code  "   $ ./setPath -doit"
-  docr text  "   $ logout"
-  docr text  "   - In Bitvise, Open New terminal console"
-  docr text  "   - Check that the FRTools scripts are installed"
-  docr code  "   $ FRTools"
+  docR step  "3. Set the Path to the FRTools scripts"
+  docR code  "   $ cd /webs/FRTools"
+  docR code  "   $ chmod 755 setPath"
+  docR code  "   $ ./setPath"
+  docR code  "   $ ./setPath -doit"
+  docR text  "   $ logout"
+  docR step  "   - In Bitvise, Open New terminal console"
+  docR step  "   - Check that the FRTools scripts are installed"
+  docR code  "   $ FRTools"
 
-  docr step  "4. Get new version of FRTools"
-  docr code  "   $ cd /webs/FRTools"
-  docr code  "   $ gitr pull "
-  docr code  "   $ gitr pull -hard"
+  docR step  "4. Get new version of FRTools"
+  docR code  "   $ cd /webs/FRTools"
+  docR code  "   $ gitr pull "
+  docR code  "   $ gitr pull -hard"
 
-  docr end
+  docR end
 
 
