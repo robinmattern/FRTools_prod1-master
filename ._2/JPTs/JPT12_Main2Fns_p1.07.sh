@@ -24,7 +24,7 @@
 #            setOS( )           |
 #            logIt( )           |
 #            askYN( )           |                                                       #.(20503.03.3 RAM Added)
-#            sayMsg( )          |
+#             
 #            setArgs()          |
 #            getOpts()          |
 #            getOpt()           |

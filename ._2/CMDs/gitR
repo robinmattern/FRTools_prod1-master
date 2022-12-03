@@ -1,0 +1,8 @@
+#!/bin/bash
+# formR gitR Command Script
+
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../FRTs/gitR/FRT22_gitR1.sh"
+
+#echo "${aCmd}" "$@"
+      "${aCmd}" "$@"

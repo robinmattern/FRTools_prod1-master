@@ -1,0 +1,9 @@
+#!/bin/bash
+# formR Tools Launch Script
+
+         aDir="$( dirname "${BASH_SOURCE}" )"
+         aCmd="$aDir/../FRTs/FRT01_Main0.sh"
+
+#echo "${aCmd}" "$@"
+      "${aCmd}" "$@"
+

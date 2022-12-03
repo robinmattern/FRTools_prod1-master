@@ -76,6 +76,8 @@
 # .(21121.03 11/30/22 RAM  9:45a| Select .profile over .bashrc
 # .(21121.07 11/30/22 RAM 11:45a| Change Help FRT Rir to FRT Dir 
 # .(21121.03 12/03/22 RAM  3:05p| Use another method to select .profile over .bashrc
+# .(21203.05 12/03/22 RAM  5:45p| Deal with setPath None Found confusion
+# .(21203.06 12/03/22 RAM  6:20p| Copy Uppercase bin commands in Linux
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -415,19 +417,22 @@ function Help( ) {
         echo -e "\n  * You must be in the FRTools Repo folder. \n"; exit
         fi
         aPath1="$( pwd )/._2/bin";
-        if [ "$3" == "-user" ] || [ "$4" == "-user"    ] ; then aUser="-user"; fi                           # .(21126.08.2)
+
+        if [ "$3" == "-user" ] || [ "$4" == "-user"      ]; then aUser="-user"; fi                          # .(21126.08.2 RAM Blank if not passed)
+        aShell="-bash";        if [ "${aOSv:0:1}" == "w" ]; then aShell="-sys"; fi                          # .(21129.07.2)
+#                              if [ "${aOSv:0:1}" != "w" ]; then aUser="-bash"; fi                          # .(21203.05.1 RAM Can't be -user or -sys in Unix or GitBash ?? )
 
      if [ "${bDoit}" == "0" ] ; then
 
-#       aBashrc=".bashrc";  if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                        ##.(21121.03.9)
-#       aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                        ##.(21121.03.9  RAM Use alternate hidden profile file).(21121.03.11)
-#       aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                        ##.(21121.03.11 RAM Use .profile if it exists).(21121.03.21)
-        aBashrc=".profile"; if [   -f -a  ~/.bashrc     ]; then aBashrc=".bashrc"; fi                        # .(21121.03.21 RAM Good Grief)
+#       aBashrc=".bashrc";  if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                       ##.(21121.03.9)
+#       aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                       ##.(21121.03.9  RAM Use alternate hidden profile file).(21121.03.11)
+#       aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                       ##.(21121.03.11 RAM Use .profile if it exists).(21121.03.21)
+        aBashrc=".profile"; if [   -f -a  ~/.bashrc     ]; then aBashrc=".bashrc"; fi                       # .(21121.03.21 RAM Good Grief)
 
 #       aWhere="the ~/${aBashrc} file"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="the Windows System"; fi   ##.(21121.03.10).(21126.09.1)
         aWhere="${aOS} Shell"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="Windows System Environment"; fi    # .(21121.03.10).(21126.09.1)
-        aShell="-bash";        if [ "${aOSv:0:1}" == "w" ]; then aShell="-sys"; fi                          # .(21129.07.2)
         if [ "${aUser}" == "-user" ]; then aWhere="Windows User Environment"; aShell="-user"; fi            # .(21126.08.11).(21129.07.2)
+
         echo -e "\n    The Path to FRTools will be set in the ${aWhere} with: RSS Info Path Add \"{Path}\" ${aUser}"
 
                     "${aInfoScr}" path add "${aPath1}" "${aUser}"                                           # .(21126.08.3)
@@ -439,19 +444,30 @@ function Help( ) {
 
      if [ "${bDoit}" == "1" ] ; then
 
-           echo       "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"; exit
-#   export bQuiet=1;  "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                   # .(21126.08.4).(21127.07.03)
+#          echo       "${aInfoScr}" path add -doit "${aPath1}" "aUser: '${aUser}'"; #  exit                 # 
+    export bQuiet=1;  "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                   # .(21126.08.4).(21127.07.03)
 
            if [ "$?" == "1" ]; then ${aLstSp}; exit; fi                                                     # .(21122.01.5 if no change to path)
 
 #          aPath2="$( "${aInfoScr}" path show "\._2"         )"                                             ##.(21126.01.1)
 #          aPath2="$( "${aInfoScr}" path show "FRTools" -sys )"                                             ##.(21126.01.1 RAM Need to check SYSTEM paths).(21129.07.3)
+#          aPath2="$( "${aInfoScr}" path show "FRTools" "${aShell}" )" | awk 'NR == 2'                      # .(21129.07.3 RAM Need to check $aShell paths)
            aPath2="$( "${aInfoScr}" path show "FRTools" "${aShell}" )"                                      # .(21129.07.3 RAM Need to check $aShell paths)
-     if [ "${aPath2}" != "" ]; then
+#          echo " aOSv: '${aOSv}' '${aOSv/w}', aShell; '${aShell}' aPath2: '${aPath2}'";                    # Includes leaning CR
+   if [ "${aPath2}" != "" ]; then
+   if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi                                                       # .(21129.07.4 RAM Tif no change to path ?? see .(21122.01.5 above)
 
-        echo "--- let's copy CMDs for aUser: '${aUser}' and or '{aShell}'"; exit 
+#          echo " ls -1 \"${aPath1/bin/CMDs}\""
+#                 ls -1 "${aPath1/bin/CMDs}"
+#          echo " aOSv: '${aOSv}' '${aOSv/w}', aShell; '${aShell}' aPath2: '${aPath2:6:1}'"; 
+#          echo "cp -p \"${aPath1/bin/CMDs}/*\"  \"${aPath1}/*\""; exit 
 
-     if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi                                                     # .(21129.07.4 RAM The path was the same)
+        if [ "${aOSv/w}" == "${aOSv}" ]; then  # Unix                                                       # .(21203.06.1 RAM Beg Copy Uppercase bin files in Linux) 
+        echo "--- let's copy CMDs for aUser: '${aUser}' and or '${aShell}', aOSv: '${aOSv}'"; 
+
+                 cp  -p "${aPath1/bin/CMDs}/*"  "${aPath1}/*"
+           fi                                                                                               # .(21203.06.1 RAM End)           
+        if [ "${aPath2:6:1}" == "*" ]; then aPath2="        ${aPath1}"; fi                                  # .(21203.05.2) 
 
 #          aToDo="restart this session"; if [ "${aOSv:0:1}" == "w" ]; then aToDo="login again"; fi          ##.(21126.09.2).(21126.09.5)
            aToDo="login again";          if [ "${aOSv:0:1}" == "g" ]; then aToDo="restart this session"; fi # .(21126.09.5)
