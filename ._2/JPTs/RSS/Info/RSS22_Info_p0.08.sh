@@ -54,6 +54,7 @@
 # .(21127.07 11/27/22 RAM  7:40p| Surpress Info Path Add msg if FRT setPath
 # .(21121.03 11/30/22 RAM  9:45a| Select .profile over .bashrc
 # .(21201.03 12/01/22 RAM  9:25a| Run source ~/${bashrc} to set PATH
+# .(21121.03 12/03/22 RAM  3:10p| Use another method to select .profile over .bashrc
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -457,7 +458,7 @@ END    { if (bShow != 1) { print aPath }
 #           echo " -  New Path: '${aNewPath}'";  exit
 
 #         else                                                                                  ##Not Found
-#           aNewPath="${aPath};\$PATH"                                            ##.(21121.01.3
+#           aNewPath="${aPath};\$PATH"                                                          ##.(21121.01.3
 #           aNewPath="${aWinPath};\$PATH"                                                       ##.(21121.01.3
 #           aNewPath="$( echo "${aNewPath}" | awk '{ gsub( /:/, ";"); gsub( /\/[cC]/, "C:" ); gsub( /\//, "\\" ); print }' )"
 #           aNewPath="$( echo "${aNewPath}" | awk '{ n = length($0);  print n < 90 ? $0 : substr( $0, 1, 90 ) "..." }' )"    ##Find 1st 80 chars in $PATH
@@ -467,8 +468,10 @@ END    { if (bShow != 1) { print aPath }
 
         else # if aOSv is not Windows
 
-#           aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi          ##.(21121.03.1 RAM Use alternate profile file).(21121.03.12)
-            aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi          # .(21121.03.12 Use .profile if it exists)
+#           aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi          ##.(21121.03.1  RAM Use alternate profile file).(21121.03.12)
+#           aBashrc=".profile"; if [ ! -f -a  ~/${aBashrc}  ]; then aBashrc=".bashrc"; fi          # .(21121.03.12 RAM Use .profile if it exists).(21121.03.22)
+            aBashrc=".profile"; if [   -f -a  ~/.bashrc     ]; then aBashrc=".bashrc"; fi          # .(21121.03.22 RAM Good grief)
+
                                                         aOSname="~/${aBashrc} file"                # .(21121.03.2)
             aOldPATH="$( cat ~/${aBashrc}   | awk '!/^ *#/' | awk '/export PATH=/ { sub( /.+=/, "" ); print; exit }' )" # .(21121.03.3).(21126.06.1 RAM Exclude commented out lines).(21126.06.2 RAM 1st only only)
             aOldPATH="$( echo "${aOldPATH}" | awk '{ sub( /^ *["]/, "" ); sub( /["] *$/, "" ); print }' )"              # .(21126.06.2 RAM Remove trailing quotes)
@@ -595,8 +598,9 @@ END { if ( bNew == 1 ) { print ""; print "  export '${aVar}'='${aVal}'" } }'
    if [ "${bDoit}" == "1" ]; then aVerb="has been"; #aToDo="      Please run: source ~/${aBashrc}"       ##.(21114.02.12).(21121.03.4)
                                                      aToDo="      Please login again"                    # .(21121.03.4)
          cd ~
-         aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                   ##.(21121.03.5).(21121.03.13)
-         aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                   # .(21121.03.13 Use .profile if it exists)
+#        aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                   ##.(21121.03.5).(21121.03.13)
+#        aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                   ##.(21121.03.13 RAM Use .profile if it exists).(21121.03.23)
+         aBashrc=".profile"; if [   -f -a  ~/.bashrc     ]; then aBashrc=".bashrc"; fi                   # .(21121.03.23 RAM Good Grief)
 
          aTS=$( date '+%y%m%d.%H%M'); aBak="${aBashrc}_v${aTS}"                                          # .(21121.03.6)
          mv  ${aBashrc}  ${aBak};                                                                        # .(21121.03.7)

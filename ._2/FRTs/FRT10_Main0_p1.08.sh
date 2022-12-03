@@ -75,6 +75,7 @@
 # .(21129.07 11/29/22 RAM  8:50p| Fix set path not found in wrong shell
 # .(21121.03 11/30/22 RAM  9:45a| Select .profile over .bashrc
 # .(21121.07 11/30/22 RAM 11:45a| Change Help FRT Rir to FRT Dir 
+# .(21121.03 12/03/22 RAM  3:05p| Use another method to select .profile over .bashrc
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -394,7 +395,7 @@ function Help( ) {
 
 # ------------------------------------------------------------------------------------
 #
-#       Set Var Command                                                                                     # .(20102.01.2 Beg RAM Added Command)
+#       Set Var Path Command                                                                                # .(20102.01.2 Beg RAM Added Command)
 #
 #====== =================================================================================================== #
 
@@ -419,8 +420,9 @@ function Help( ) {
      if [ "${bDoit}" == "0" ] ; then
 
 #       aBashrc=".bashrc";  if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                        ##.(21121.03.9)
-#       aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                        ##.(21121.03.9 RAM Use alternate hidden profile file).(21121.03.11)
-        aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                        # .(21121.03.11 Use .profile if it exists)
+#       aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                        ##.(21121.03.9  RAM Use alternate hidden profile file).(21121.03.11)
+#       aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                        ##.(21121.03.11 RAM Use .profile if it exists).(21121.03.21)
+        aBashrc=".profile"; if [   -f -a  ~/.bashrc     ]; then aBashrc=".bashrc"; fi                        # .(21121.03.21 RAM Good Grief)
 
 #       aWhere="the ~/${aBashrc} file"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="the Windows System"; fi   ##.(21121.03.10).(21126.09.1)
         aWhere="${aOS} Shell"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="Windows System Environment"; fi    # .(21121.03.10).(21126.09.1)
@@ -437,8 +439,8 @@ function Help( ) {
 
      if [ "${bDoit}" == "1" ] ; then
 
-#          echo       "${aInfoScr}" path add -doit "${aPath1}"; exit
-    export bQuiet=1;  "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                   # .(21126.08.4).(21127.07.03)
+           echo       "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"; exit
+#   export bQuiet=1;  "${aInfoScr}" path add -doit "${aPath1}" "${aUser}"                                   # .(21126.08.4).(21127.07.03)
 
            if [ "$?" == "1" ]; then ${aLstSp}; exit; fi                                                     # .(21122.01.5 if no change to path)
 
@@ -446,7 +448,10 @@ function Help( ) {
 #          aPath2="$( "${aInfoScr}" path show "FRTools" -sys )"                                             ##.(21126.01.1 RAM Need to check SYSTEM paths).(21129.07.3)
            aPath2="$( "${aInfoScr}" path show "FRTools" "${aShell}" )"                                      # .(21129.07.3 RAM Need to check $aShell paths)
      if [ "${aPath2}" != "" ]; then
-     if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi
+
+        echo "--- let's copy CMDs for aUser: '${aUser}' and or '{aShell}'"; exit 
+
+     if [ "${aPath1}" == "${aPath2:4}" ]; then exit; fi                                                     # .(21129.07.4 RAM The path was the same)
 
 #          aToDo="restart this session"; if [ "${aOSv:0:1}" == "w" ]; then aToDo="login again"; fi          ##.(21126.09.2).(21126.09.5)
            aToDo="login again";          if [ "${aOSv:0:1}" == "g" ]; then aToDo="restart this session"; fi # .(21126.09.5)
