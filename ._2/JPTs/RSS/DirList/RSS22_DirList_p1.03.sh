@@ -31,7 +31,6 @@
 # .(21027.04 10/27/22 RAM  3:20p| Modify Heading
 # .(21203.02 12/03/22 RAM 11:40p| Put quotes around $1 and aDir
 # .(21203.03 12/03/22 RAM 11:40p| Exclude node_modules and .git
-# .(21203.04 12/03/22 RAM 11:40p| Change Column codes
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
