@@ -38,6 +38,7 @@
 # .(21127.08 11/27/22 RAM  8:30p| Added ${aLstSp} in various places
 # .(21129.02 11/27/22 RAM  8:45a| Display full git pull and clone result
 # .(21130.01 11/30/22 RAM 10:20a| Only show 21 lines of config file
+# .(21201.09 12/01/22 RAM  6:10p| Improve checking if all repo files are deleted
 # .(21202.02 12/02/22 RAM  2:45p| Improve gitr clone
 
 ##PRGM     +====================+===============================================+
@@ -231,7 +232,7 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
     fi                                                                                                  # .(21101.02.1 RAM End)
 #   -----------------------------------------
 
-function askYN() {                                                                                      # .(21201.09.1 RAM Beg Add askYN)
+function askYN() {                                                                                      # .(21202.02.1 RAM Beg Add askYN)
          echo    "  $1"
          read -p "    Enter Yes or Yo: [y/n]: " aAnswer
          aAnswer=$( echo ${aAnswer} | awk '/^[ynYN]+$/' )
@@ -239,7 +240,7 @@ function askYN() {                                                              
          aAnswer=$( echo ${aAnswer} | awk '/^[yY]+$/ { print "y" }' )
 #if [ "${aAnswer}" != "y" ]; then exit; fi
 
-         } # eof askYN                                                                                   # .(21201.09.1 RAM End)
+         } # eof askYN                                                                                   # .(21202.02.1 RAM End)
 #   -----------------------------------------
 
                                                  aConfigFile=""                                                      ##.(21127.01.1 RAM Beg)
@@ -350,40 +351,40 @@ if [ "$c5" == " " ]; then
     echo ""                                                                             >>"${aConfigFile}"
 #   echo "    Apps=(  \"/._2/\" )"                                                      >>"${aConfigFile}"
     echo "    Apps+=\"/client1/\""                                                      >>"${aConfigFile}"
-    echo "    Apps+=\"/server1/\""                                                      >>"${aConfigFile}"    # .(21201.08.x RAM Beg Push paths into Apps array)
+    echo "    Apps+=\"/server1/\""                                                      >>"${aConfigFile}"    # .(21202.02.2 RAM Beg Push paths into Apps array)
     echo "    Apps+=\"/README.md\""                                                     >>"${aConfigFile}"
     echo "    Apps+=\"/code-workspace\""                                                >>"${aConfigFile}"
 #   echo "    Apps+=\"/client1/1c1_my-html-custom-app/\""                               >>"${aConfigFile}"
-#   echo "    Apps+=\"/client1/2c1_my-html-remote-app/\""                               >>"${aConfigFile}"    # .(21201.08.x RAM End)
+#   echo "    Apps+=\"/client1/2c1_my-html-remote-app/\""                               >>"${aConfigFile}"    # .(21202.02.2 RAM End)
     echo ""                                                                             >>"${aConfigFile}"
     echo "#   ------------------------------------------------"                         >>"${aConfigFile}"
     echo ""                                                                             >>"${aConfigFile}"
     echo "    export aProject=\"\${Project}\""                                          >>"${aConfigFile}"
     echo "    export aStage=\"\${Stage}\""                                              >>"${aConfigFile}"
-    echo "    export aRepo=\"\${Project}_${Stage}\""                                    >>"${aConfigFile}"    # .(21201.08.x RAM Add aRepo=)
+    echo "    export aRepo=\"\${Project}_${Stage}\""                                    >>"${aConfigFile}"    # .(21202.02.3 RAM Add aRepo=)
     echo "    export aRepoDir=\"\${RepoDir}\""                                          >>"${aConfigFile}"
     echo "    export aWebsDir=\"\${WebsDir}\""                                          >>"${aConfigFile}"
     echo "    export aGitHub_Cert=\"\${GitHub_Cert}\""                                  >>"${aConfigFile}"
     echo "    export aGitHub_Acct=\"\${GitHub_Acct}\""                                  >>"${aConfigFile}"
     echo "    export aGitHub_SSH=\"\${GitHub_SSH}\""                                    >>"${aConfigFile}"
     echo "    export Apps"                                                              >>"${aConfigFile}"
-    echo ""                                                                             >>"${aConfigFile}" # .(21029.02.1 RAM End)
+    echo ""                                                                             >>"${aConfigFile}"    # .(21029.02.1 RAM End)
 
 #   -----------------------------------------
 
     if [ "${bDoit}" != "1" ]; then                                                          # .(21101.02.3 RAM Continue if bDoit)
 
     echo "  Please edit the vars: Stage, GitHub_Acct and Apps, as appropriate"
-    echo "    in this config file just created: "                          # .(21201.08.1)
+    echo "    in this config file just created: "                                           # .(21202.02.4)
     echo ""
     echo "-------------------------------------------------------------------------------"
      cat   "${aConfigFile}" | awk 'NR <= 20 { print "  " $0 }'                              # .(21130.01.1 RAM)
     echo "-------------------------------------------------------------------------------"
     echo ""
-    echo "  Opening nano for you to make edits to: ${aConfigFile},:"                        # .(21201.08.1)
+    echo "  Opening nano for you to make edits to: ${aConfigFile},:"                        # .(21202.02.5 RAM Beg)
     read -s -n 1 -p "     Press any key, or CTRC-C to bypass.  "; echo ""
-    if [ "$?" == "0" ]; then nano "${aConfigFile}"; fi ; echo ""
-    echo "  Then run the command again, gitr clone ${aPrj} to view the revised settings."
+    if [ "$?" == "0" ]; then nano "${aConfigFile}"; fi ; echo ""                            
+    echo "  Then run the command again, gitr clone ${aPrj} to view the revised settings."   # .(21202.02.5 RAM End)
 
     ${aLstSp}; exit
     fi                                                                                      # .(21101.02.4)
@@ -466,9 +467,9 @@ if [ "${bSSH}" == "0" ]; then
  if [ "${aWebsDir:0:2}" == "/C" ]; then bCone=1; fi  # Get files in root folder
  for (( i=0; i <= $(( ${#Apps[*]}  - 1 )); i++ )); do mApps[$i]=${Apps[$i]}; done                           # .(21105.03.x Set vars from config file) )
 
- if [ "${aRepo}" == "" ]; then                                                                              # .(21201.08.x RAM Use if set in config file)
+ if [ "${aRepo}" == "" ]; then                                                                              # .(21202.02.6 RAM Use if set in config file)
     aRepo=${aProject}_${aStage}; if [ "${aStage}" == "" ]; then aRepo=${aProject}; fi                       # .(21105.01.3 RAM Get rid of _)
-    fi                                                                                                      # .(21201.08.x)
+    fi                                                                                                      # .(21202.02.6)
 #   ---------------------------------------------------------------------------------------------------------------------
 
 #====== =================================================================================================== #  ===========
@@ -509,9 +510,9 @@ if [ "${bSSH}" == "0" ]; then
 
     echo ""
     echo "  -------------------------------------------------------------------------------"
-    askYN "Would you like to edit this config file?";                           # .(21201.08.3)
-         if [ "${aAnswer}" == "y" ]; then nano "${aConfigFile}"; fi              # .(21201.08.4)
-    echo ""                                                                     # .(21201.08.5)
+    askYN "Would you like to edit this config file?";                           # .(21202.02.7)
+         if [ "${aAnswer}" == "y" ]; then nano "${aConfigFile}"; fi             # .(21202.02.8)
+    echo ""                                                                     # .(21202.02.9)
     echo -e "  To clone ${aCone}"
     echo ""
     echo    "    Run: gitr clone ${aPrj} ${aAll}-doit"                          # .(21127.08.3 RAM Uppercase Project)
@@ -555,23 +556,23 @@ if [ "${bSSH}" == "0" ]; then
     fi                                                                          # .(21029.01.2 RAM End)
 #   -----------------------------------------------------------------
 
-    rm -fr "${aWebsDir}/${aRepoDir}"/*  2>/dev/null                                         # .(21026.01.1 RAM Delete all files in RepoDir).(21201.09.x RAM Use full path)
-    rm -fr "${aWebsDir}/${aRepoDir}"/.* 2>/dev/null.                                        # .(21201.09.x)
+    rm -fr "${aWebsDir}/${aRepoDir}"/*  2>/dev/null                                         # .(21026.01.1 RAM Delete all files in RepoDir).(21201.09.1 RAM Use full path)
+    rm -fr "${aWebsDir}/${aRepoDir}"/.* 2>/dev/null.                                        # .(21201.09.2)
 
-            aRDir="$( dirname $0)/../../JPTs/RSS/DirList/RSS22_DirList.sh"                  # .(21127.02.1 RDir may not exist).(21201.09.x)
- if [ -d "${aWebsDir}/${aRepoDir}" ]; then                                                  # .(21127.08.3 RAM check if folder is still there).(21201.09.x)
-#           nCnt=$( ls -la "${aWebsDir}/${aRepoDir}" | awk '/total/ { print $2 }' )         ##.(21107.01.1 RAM Check if RepoDir contains files).(21201.09.x)
-            nCnt=$( "${aRDir}" "${aWebsDir}/${aRepoDir}" | awk 'NR == 4 { print $1 }' )     # .(21107.01.1 RAM Check if RepoDir contains files).(21201.09.x)
+            aRDir="$( dirname $0)/../../JPTs/RSS/DirList/RSS22_DirList.sh"                  # .(21127.02.1 RDir may not exist).(21201.09.3)
+ if [ -d "${aWebsDir}/${aRepoDir}" ]; then                                                  # .(21127.08.3 RAM check if folder is still there).(21201.09.4)
+#           nCnt=$( ls -la "${aWebsDir}/${aRepoDir}" | awk '/total/ { print $2 }' )         ##.(21107.01.1 RAM Check if RepoDir contains files).(21201.09.5)
+            nCnt=$( "${aRDir}" "${aWebsDir}/${aRepoDir}" | awk 'NR == 4 { print $1 }' )     # .(21107.01.1 RAM Check if RepoDir contains files).(21201.09.5)
 #           echo " ---- $( pwd ), nCnt: ${nCnt}, ls -la \"${aWebsDir}/${aRepoDir}\""; # exit
 
     if [ "${nCnt}" != "0" ]; then
 
          echo -e "\n * The repo folder, ${aRepoDir} was not completey removed"
 
-         cd "${aWebsDir}"                                                                   # .(21201.08.x)
-         if [ -f "${aRDir}" ]; then "${aRDir}" "${aRepoDir}" 2 3 | awk '{ print "  " $0 }'; exit; fi  # .(21127.02.2 Show remaining files).(21201.09.x)
+         cd "${aWebsDir}"                                                                   # .(21202.02.10)
+         if [ -f "${aRDir}" ]; then "${aRDir}" "${aRepoDir}" 2 3 | awk '{ print "  " $0 }'; exit; fi  # .(21127.02.2 Show remaining files).(21201.09.6)
          exit
-      fi                                                                        # .(21127.08.3)
+      fi                                                                                    # .(21127.08.3)
     fi
 #   ---------------------------------------------------------------------------------------------------------------------
 
@@ -628,12 +629,12 @@ if [ "${bCone}" == "0" ]; then
 #   echo "-  git sparse-checkout set '${aRepoDir}/${mApps[0]}";
 #   git sparse-checkout set "'${aRepoDir}/${mApps[0]}"
 #   touch "${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout "
-    echo  "${mApps[0]}"   >"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"          # .(21201.09.x)
+    echo  "${mApps[0]}"   >"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"          # .(21201.09.7)
 
 for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
 #   echo "-  git sparse-checkout add '${aRepoDir}/${mApps[$i]}'"
-#   git sparse-checkout add "'${aRepoDir}/${mApps[$i]}"                                 ##.(21201.09.x)
-    echo  "${mApps[$i]}" >>"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"          # .(21201.09.x)
+#   git sparse-checkout add "'${aRepoDir}/${mApps[$i]}"                                 ##.(21201.09.8)
+    echo  "${mApps[$i]}" >>"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"          # .(21201.09.8)
     done
 
 #   git sparse-checkout add ".code-workspace"   # root files pulled due to --cone
