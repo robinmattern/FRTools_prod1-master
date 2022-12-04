@@ -473,7 +473,7 @@ function Help( ) {
 
 #          aToDo="restart this session"; if [ "${aOSv:0:1}" == "w" ]; then aToDo="login again"; fi          ##.(21126.09.2).(21126.09.5)
            aToDo="login again";          if [ "${aOSv:0:1}" == "g" ]; then aToDo="restart this session"; fi # .(21126.09.5)
-                 echo "";
+                 if [ "${aOSv/w}" != "${aOSv}" ]; then  echo ""; fi # Windows                               # .(21203.06.3 RAM Why??) 
                  echo "    The Path to FRTools has been set to:"; echo "              '${aPath2:8}'."
                  echo ""
                  echo "  * Please ${aToDo} for the Path to take effect."                                    # .(21126.09.3)
