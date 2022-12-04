@@ -467,7 +467,7 @@ function Help( ) {
         if [ "${aOSv/w}" == "${aOSv}" ]; then  # Unix                                                       # .(21203.06.1 RAM Beg Copy Uppercase bin files in Linux) 
 #          echo "--- let's copy CMDs for aUser: '${aUser}' and or '${aShell}', aOSv: '${aOSv}'"; 
 
-                 cp  -p "${aPath1/bin/CMDs}/"*  "${aPath1}/"                                                # .(21203.06.2 RAM "${aPath1/bin/CMDs}/*" no workie)
+                 cp  -p "${aPath1/bin/CMDs}/"*  "${aPath1}/"  >/dev/null                                    # .(21203.06.2 RAM "${aPath1/bin/CMDs}/*" no workie)
            fi                                                                                               # .(21203.06.1 RAM End)           
         if [ "${aPath2:6:1}" == "*" ]; then aPath2="        ${aPath1}"; fi                                  # .(21203.05.2) 
 
