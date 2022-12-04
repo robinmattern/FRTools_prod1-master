@@ -462,18 +462,18 @@ function Help( ) {
 #          echo " ls -1 \"${aPath1/bin/CMDs}\""
 #                 ls -1 "${aPath1/bin/CMDs}"
 #          echo " aOSv: '${aOSv}' '${aOSv/w}', aShell; '${aShell}' aPath2: '${aPath2:6:1}'"; 
-#          echo "cp -p \"${aPath1/bin/CMDs}/*\"  \"${aPath1}/*\""; exit 
+#          echo "cp -p \"${aPath1/bin/CMDs}/\"*"  \"${aPath1}/\""; exit 
 
         if [ "${aOSv/w}" == "${aOSv}" ]; then  # Unix                                                       # .(21203.06.1 RAM Beg Copy Uppercase bin files in Linux) 
-        echo "--- let's copy CMDs for aUser: '${aUser}' and or '${aShell}', aOSv: '${aOSv}'"; 
+#          echo "--- let's copy CMDs for aUser: '${aUser}' and or '${aShell}', aOSv: '${aOSv}'"; 
 
-                 cp  -p "${aPath1/bin/CMDs}/*"  "${aPath1}/*"
+                 cp  -p "${aPath1/bin/CMDs}/"*  "${aPath1}/"                                                # .(21203.06.2 RAM "${aPath1/bin/CMDs}/*" no workie)
            fi                                                                                               # .(21203.06.1 RAM End)           
         if [ "${aPath2:6:1}" == "*" ]; then aPath2="        ${aPath1}"; fi                                  # .(21203.05.2) 
 
 #          aToDo="restart this session"; if [ "${aOSv:0:1}" == "w" ]; then aToDo="login again"; fi          ##.(21126.09.2).(21126.09.5)
            aToDo="login again";          if [ "${aOSv:0:1}" == "g" ]; then aToDo="restart this session"; fi # .(21126.09.5)
-#                echo "";
+                 echo "";
                  echo "    The Path to FRTools has been set to:"; echo "              '${aPath2:8}'."
                  echo ""
                  echo "  * Please ${aToDo} for the Path to take effect."                                    # .(21126.09.3)
