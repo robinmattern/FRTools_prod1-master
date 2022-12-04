@@ -78,6 +78,7 @@
 # .(21121.03 12/03/22 RAM  3:05p| Use another method to select .profile over .bashrc
 # .(21203.05 12/03/22 RAM  5:45p| Deal with setPath None Found confusion
 # .(21203.06 12/03/22 RAM  6:20p| Copy Uppercase bin commands in Linux
+# .(21121.03 12/03/22 RAM  6:50p| Reverse method to select .profile over .bashrc
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main0              |
@@ -424,10 +425,11 @@ function Help( ) {
 
      if [ "${bDoit}" == "0" ] ; then
 
-#       aBashrc=".bashrc";  if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile"; fi                       ##.(21121.03.9)
-#       aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile"; fi                       ##.(21121.03.9  RAM Use alternate hidden profile file).(21121.03.11)
-#       aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc"; fi                       ##.(21121.03.11 RAM Use .profile if it exists).(21121.03.21)
-        aBashrc=".profile"; if [   -f -a  ~/.bashrc     ]; then aBashrc=".bashrc"; fi                       # .(21121.03.21 RAM Good Grief)
+#       aBashrc=".bashrc";  if [ ! -f    "~/${aBashrc}" ]; then aBashrc="profile";  fi                      ##.(21121.03.9)
+#       aBashrc=".bashrc";  if [ ! -f -a "~/${aBashrc}" ]; then aBashrc="profile";  fi                      ##.(21121.03.9  RAM Use alternate hidden profile file).(21121.03.11)
+#       aBashrc=".profile"; if [ ! -f -a "~/${aBashrc}" ]; then aBashrc=".bashrc";  fi                      ##.(21121.03.11 RAM Use .profile if it exists).(21121.03.21)
+#       aBashrc=".profile"; if [   -f -a  ~/.bashrc     ]; then aBashrc=".bashrc";  fi                      ##.(21121.03.21 RAM Good Grief).(21121.03.31)
+        aBashrc=".bashrc";  if [   -f -a  ~/.profile    ]; then aBashrc=".profile"; fi                      # .(21121.03.31 RAM More Good Grief)
 
 #       aWhere="the ~/${aBashrc} file"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="the Windows System"; fi   ##.(21121.03.10).(21126.09.1)
         aWhere="${aOS} Shell"; if [ "${aOSv:0:1}" == "w" ]; then aWhere="Windows System Environment"; fi    # .(21121.03.10).(21126.09.1)
