@@ -502,7 +502,7 @@ if [ "${bSSH}" == "0" ]; then
 
 #   --------------------------------------------------------------------------
 
- if [ "${bEdit}" == "1" ]; then                                                             # .(21204.01.25 RAM Beg Add Edit command)
+ if [ "${bEdit}" == "1" ]; then                                                                             # .(21204.01.25 RAM Beg Add Edit command)
 
     sBug=${bDebug};  
  if [ "${sBug}" == "1" ]; then
@@ -514,7 +514,11 @@ if [ "${bSSH}" == "0" ]; then
 
     echo  -e "\n      .git/info/sparse-checkout"
     echo       "  --- ---------------------------------------------"
+ if [ -d "${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout" ]; then                                        # .(21204.01.31 RAM Check if exists)
     cat  "${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout" | awk '{ printf "     %2d) %s\n", NR-1, $0 }'
+  else                                                                                                      # .(21204.01.32)
+    echo "      0)"                                                                                         # .(21204.01.33)
+    fi                                                                                                      # .(21204.01.34)
 
     echo ""
     fi

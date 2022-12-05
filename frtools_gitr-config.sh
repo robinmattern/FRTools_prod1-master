@@ -10,11 +10,11 @@
     RepoDir="${Project}_/${Stage}"
     WebsDir="/c/WEBs/8020/VMs/et218t/webs/nodeapps"
 
-    Apps=(  "/._2/" )
-    Apps[1]="/client1/"
-    Apps[2]="/server1/"
-    Apps[2]="/README.md"
-    Apps[2]="/code-workspace"
+    Apps+=( "._2/" )
+    Apps+=( "/client1/" )
+    Apps+=( "/server1/" )
+    Apps+=( "/README.md" )
+    Apps+=( "/code-workspace" )
 
 #   ------------------------------------------------
 
