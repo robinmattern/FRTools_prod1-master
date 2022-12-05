@@ -23,6 +23,7 @@
 ##FD   FRT22_gitR1.sh           |  86848| 11/27/22 17:04|  1419| p2.04-21127.1704
 ##FD   FRT22_gitR1.sh           |  94794| 12/04/22 09:06|  1517| p2.04-21204.0906
 ##FD   FRT22_gitR1.sh           | 103287| 12/04/22 20:54|  1667| p2.04-21204.2054
+##FD   FRT22_gitR1.sh           | 103287| 12/05/22  8:10|  1669| p2.04-21205.0810
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run git commands with helpfull
 #            output.
@@ -108,7 +109,7 @@
 # .(21201.04 12/01/22 RAM  9:30a| Show two reset permission counts
 # .(21204.01 12/04/22 RAM  8:40a| Add Refresh and Edit commands
 # .(21204.02 12/04/22 RAM  3:00p| Add Backup command
-# .(21205.01 12/05/22 RAM  8:10a| Add -debug tp sparse edit
+# .(21205.01 12/05/22 RAM  8:10a| Add -debug to sparse edit
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -1525,7 +1526,7 @@ function setA() { chmod 755 "$1"; echo "$1"; }
 
   if [ "${aCmd2}" == "sp-ed"  ]; then                                                                       # .(21204.01.7 RAM Beg Add Sparse Edit)
      if [ "${aProject}" == "" ]; then
-        sayMsg "Can't find a gitR config file to edit" 2                                     
+        sayMsg "Can't find a gitR config file to edit" 2
         fi
         aDebug=""; if [ "${bDebug}" == "1" ]; then echo ""; aDebug="-debug"; fi                             # .(21205.01.1 RAM Add -debug)
         gitr clone ${aProject} -edit "${aDebug}"                                                            # .(21205.01.2)

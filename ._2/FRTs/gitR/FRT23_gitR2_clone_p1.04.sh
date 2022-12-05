@@ -504,7 +504,7 @@ if [ "${bSSH}" == "0" ]; then
 
  if [ "${bEdit}" == "1" ]; then                                                             # .(21204.01.25 RAM Beg Add Edit command)
 
-    sBug=${bDebug}; echo "sBug: ${sBug}"; exit 
+    sBug=${bDebug};  
  if [ "${sBug}" == "1" ]; then
 
     echo  -e "\n      ${aConfigFile}"
