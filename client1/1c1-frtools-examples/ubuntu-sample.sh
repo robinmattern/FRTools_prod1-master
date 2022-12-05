@@ -10,7 +10,7 @@
 #            steps to install FRTools.
 #               1. Revert the system back to no race of FRTools
 #               2. Clone the FRTools repository
-#               3. Run setPath to make all scripots avaiable from anywhere
+#               3. Run setPath to make all scripts avaiable from anywhere
 #               4. Get a new version of the FRTools repository
 #               5. Other usefull commnds
 #
@@ -58,7 +58,7 @@ if [ "${aDocRcmd/bin\/docR/}" != "${aDocRcmd}" ]; then unset -f docR; fi
   docR text  "        Remove "/webs/FRTools/._2/bin:" from export PATH="\$PATH:..." in /root/.profile"
   docR text  "        CTRL-X"
   docR code  "    $ logout"
-  docR step  "    - In Bitvise, Open New terminal console"
+  docR step  "    - In Bitvise, Login, then Open New terminal console"
   docR step  "    - Check the FRTools is not installed"
   docR code  "    $ frtools"
   docR step  "    - Remove the FRTools if present"
@@ -77,9 +77,9 @@ if [ "${aDocRcmd/bin\/docR/}" != "${aDocRcmd}" ]; then unset -f docR; fi
   docR code  "    $ ./setPath"
   docR code  "    $ ./setPath -doit"
   docR code  "    $ logout"
-  docR step  "    - In Bitvise, Open New terminal console"
+  docR step  "    - In Bitvise, Login, then Open New terminal console"
   docR step  "    - Check that the FRTools scripts are installed"
-  docR code  "    $ FRTools"
+  docR code  "    $ frtools"
 
   docR space
   docR step  " 4. Get new version of FRTools"
@@ -94,4 +94,5 @@ if [ "${aDocRcmd/bin\/docR/}" != "${aDocRcmd}" ]; then unset -f docR; fi
 ##SRCE     +====================+===============================================+
 ##RFILE    +====================+=======+===================+======+=============+
 #*/
+
 
