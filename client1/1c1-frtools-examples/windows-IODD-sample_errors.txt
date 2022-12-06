@@ -1,0 +1,39 @@
+
+$ gitr clone https://github.com/brucetroutman-gmail/IODDCOM_prod-master IODD
+
+     ** Config file, 'ioddcom_gitr-config.sh', not found.
+
+  Please edit the vars: Stage, GitHub_Acct and Apps, as appropriate
+    in this config file just created:
+
+-------------------------------------------------------------------------------
+  #!/bin/bash
+
+      Project="IODDCOM"          S.B RepoDir is present
+      Stage="prod-master"
+      GitHub_Acct="brucetroutman-gmail"
+      GitHub_Cert="{github-ram}"
+      GitHub_SSH="no"
+
+      RepoDir="IODD"               # 5 {Project}_gitr_config.sh
+      WebsDir="/c/Repos"
+
+      Apps+="/client1/"
+      Apps+="/server1/"
+      Apps+="/README.md"
+      Apps+="/code-workspace"
+
+  #   ------------------------------------------------
+
+      export aProject="${Project}"
+      export aStage="${Stage}"
+-------------------------------------------------------------------------------
+
+  Opening nano for you to make edits to: ioddcom_gitr-config.sh,:
+     Press any key, or CTRC-C to bypass.
+
+  Then run the command again, gitr clone IODDCOM to view the revised settings.
+/c/Repos/FRTools/._2/bin/../FRTs/gitR/FRT23_gitR2_clone_p1.04.sh: line 404: /c/Repos/IODD/.git/info/sparse-checkout: No such file or directory
+
+JP Scripter@sc212d MINGW64 /c/Repos
+

@@ -20,10 +20,10 @@
 
     export aProject="${Project}"
     export aStage="${Stage}"
-    export aGitHub_Cert="${GitHub_Cert}"
-    export aGitHub_Acct="${GitHub_Acct}"
-    export aGitHub_SSH="${GitHub_SSH}"
+    export aRepo="${Project}_${Stage}"           # Edit ?
     export aRepoDir="${RepoDir}"
     export aWebsDir="${WebsDir}"
+    export aGitHub_Acct="${GitHub_Acct}"
+    export aGitHub_Cert="${GitHub_Cert}"
+    export aGitHub_SSH="${GitHub_SSH}"
     export Apps
-
