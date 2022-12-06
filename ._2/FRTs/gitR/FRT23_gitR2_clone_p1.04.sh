@@ -10,6 +10,7 @@
 ##FD   FRT23_gitR_clone.sh      |  33656| 11/27/22 17:20|   567| p1.04-21127.1720
 ##FD   FRT23_gitR_clone.sh      |  42798| 12/03/22 14:24|   696| p1.04-21203.1424
 ##FD   FRT23_gitR_clone.sh      |  47389| 12/04/22 20:23|   788| p1.04-21204.2023
+##FD   FRT23_gitR2_clone.sh     |  54109| 12/06/22 14:45|   844| p1.04-21206.1445
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run gitr clone {Project}
 #
@@ -47,6 +48,7 @@
 # .(21205.03 12/05/22 RAM  7:50p| Use PrjN Uppercase for gitR-config.sh
 # .(21206.01 12/06/22 RAM  9:00a| Prompt for Edit or Doit after creating configfile
 # .(21206.02 12/06/22 RAM  1:55p| Make created and updated displays the same
+# .(21206.03 12/06/22 RAM  2:45p| .git/info/sparse-checkout may not be created
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -54,7 +56,7 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-    aVdt="Dec 04, 2022  8:23p"; aVtitle="formR gitR Tools"                                                                      # .(21113.05.6 RAM Add aVtitle for Version in Begin)
+    aVdt="Dec 06, 2022  2:45p"; aVtitle="formR gitR Tools"                                                                      # .(21113.05.6 RAM Add aVtitle for Version in Begin)
     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"             # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
                                bHelp=0
@@ -588,15 +590,15 @@ if [ "${bSSH}" == "0" ]; then
 #   echo -e "\n  --- .git/info/sparse-checkout"
     fi
 
- if [ -d "${aWebsDir}/${aRepoDir}/.git" ]; then                                             # .(21206.03.2)
+ if [ -d "${aWebsDir}/${aRepoDir}/.git" ]; then                                             # .(21206.03.3)
     echo             "${mApps[0]}"   >"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"
   for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
     echo             "${mApps[$i]}" >>"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"
     done
-  else                                                                                      # .(21206.03.3 RAM Beg)
+  else                                                                                      # .(21206.03.4 RAM Beg)
     echo -e "\n  After cloning this repository, you can limit files and folders to the Sparse Apps list."
     exit
-    fi                                                                                      # .(21206.03.3 RAM End)
+    fi                                                                                      # .(21206.03.4 RAM End)
 
  if [ "${sBug}" == "0" ]; then
     echo -e "\n  To reapply sparse files and folder list:\n"
