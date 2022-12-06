@@ -42,6 +42,8 @@
 # .(21201.09 12/01/22 RAM  6:10p| Improve checking if all repo files are deleted
 # .(21202.02 12/02/22 RAM  2:45p| Improve gitr clone
 # .(21204.01 12/04/22 RAM  8:20p| Add Refresh and Edit commands
+# .(21202.02 12/05/22 RAM  6:40p| Allow Yes or No answers
+# .(21202.02 12/05/22 RAM  7:10p| Must use ( )s for array asignments
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -245,10 +247,11 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 
 function askYN() {                                                                                          # .(21202.02.1 RAM Beg Add askYN)
          echo    "  $1"
-         read -p "    Enter Yes or Yo: [y/n]: " aAnswer
-         aAnswer=$( echo ${aAnswer} | awk '/^[ynYN]+$/' )
+         read -p "    Enter Yes or No: [y/n]: " aAnswer
+#        aAnswer=$( echo ${aAnswer} | awk '/^[ynYN]+$/' )
+         aAnswer=$( echo ${aAnswer} | awk '/^[ynYN](es|o)*$/' )                                             # .(21202.02.11 RAM Allow Yes or No answers)
  if [ "${aAnswer}" == "" ]; then echo "  * Please answer with y or n."; exit; fi
-         aAnswer=$( echo ${aAnswer} | awk '/^[yY]+$/ { print "y" }' )
+         aAnswer=$( echo ${aAnswer} | awk '/^[yY](es)*$/ { print "y" }' )
 #if [ "${aAnswer}" != "y" ]; then exit; fi
 
          } # eof askYN                                                                                      # .(21202.02.1 RAM End)
@@ -360,26 +363,26 @@ if [ "$c5" == " " ]; then
     echo "    WebsDir=\"${aWebsDir}\""                                                  >>"${aConfigFile}"
 #   echo "#   WebsDir=\"/webs\""                                                        >>"${aConfigFile}"
     echo ""                                                                             >>"${aConfigFile}"
-#   echo "    Apps=(  \"/._2/\" )"                                                      >>"${aConfigFile}"
-    echo "    Apps+=\"/client1/\""                                                      >>"${aConfigFile}"
-    echo "    Apps+=\"/server1/\""                                                      >>"${aConfigFile}"    # .(21202.02.2 RAM Beg Push paths into Apps array)
-    echo "    Apps+=\"/README.md\""                                                     >>"${aConfigFile}"
-    echo "    Apps+=\"/code-workspace\""                                                >>"${aConfigFile}"
-#   echo "    Apps+=\"/client1/1c1_my-html-custom-app/\""                               >>"${aConfigFile}"
-#   echo "    Apps+=\"/client1/2c1_my-html-remote-app/\""                               >>"${aConfigFile}"    # .(21202.02.2 RAM End)
+#   echo "    Apps+=(  \"/._2/\" )"                                                     >>"${aConfigFile}"  # .(21202.02.2 RAM Beg Push paths into Apps array).(21202.02.21 Must use ()s)
+    echo "    Apps+=( \"/client1/\" )"                                                  >>"${aConfigFile}"
+    echo "    Apps+=( \"/server1/\" )"                                                  >>"${aConfigFile}"
+    echo "    Apps+=( \"/README.md\" )"                                                 >>"${aConfigFile}"
+    echo "    Apps+=( \"/code-workspace\" )"                                            >>"${aConfigFile}"
+#   echo "    Apps+=( \"/client1/1c1_my-html-custom-app/\" )"                           >>"${aConfigFile}"
+#   echo "    Apps+=( \"/client1/2c1_my-html-remote-app/\" )"                           >>"${aConfigFile}"  # .(21202.02.2 RAM End).(21202.02.21)
     echo ""                                                                             >>"${aConfigFile}"
-    echo "#   ------------------------------------------------"                         >>"${aConfigFile}"
+    echo "# - ------------------------------------------------"                         >>"${aConfigFile}"  # .(21130.01.2) 
     echo ""                                                                             >>"${aConfigFile}"
     echo "    export aProject=\"\${Project}\""                                          >>"${aConfigFile}"
     echo "    export aStage=\"\${Stage}\""                                              >>"${aConfigFile}"
-    echo "    export aRepo=\"\${Project}_${Stage}\""                                    >>"${aConfigFile}"    # .(21202.02.3 RAM Add aRepo=)
+    echo "    export aRepo=\"\${Project}_${Stage}\""        # Edit ?                    >>"${aConfigFile}"  # .(21202.02.3 RAM Add aRepo=)
     echo "    export aRepoDir=\"\${RepoDir}\""                                          >>"${aConfigFile}"
     echo "    export aWebsDir=\"\${WebsDir}\""                                          >>"${aConfigFile}"
-    echo "    export aGitHub_Cert=\"\${GitHub_Cert}\""                                  >>"${aConfigFile}"
     echo "    export aGitHub_Acct=\"\${GitHub_Acct}\""                                  >>"${aConfigFile}"
+    echo "    export aGitHub_Cert=\"\${GitHub_Cert}\""                                  >>"${aConfigFile}"
     echo "    export aGitHub_SSH=\"\${GitHub_SSH}\""                                    >>"${aConfigFile}"
     echo "    export Apps"                                                              >>"${aConfigFile}"
-    echo ""                                                                             >>"${aConfigFile}"    # .(21029.02.1 RAM End)
+    echo ""                                                                             >>"${aConfigFile}"  # .(21029.02.1 RAM End)
 
 #   -----------------------------------------
 
@@ -389,7 +392,8 @@ if [ "$c5" == " " ]; then
     echo "    in this config file just created: "                                           # .(21202.02.4)
     echo ""
     echo "-------------------------------------------------------------------------------"
-     cat   "${aConfigFile}" | awk 'NR <= 20 { print "  " $0 }'                              # .(21130.01.1 RAM)
+#    cat   "${aConfigFile}" | awk 'NR <= 20 { print "  " $0 }'                              # .(21130.01.1 RAM)
+     cat   "${aConfigFile}" | awk '/# - -/ { exit } { print "  " $0 }'                      # .(21130.01.1 RAM)
     echo "-------------------------------------------------------------------------------"
     echo ""
     echo "  Opening nano for you to make edits to: ${aConfigFile},:"                        # .(21202.02.5 RAM Beg)
@@ -462,7 +466,7 @@ END   { }'
 #====== =================================================================================================== #  ===========
 
 #   source  "gitr_${aProj}-config.sh"
-    source  "${aConfigFile}"
+    source  "${aConfigFile}";  
 
 #   echo "----- source  \"${aConfigFile}\", aRepo: '${aRepo}'"; # exit
 #   echo "aWebsDir: ${aWebsDir}"; exit
@@ -485,7 +489,10 @@ if [ "${bSSH}" == "0" ]; then
 
                                         bCone=0;
  if [ "${aWebsDir:0:2}" == "/C" ]; then bCone=1; fi  # Get files in root folder
- for (( i=0; i <= $(( ${#Apps[*]}  - 1 )); i++ )); do mApps[$i]=${Apps[$i]}; done                           # .(21105.03.x Set vars from config file) )
+
+#for (( i=0; i <= $(( ${#Apps[*]}  - 1 )); i++ )); do mApps[$i]=${Apps[$i]}; done                           ##.(21105.03.x Set vars from config file) ).(21202.02.22)
+#for (( i=0; i <= $(( ${#Apps[@]}  - 1 )); i++ )); do mApps[$i]=${Apps[$i]}; done                           ##.(21105.03.x Set vars from config file) ).(21202.02.22)
+ for (( i=0; i <= $(( ${#Apps[@]}  - 1 )); i++ )); do mApps+=( ${Apps[$i]} ); done                          # .(21105.03.x Set vars from config file) ).(21202.02.22)
 
  if [ "${aRepo}" == "" ]; then                                                                              # .(21202.02.6 RAM Beg Use if set in config file)
     aRepo=${aProject}_${aStage}; if [ "${aStage}" == "" ]; then aRepo=${aProject}; fi                       # .(21105.01.3 RAM Get rid of _)
@@ -536,22 +543,21 @@ if [ "${bSSH}" == "0" ]; then
  if [ "${sBug}" == "1" ]; then
     echo -e "\n      \${mApps[@]}  (source: ${aConfigFile})"
     echo      "  --- ---------------------------------------------------------------------------------------------------"
-    echo -e   "      ${mApps[@]}\n"
+    echo -e    "      ${mApps[@]}\n"
 
     echo      "      \${mApps[i]} >>.git/info/sparse-checkout"
     echo      "  --- ---------------------------------------------"
-    echo "      0)  ${mApps[0]}"
-for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
-    echo "      $i)  ${mApps[$i]}"
+    echo   "      0)  ${mApps[0]}"
+  for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
+    echo  "      $i)  ${mApps[$i]}"
     done
 
 #   echo -e "\n  --- ${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"
 #   echo -e "\n  --- .git/info/sparse-checkout"
     fi
-
-    echo  "${mApps[0]}"   >"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"
-for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
-    echo  "${mApps[$i]}" >>"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"
+    echo             "${mApps[0]}"   >"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"
+  for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
+    echo             "${mApps[$i]}" >>"${aWebsDir}/${aRepoDir}/.git/info/sparse-checkout"
     done
 
  if [ "${sBug}" == "0" ]; then
@@ -571,7 +577,8 @@ for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
     echo -e "\n  Run: gitr sparse refresh"
 
     ${aLstSp}; exit
-    fi                                                                                      # .(21204.01.25 RAM End)
+
+    fi  # eif sparse edit                                                                                   # .(21204.01.25 RAM End)
 #   --------------------------------------------------------------------------
 
     echo ""
@@ -580,27 +587,28 @@ for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
     echo "  -------------------------------------------------------------------------------"
     echo "    Project: ${aProject}"
     echo "    Stage:   ${aStage}"
-    echo ""
+#   echo ""
 
 #        aAll="";          aCone="only those files in {Apps[i]} folders in Repo: ${aProject}_${aStage}"     ##.(21105.01.4)
          aAll="";          aCone="only those files in the {Apps[i]} folders from Repo: ${aRepo}"            # .(21105.01.4 RAM Was: ${aProject}_${aStage})
  if [ "${bCone}" == "1" ]; then aCone="all files in the Repo root folder (i.e. bCone=1), and\n         ${aCone:5} "; fi
  if [ "${bAll}"  == "1" ]; then aCone="all files in all folders from Repo : ${aRepo}"; aAll="-all "; fi     # .(21105.01.5)
 
-    echo "    Git Cmd: git clone ${aGitHub_URL}/${aRepo}.git  ${aRepoDir}"                                  # .(21105.01.6)
-    echo "    Git URL: http://gitHub.com/${aGitHub_Acct}/${aRepo}"                                          # .(21105.01.7)
-    echo "    GitHub_Cert: ${aGitHub_Cert}"
     echo "    GitHub_Acct: ${aGitHub_Acct}"
+    echo "    GitHub_Cert: ${aGitHub_Cert}"
     echo "    bCone:   ${bCone},  bAll: ${bAll};  bSSH: ${bSSH}"
     echo ""
-    echo "    WebsDir: ${aWebsDir}"
     echo "    RepoDir: ${aRepoDir}"
+    echo "    WebsDir: ${aWebsDir}"
+    echo "    Git URL: http://gitHub.com/${aGitHub_Acct}/${aRepo}"                                          # .(21105.01.7).(21202.02.12 RAM Move here)
+    echo "    Git Cmd: git clone ${aGitHub_URL}/${aRepo}.git  ${aRepoDir}"                                  # .(21105.01.6).(21202.02.13) 
     echo ""
 #   echo "    Apps[1]: ${mApps[1]}"
 
 #   for aApp in "${mApps[@]}"; do  echo "  ${aApp}"; done
     for (( i=0; i <= $(( ${#mApps[@]} - 1 )); i++ )); do
-    echo "    Apps[$(( $i + 1 ))]: ${mApps[ $i ]}"
+#   echo "    Apps[$(( $i + 1 ))]: ${mApps[ $i ]}"                                                          ##.(21202.02.14)
+    echo "    Apps+=( ${mApps[ $i ]} )"                                                                     # .(21202.02.14 RAM Change Array Assignment).(21202.02.23)
     done
 
     echo ""
@@ -679,7 +687,7 @@ for (( i=1; i<=$(( ${#mApps[*]} - 1 )); i++ )); do
 
 #   exit
     echo ""
-    echo "Cloning ${aGitHub_URL}/${aRepo}.git"                                                  # .(21105.01.8)
+    echo "Cloning ${aGitHub_URL}/${aRepo}.git"                                              # .(21105.01.8)
 
  if [ "${bAll}" == "1" ]; then
 

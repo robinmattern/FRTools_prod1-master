@@ -1560,7 +1560,7 @@ function setA() { chmod 755 "$1"; echo "$1"; }
         echo -e "\n  Repository Sparse Folders  (Sparse is: ${aOnOff})"
         echo  "  -------------------------------------------"
 #       git sparse-checkout list 2>&1      | awk '{ print "    " $0 }'
-        cat ./.git/info/sparse-checkout    | awk '{ print "    " $0 }'
+        cat ./.git/info/sparse-checkout    | awk '{ printf "    %2d) %s\n", NR, $0 }'
 
     if [ "1" == "0" ]; then
         echo -e "\n  ${aConfigDir}/${aConfigFile}"
@@ -1570,8 +1570,7 @@ function setA() { chmod 755 "$1"; echo "$1"; }
         cat "${aConfigDir}/${aConfigFile}" | awk '/#/ { next }; / Apps\+/ { gsub( /[(+=")]/, "" ); sub( /^ +Apps +/, ""); printf "%2d) %s\n", i++, $0 }'
         fi
 
-        echo ""
-        fi                                                                                                  # .(21026.01.3 End)
+        fi # eif sparse list                                                                                # .(21026.01.3 End)
 
   if [ "${aArg1:0:2}" == "di" ]; then
         rss dirlist 1 3
