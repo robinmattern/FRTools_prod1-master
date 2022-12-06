@@ -44,6 +44,7 @@
 # .(21204.01 12/04/22 RAM  8:20p| Add Refresh and Edit commands
 # .(21202.02 12/05/22 RAM  6:40p| Allow Yes or No answers
 # .(21202.02 12/05/22 RAM  7:10p| Must use ( )s for array asignments
+# .(21205.03 12/05/22 RAM  7:50p| Use PrjN Uppercase for gitr-config.sh
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -268,13 +269,13 @@ function askYN() {                                                              
 #if [ -f       "gitr_${aProj}_config.sh" ]; then aConfigFile="gitr_${aProj}_config.sh"; fi;    aCurDir="./"          # .(21029.03.3)
 #if [ -f       "gitr_${aProj}config.sh"  ]; then aConfigFile="gitr_${aProj}config.sh"; fi;     aCurDir="./"          ##.(21127.01.1 RAM End)
 
-                                                aConfigFile=""                                                       # .(21127.01.2 RAM Beg Change Config file name)
- if [ -f "../../${aPrj}_gitr-config.sh" ]; then aConfigFile="../../${aPrj}_gitr-config.sh";  aCurDir="../../"; fi
- if [ -f "../../${aPrj}_gitr_config.sh" ]; then aConfigFile="../../${aPrj}_gitr_config.sh";  aCurDir="../../"; fi    # .(21029.03.1 RAM)
- if [ -f    "../${aPrj}_gitr-config.sh" ]; then aConfigFile="../${aPrj}_gitr-config.sh";     aCurDir="../"; fi
- if [ -f    "../${aPrj}_gitr_config.sh" ]; then aConfigFile="../${aPrj}_gitr_config.sh";     aCurDir="../"; fi       # .(21029.03.2)
- if [ -f       "${aPrj}_gitr-config.sh" ]; then aConfigFile="${aPrj}_gitr-config.sh"; fi;    aCurDir="./"
- if [ -f       "${aPrj}_gitr_config.sh" ]; then aConfigFile="${aPrj}_gitr_config.sh"; fi;    aCurDir="./"            # .(21029.03.3).(21127.01.2 RAM End)
+                                                 aConfigFile=""; aPrjN="${aProj}"                                    # .(21127.01.2 RAM Beg Change Config file name).(21205.03.1)
+ if [ -f "../../${aPrjN}_gitr-config.sh" ]; then aConfigFile="../../${aPrjN}_gitr-config.sh";  aCurDir="../../"; fi  # .(21205.03.2 RAM Beg Use Uppercase PrjN)
+ if [ -f "../../${aPrjN}_gitr_config.sh" ]; then aConfigFile="../../${aPrjN}_gitr_config.sh";  aCurDir="../../"; fi  # .(21029.03.1 RAM)
+ if [ -f    "../${aPrjN}_gitr-config.sh" ]; then aConfigFile="../${aPrjN}_gitr-config.sh";     aCurDir="../"; fi
+ if [ -f    "../${aPrjN}_gitr_config.sh" ]; then aConfigFile="../${aPrjN}_gitr_config.sh";     aCurDir="../"; fi     # .(21029.03.2)
+ if [ -f       "${aPrjN}_gitr-config.sh" ]; then aConfigFile="${aPrjN}_gitr-config.sh"; fi;    aCurDir="./"
+ if [ -f       "${aPrjN}_gitr_config.sh" ]; then aConfigFile="${aPrjN}_gitr_config.sh"; fi;    aCurDir="./"          # .(21029.03.3).(21127.01.2 RAM End).(21205.03.2 RAM End)
 
  if [ "${aWebsDir}" == "" ]; then
 #   aWebsDir=$( basename $( ls -1 ${aCurDir} ) )
@@ -299,7 +300,8 @@ function askYN() {                                                              
                                                  aConfigFile="${aConfigFile/_-/_}"
  if [ "${aConfigFile}" == "" ]; then                                                        # .(21127.01.3 RAM It wasn't found above)
 #        aConfigFile=gitr_${aProj}-config.sh;    aConfigFile="${aConfigFile/_-/_}"          ##.(21127.01.4)
-         aConfigFile=${aProj}_gitr-config.sh;    aConfigFile="${aConfigFile/_-/_}"          # .(21127.01.4 RAM Create one with this name)
+#        aConfigFile=${aProj}_gitr-config.sh;    aConfigFile="${aConfigFile/_-/_}"          ##.(21127.01.4 RAM Create one with this name).(21205.03.3)
+         aConfigFile=${aPrjN}_gitr-config.sh;    aConfigFile="${aConfigFile/_-/_}"          # .(21205.03.3)
 
     if [ "${bDoit}" != "1" ]; then                                                          # .(21101.02.1)
 #   echo ""
@@ -371,7 +373,7 @@ if [ "$c5" == " " ]; then
 #   echo "    Apps+=( \"/client1/1c1_my-html-custom-app/\" )"                           >>"${aConfigFile}"
 #   echo "    Apps+=( \"/client1/2c1_my-html-remote-app/\" )"                           >>"${aConfigFile}"  # .(21202.02.2 RAM End).(21202.02.21)
     echo ""                                                                             >>"${aConfigFile}"
-    echo "# - ------------------------------------------------"                         >>"${aConfigFile}"  # .(21130.01.2) 
+    echo "# - ------------------------------------------------"                         >>"${aConfigFile}"  # .(21130.01.2)
     echo ""                                                                             >>"${aConfigFile}"
     echo "    export aProject=\"\${Project}\""                                          >>"${aConfigFile}"
     echo "    export aStage=\"\${Stage}\""                                              >>"${aConfigFile}"
@@ -392,8 +394,8 @@ if [ "$c5" == " " ]; then
     echo "    in this config file just created: "                                           # .(21202.02.4)
     echo ""
     echo "-------------------------------------------------------------------------------"
-#    cat   "${aConfigFile}" | awk 'NR <= 20 { print "  " $0 }'                              # .(21130.01.1 RAM)
-     cat   "${aConfigFile}" | awk '/# - -/ { exit } { print "  " $0 }'                      # .(21130.01.1 RAM)
+#    cat   "${aConfigFile}" | awk 'NR <= 20 { print "  " $0 }'                              ##.(21130.01.1 RAM).(21130.01.11)
+     cat   "${aConfigFile}" | awk '/# - -/ { exit } { print "  " $0 }'                      # .(21130.01.11 RAM May be on a different line)
     echo "-------------------------------------------------------------------------------"
     echo ""
     echo "  Opening nano for you to make edits to: ${aConfigFile},:"                        # .(21202.02.5 RAM Beg)
@@ -466,7 +468,7 @@ END   { }'
 #====== =================================================================================================== #  ===========
 
 #   source  "gitr_${aProj}-config.sh"
-    source  "${aConfigFile}";  
+    source  "${aConfigFile}";
 
 #   echo "----- source  \"${aConfigFile}\", aRepo: '${aRepo}'"; # exit
 #   echo "aWebsDir: ${aWebsDir}"; exit
@@ -511,7 +513,7 @@ if [ "${bSSH}" == "0" ]; then
 
  if [ "${bEdit}" == "1" ]; then                                                                             # .(21204.01.25 RAM Beg Add Edit command)
 
-    sBug=${bDebug};  
+    sBug=${bDebug};
  if [ "${sBug}" == "1" ]; then
 
     echo  -e "\n      ${aConfigFile}"
@@ -528,7 +530,7 @@ if [ "${bSSH}" == "0" ]; then
     fi                                                                                                      # .(21204.01.34)
 
     echo ""
-    fi
+    fi  # eif sBug
 
  if [ "${sBug}" == "1" ]; then ls -l "${aConfigFile}"; fi
 
@@ -601,7 +603,7 @@ if [ "${bSSH}" == "0" ]; then
     echo "    RepoDir: ${aRepoDir}"
     echo "    WebsDir: ${aWebsDir}"
     echo "    Git URL: http://gitHub.com/${aGitHub_Acct}/${aRepo}"                                          # .(21105.01.7).(21202.02.12 RAM Move here)
-    echo "    Git Cmd: git clone ${aGitHub_URL}/${aRepo}.git  ${aRepoDir}"                                  # .(21105.01.6).(21202.02.13) 
+    echo "    Git Cmd: git clone ${aGitHub_URL}/${aRepo}.git  ${aRepoDir}"                                  # .(21105.01.6).(21202.02.13)
     echo ""
 #   echo "    Apps[1]: ${mApps[1]}"
 
