@@ -959,8 +959,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 
 function getConfigFile() {                                                                                  # .(21205.04.1 RAM Beg)
-         echo "--- looking for '$1_gitR-config.sh' in $( pwd )"                                             # .(21205.03.4)
-
+#        echo "--- looking for '$1_gitR-config.sh' in $( pwd )"                                             # .(21205.03.4)
 
 #   if [ -r "$( pwd )/$1_gitR-config.sh" ]; then                                                            ##.(21205.03.5)
     if [ -e          "$1_gitR-config.sh" ]; then                                                            # .(21205.03.5)
@@ -1007,7 +1006,7 @@ function getConfigFile() {                                                      
         aCurDir="$( pwd )";   # echo "-1- aCurDir: '${aCurDir}', aArg1: ${aArg1}, mARGs[0]: '${mARGs[0]}'"
 #   if [ -d "${aCurDir}/.git" ] && [ "${mARGs[0]}" == "" ]; then mARGs[0]="$( basename "${aCurDir}" )"; fi ##.(21206.04.1)
     if [ -d "${aCurDir}/.git" ];                            then mARGs[0]="$( basename "${aCurDir}" )"; fi # .(21206.04.1 RAM Use RepoDir name if valid)
-                                echo "-2- aCurDir: '${aCurDir}', mARGs[0]: '${mARGs[0]}'"
+                              # echo "-2- aCurDir: '${aCurDir}', mARGs[0]: '${mARGs[0]}'"
 
         getConfigFile ${mARGs[0]}; if [ "${nCfg}" == "0" ]; then cd ..
         getConfigFile ${mARGs[0]}; if [ "${nCfg}" == "0" ]; then cd ..
@@ -1030,7 +1029,7 @@ function getConfigFile() {                                                      
            aRepoDir="${aWebsDir}/${aRepoDir}"
         fi; fi                                                                                              # .(21205.04.1 RAM End)
 
-        sayMsg "gitR1[990]  nCfg: ${nCfg}; aConfigFile: '${aConfigFile}', aRepoDir: '${aRepoDir}'" 2
+        sayMsg "gitR1[990]  nCfg: ${nCfg}; aConfigFile: '${aConfigFile}', aRepoDir: '${aRepoDir}'" -1
 
 #  ---------------------------------------------------------------------------------------
 
