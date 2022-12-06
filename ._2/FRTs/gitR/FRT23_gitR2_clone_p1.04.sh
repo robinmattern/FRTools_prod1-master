@@ -46,6 +46,7 @@
 # .(21202.02 12/05/22 RAM  7:10p| Must use ( )s for array asignments
 # .(21205.03 12/05/22 RAM  7:50p| Use PrjN Uppercase for gitR-config.sh
 # .(21206.01 12/06/22 RAM  9:00a| Prompt for Edit or Doit after creating configfile
+# .(21206.02 12/06/22 RAM  1:55p| Make created and updated displays the same
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
