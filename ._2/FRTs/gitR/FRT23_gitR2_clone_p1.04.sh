@@ -49,6 +49,7 @@
 # .(21206.01 12/06/22 RAM  9:00a| Prompt for Edit or Doit after creating configfile
 # .(21206.02 12/06/22 RAM  1:55p| Make created and updated displays the same
 # .(21206.03 12/06/22 RAM  2:45p| .git/info/sparse-checkout may not be created
+# .(21206.04 12/06/22 RAM  3:40p| Use WebsDir if valid
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -676,8 +677,8 @@ if [ "${bSSH}" == "0" ]; then
 #====== =================================================================================================== #  ===========
 
 #   echo "Using Gitr config file: ${aConfigFile}"
-    echo "aWebsDir: ${aWebsDir}"; echo "aCurDir was $( pwd )"; exit
-    cd "${aWebsDir}"
+#   echo "aWebsDir: ${aWebsDir}"; echo "aCurDir was $( pwd )"; exit             ##.(21206.04.2) 
+    cd "${aWebsDir}"                                                            # .(21206.04.2 RAM ??) 
 
 #   -----------------------------------------------------------------
 
