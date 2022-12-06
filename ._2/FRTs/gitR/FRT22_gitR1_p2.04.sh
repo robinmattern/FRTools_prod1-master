@@ -110,6 +110,7 @@
 # .(21204.01 12/04/22 RAM  8:40a| Add Refresh and Edit commands
 # .(21204.02 12/04/22 RAM  3:00p| Add Backup command
 # .(21205.01 12/05/22 RAM  8:10a| Add -debug to sparse edit
+# .(21205.04 12/05/22 RAM  9:00p| Determine gitr-config file name 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -955,33 +956,55 @@ END{ }
 
 #====== =================================================================================================== #  ===========
 
-function getConfigFile() {
+function getConfigFile() {                                                                                  # .(21205.04.1 RAM Beg)
+         echo "--- looking for '$1_gitr-config.sh' in $( pwd )" 
+
+#   if [ -r "$( pwd )/$1_gitr-config.sh" ]; then 
+    if [ -e "$1_gitr-config.sh" ]; then 
+         mConfigFiles[1]="$1_gitr-config.sh"; aConfigFile="${mConfigFiles[1]}"; nCfg=1; 
+         aConfigDir="$( pwd )"
+#        aProjName="$( echo "${aConfigFile%%_*}" | tr "[:lower:]" "[:upper:]" )"
+         aProjName="${aConfigFile%%_*}" 
+         echo "--- found: mConfigFiles[${nCfg}]: '${mConfigFiles[${nCfg}]}'" 
+         return 
+         fi 
+
          readarray -t mConfigFiles < <( find . -maxdepth 1 -name "*_gitr-config.sh" );
          nCfg=${#mConfigFiles[@]}
-         if [ -d ".git" ]; then aRepoDir="$( pwd )"; fi
+
+    if [ -d ".git"        ]; then aRepoDir="$( pwd )"; fi
     if [ "${nCfg}" == "0" ]; then return; fi
     if [ "${nCfg}" != "1" ]; then
-         echo "Pick a ConfigFile:"; i=0
-         for aFile in "${mConfigFiles[@]}"; do i=$(( $i + 1 )); echo " ${i}. ${aFile:2}"; done
+         echo -e "\n  Pick a gitR Config File:"; i=0
+         for aFile in "${mConfigFiles[@]}"; do i=$(( $i + 1 )); echo "    ${i}. ${aFile:2}"; done
 #        echo "${mConfigFiles[@]}" | awk '{   print "    " $0 }'
-         nCfg=2
-         fi
+
+         echo ""; read -p "    Enter the number of a gitr-config file: " aAnswer                            
+         aAnswer=$( echo ${aAnswer} | awk '/^[1-9]+$/' );  
+         if [ "${aAnswer}" == "" ]; then echo ""; sayMsg "Please enter a number greater than 0." 2; fi 
+#        echo "";                                                                                           
+         nCfg=${aAnswer}
+         if [[ "${nCfg}" > "${#mConfigFiles[@]}" ]]; then sayMsg "Please enter a number between 1 and ${#mConfigFiles[@]}." 2; fi 
+
+         fi # eif Pick from lultiple multiple gitR config files
+
 #        aRepoDir="$( pwd )"; if [ ! -d ".git" ]; then aRepoDir=""; fi
          aConfigFile="${mConfigFiles[$(( $nCfg - 1 ))]}"; aConfigFile="${aConfigFile:2}"
          aConfigDir="$( pwd )"
-         aProjName="$( echo "${aConfigFile%%_*}" | tr "[:lower:]" "[:upper:]" )"
+#        aProjName="$( echo "${aConfigFile%%_*}" | tr "[:lower:]" "[:upper:]" )"
+         aProjName="${aConfigFile%%_*}" 
          }
 #   if [ -f "*_gitr-config.sh" ]; then echo "--- they exist"
 #   for $( find . -maxdepth 1 -name "*_gitr-config.sh" ); do mConfigFiles+=${aFile}; done;
 #       mConfigFiles=( $( find . -maxdepth 1 -name "*_gitr-config.sh" ) )
 
         aCurDir="$( pwd )"
-        getConfigFile; if [ "${nCfg}" == "0" ]; then cd ..
-        getConfigFile; if [ "${nCfg}" == "0" ]; then cd ..
-        getConfigFile; if [ "${nCfg}" == "0" ]; then
+        getConfigFile ${mARGs[0]}; if [ "${nCfg}" == "0" ]; then cd ..
+        getConfigFile ${mARGs[0]}; if [ "${nCfg}" == "0" ]; then cd ..
+        getConfigFile ${mARGs[0]}; if [ "${nCfg}" == "0" ]; then
 #       aConfigFile=""
 #       echo  -e "  * Can't find a gitR Config File"
-        sayMsg sp "gitR1[982]  Can't find a gitR Config File" -1
+        sayMsg sp "gitR1[982]  Can't find a gitR Config File" 1
         fi; fi; fi
 
 #   for aFile in $( ls -1 *_gitr-config.sh ); do mConfigFiles+=${aFile}; done; fi
@@ -995,7 +1018,11 @@ function getConfigFile() {
         source "${aConfigDir}/${aConfigFile}"
    if [ "${aRepoDir}"    != "" ]; then
            aRepoDir="${aWebsDir}/${aRepoDir}"
-        fi; fi
+        fi; fi                                                                                              # .(21205.04.1 RAM End)
+
+        sayMsg "gitR1[990]  nCfg: ${nCfg}; aConfigFile: '${aConfigFile}', aRepoDir: '${aRepoDir}'" -1
+
+#  ---------------------------------------------------------------------------------------
 
    if [ "${aRepoDir}"    != "" ]; then cd "${aRepoDir}"; fi
    if [ "${aRepoDir}"    == "" ]; then cd "${aCurDir}";  fi
