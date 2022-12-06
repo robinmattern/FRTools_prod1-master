@@ -113,6 +113,7 @@
 # .(21205.03 12/05/22 RAM  7:50p| Use PrjN Uppercase for gitR-config.sh
 # .(21205.04 12/05/22 RAM  9:00p| Determine gitr-config file name
 # .(21206.04 12/06/22 RAM  3:20p| Use RepoDir name if valid
+# .(21206.05 12/06/22 RAM  6:30p| Show Last Commit for gitr pull
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -995,6 +996,7 @@ function getConfigFile() {                                                      
          aConfigDir="$( pwd )"
 #        aProjName="$( echo "${aConfigFile%%_*}" | tr "[:lower:]" "[:upper:]" )"
          aProjName="${aConfigFile%%_*}"
+ if [ "${aProjName}" == "" ]; then  aProjName="$(basename "${aConfigDir}" )"; fi                                           # .(21206.05.1)                                       
 
          } # eof getConfigFile
 #        ----------------------------------------------------------------------
@@ -1082,9 +1084,21 @@ function getConfigFile() {                                                      
 #====== =================================================================================================== #
 #       sayMsg "gitR1[1045]  Pull (${aCmd})" 1
 
+function shoLastCommit() {                                                                                  # .(21212.06.1 RAM Beg)
+aAWKpgm3='
+    /commit/ { c=substr( $2, 1, 6 ) }; /Author:/ { sub( / <.+/, "" ); a=$0 }; /Date:/ { d=$2" "$3" "$4" "$5 };
+     /^    / { m=substr( $0, 5 ); exit } 
+END          { print "   "c ", " d ", " substr( a, 9) ", \"" m "\"" }'
+         git log -1 | awk "${aAWKpgm3}"
+         }                                                                                                  # .(21212.06.1 RAM Beg)
+
   if [ "${aCmd}" ==  "Pull" ]; then
         setProjVars
         echo ""
+
+    if [ "${aArg1}" == "all"    ]; then aArg1="-all";  fi                                                   # .(21212.06.1)
+#   if [ "${aArg1}" == "-all"   ]; then $0 sparse off; aArg1="-hard"; exit; fi                              ##.(21212.06.2)
+    if [ "${aArg1}" == "-all"   ]; then git sparse-checkout disable; aArg1="-hard"; fi                      # .(21212.06.2 RAM Turn it off)
 
     if [ "${aArg1}" == "hard"   ]; then aArg1="--hard"; fi                                                  # .(21127.03.2)
     if [ "${aArg1}" == "-hard"  ]; then aArg1="--hard"; fi                                                  # .(21127.03.3)
@@ -1100,17 +1114,22 @@ function getConfigFile() {                                                      
 
 #       git pull 2>&1 | awk '/changed|Already/ { print "   " $0 }'                                          ##.(21129.02.1)
         aResult="$( git pull 2>&1 | awk       '{ print "   " $0 }' )"                                       # .(21129.02.1 RAM Beg)
-        echo "${aResult}";
+#       echo "${aResult}";                                                                                  # .(21206.05.2 RAM Move to below)
         bErr=$( echo "${aResult}" | awk '/Aborting/ { print 1; exit }' ); if [ "${bErr}" != "1" ]; then bErr=0; fi
         bOK=$(  echo "${aResult}" | awk '/Already/  { print 1; exit }' ); if [ "${bOK}"  != "1" ]; then bOK=0; fi
 #       echo "   --- \$bErr: ${bErr}"; # exit
 #       sayMsg "gitR1[1069]  bOK: '${bOK}', bReset: '${bReset}'" 1;
 
     if [ "${bErr}" == "1" ]; then
-
+        echo "${aResult}"                                                                                   # .(21206.05.3)             
         echo -e "\n * Pull failed. Run: gitr pull -hard, to force pull of all repository files."
         ${aLstSp}; exit
         fi                                                                                                  # .(21129.02.1 RAM End)
+
+    if [ "${bOK}" == "1" ]; then                                                                            # .(21206.05.4 RAM Beg)
+        echo "${aResult/.} for ${aProjName}";
+        shoLastCommit
+        fi                                                                                                  # .(21206.05.4 RAM End)
 
     if [ "${bOK}" == "0" ] || [ "${bReset}" == "1" ]; then                                                  # .(21129.03.1)
     if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
@@ -1134,7 +1153,7 @@ function setA() { chmod 755 "$1"; echo "$1"; }
 #       git pull 2>&1 | awk '/changed|Already/ { print "   "$0 }'                                           ##.(21129.02.3)
 #       git pull 2>&1 | awk '{ print "   "$0 }'                                                             ##.(21129.02.4)
 
-        fi; fi                                                                                              # .(21129.03.4)
+        fi; fi;  # eif bOK, Windows & FRTools                                                               # .(21129.03.4)
 
         ${aLstSp}                                                                                           # .(21127.08.2)
      fi # eif Pull
