@@ -77,9 +77,9 @@ if [ "${aDocRcmd/bin\/docR/}" != "${aDocRcmd}" ]; then unset -f docR; fi
   docR code  "    $ ./setPath"
   docR code  "    $ ./setPath -doit"
   docR code  "    $ logout"
-  docR step  "    - In Bitvise, Open New terminal console"
+  docR step  "    - In Bitvise, Login, then Open New terminal console"
   docR step  "    - Check that the FRTools scripts are installed"
-  docR code  "    $ FRTools"
+  docR code  "    $ frtools"
 
   docR space
   docR step  " 4. Get new version of FRTools"
@@ -94,4 +94,5 @@ if [ "${aDocRcmd/bin\/docR/}" != "${aDocRcmd}" ]; then unset -f docR; fi
 ##SRCE     +====================+===============================================+
 ##RFILE    +====================+=======+===================+======+=============+
 #*/
+
 
