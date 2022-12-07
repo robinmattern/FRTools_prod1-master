@@ -8,6 +8,7 @@
 ##FD   RSS01_Main1.sh           |   7751| 11/03/22 16:16|   134| p1.06-21114-1945
 ##FD   RSS01_Main1.sh           |   9572| 11/20/22 13:48|   154| p1.06-21120.1348
 ##FD   RSS01_Main1.sh           |   9734| 11/20/22 14:00|   156| p1.06-21120.1400
+##FD   RSS01_Main1.sh           |  10078| 12/06/22 19:11|   160| p1.06-21206.1911
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #            Use the commands in this script to manage file resources.
 #
@@ -31,6 +32,7 @@
 # .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin
 # .(21114.06 11/13/22 RAM  7:45p| Fix Path to sub commands
 # .(21120.02 11/20/22 RAM  2:00p| Fix aOSv and aLstSp
+# .(21206.06 12/06/22 RAM  6:45p| Add -r and -c to dirlist
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -38,14 +40,14 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-     aVdt="Nov 20, 2022  2:00p"; aVtitle="Robin's Shell Scripts"                                            # .(21113.05.4 RAM Add aVtitle for Version in Begin)
+     aVdt="Dec 06, 2022  7:11p"; aVtitle="Robin's Shell Scripts"                                            # .(21113.05.4 RAM Add aVtitle for Version in Begin)
      aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
      LIB="RSS"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
 
 #    aFns="$( dirname "${BASH_SOURCE}"         )/RSS01_Main2Fns_p1.06_v21112.sh";  if [ ! -f "${aFns}" ]; then  ##.(21113.05.5 RAM Use RSS01_Main2Fns_p1.06_v21112.sh)
      aFns="$( dirname "${BASH_SOURCE}"      )/../JPT12_Main2Fns_p1.07.sh";         if [ ! -f "${aFns}" ]; then  # .(21113.05.5 RAM Use JPT12_Main2Fns_p1.07.sh)
-     echo -e "\n ** RSS01[ 48]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
+     echo -e "\n ** RSS01[ 50]  JPT Fns script, '.${aFns#*._2}', NOT FOUND\n"; exit; fi; #fi
      source "${aFns}";
 
 # +------- +------------------ +----------------------------------------------------------- # ------------+ ------------------- # --------------+
@@ -61,15 +63,15 @@
 
 #    aLstSp="echo "; if [ "${aOSv:0:1}" != "w" ]; then aLstSp=""; fi                                        ##.(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse).(21120.02.9)
      aLstSp="echo "; if [ "${aOSv/w}" != "${aOSv}" ]; then aLstSp=""; fi                                    # .(10706.09.1 RAM Windows returns an extra blank line).(21113.06.1 RAM Reverse).(21120.02.9)
-#    echo "  - RSS01[ 64]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
+#    echo "  - RSS01[ 66]  aOSv: ${aOSv}, ${aOS}, aLstSp: '${aLstSp}'"; ${aLstSp}; # exit
 
 #    -- --- ---------------  =  ------------------------------------------------------  #
 
 #    aOSv=gfw1 | w10p | w08s
 #    aOSv=rh62 | rh70 | uv14 | ub16
 
-#    sayMsg    "RSS01[ 71]  aServer: '${aServer}', aOSv: ${aOSv}, aOS: '${aOS}', bDebug: '${bDebug}'" 1
-#    sayMsg    "RSS01[ 72]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4', bQuiet: '${bQuiet}', bDebug: '${bDebug}'" 2
+#    sayMsg    "RSS01[ 73]  aServer: '${aServer}', aOSv: ${aOSv}, aOS: '${aOS}', bDebug: '${bDebug}'" 1
+#    sayMsg    "RSS01[ 74]  $\1: '$1', $\2: '$2', $\3: '$3', $\4: '$4', bQuiet: '${bQuiet}', bDebug: '${bDebug}'" 2
 
                                                              bTest=0;
   if [ "$1"      == "test"   ]; then                         bTest=1;           shift;     fi
@@ -92,17 +94,17 @@
 
 function Help() {
      echo ""
-     echo "  Useful Shell Scripts  (${aVer})               (${aVdt})"
-     echo "  ------------------------------------------  ---------------------------------"
-     echo "    RSS [R]Dir  {Dir} {FileSearch}            List or Find files"
-     echo "    RSS DirList {Dir} [Levels] [Columns]      List Directory File Counts"
-#    echo "    RSS Net                                   Set Up Network"
-     echo "    RSS Info [Help]                           Show or Set OS Info"
-     echo "    RSS Info Path [Show|Add]                  Show or Update [System] Path"
-     echo "    RSS Info Vars [Show|Set {Var} {Val}]      Show or Set [System] Path"
-#    echo "    RSS makSH                                 Make a  "
-     echo "    RSS source  {Cmd}                         Check command file locations"
-     echo "    RSS version {Cmd}                         Show RSS version or source script"
+     echo "  Useful Shell Scripts  (${aVer})                 (${aVdt})"
+     echo "  --------------------------------------------  ---------------------------------"
+     echo "    RSS [R]Dir  {Dir} {FileSearch}              List or Find files"
+     echo "    RSS DirList {Dir} [-r Levels] [-c Columns]  List Directory File Counts"   # .(21206.06.1)
+#    echo "    RSS Net                                     Set Up Network"
+     echo "    RSS Info [Help]                             Show or Set OS Info"
+     echo "    RSS Info Path [Show|Add]                    Show or Update [System] Path"
+     echo "    RSS Info Vars [Show|Set {Var} {Val}]        Show or Set [System] Path"
+#    echo "    RSS makSH                                   Make a  "
+     echo "    RSS source  {Cmd}                           Check command file locations"
+     echo "    RSS version {Cmd}                           Show RSS version or source script"
      ${aLstSp}
      exit
      }

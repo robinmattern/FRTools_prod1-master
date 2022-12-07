@@ -5,15 +5,16 @@
 ##RFILE    +====================+=======+===================+======+=============+
 ##FD   RSS22-DirList.sh         |   7556|  3/07/18  5:41|   146| v1.02.90315
 ##FD   RSS22_DirList.sh         |  11987| 12/03/22 13:46|   180| p1.03-21203.1346
+##FD   RSS22_DirList.sh         |  13166| 12/06/22 19:10|   192| p1.03-21206.1910
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #            List directory counts using du on every subfolder, where
 #
-#              DirList [Levels] [Columns]
-#                      [Levels}             {Levels} down, defaults to 1
-#                               [Columns}    0) Names only,
-#                                            1) Names & Sizes only,
-#                                            2) Names & Sizes and Files
-#                                            3) Names & Sizes, Files and Dirs
+#              DirList [-r Levels] [-c Columns]                                            # .(21206.06.2)
+#                      [-r Levels}                 {Levels} down, (defaults to 1)          # .(21206.06.3)
+#                                  [-c Columns}    0) Names only,                          # .(21206.06.4)
+#                                                  1) Names & Sizes only, (default)
+#                                                  2) Names & Sizes and Files
+#                                                  3) Names & Sizes, Files and Dirs
 #
 ##LIC      .--------------------+----------------------------------------------+
 #            Copyright (c) 2018-2022 JScriptWare * Released under
@@ -32,12 +33,13 @@
 # .(21203.02 12/03/22 RAM 11:40p| Put quotes around $1 and aDir
 # .(21203.03 12/03/22 RAM 11:40p| Exclude node_modules and .git
 # .(21203.04 12/03/22 RAM 11:40p| Change Column codes
+# .(21206.06 12/06/22 RAM  7:10p| Add -r and -c to dirlist
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-    aVdt="Dec 03, 2022  1:46p"; aVtitle="formR gitR Tools"                                                                      # .(21113.05.6 RAM Add aVtitle for Version in Begin)
+    aVdt="Dec 06, 2022  7:10p"; aVtitle="formR gitR Tools"                                                                      # .(21113.05.6 RAM Add aVtitle for Version in Begin)
     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"             # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
             LIB="RSS"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER                             # .(80923.01.1)
@@ -54,10 +56,19 @@
 #           nTyp=$3; if [ "$3" = "" ]; then nTyp=3;   fi   # 1)Names only, 2)Sizes only, 3)Sizes, Files and Dirs
             nTyp=$3; if [ "$3" = "" ]; then nTyp=1;   fi   # 0)Names only, 1)Sizes only, 2)Sizes, and Files, 3)Sizes, Files and Dirs  # .(21203.04.1 RAM Change nTyp codes)
 
+            mArgs=( "$@" )                                                                  # .(21206.06.5 RAM Beg)
+#           for aArg in "$[@]"; do echo "aArg: "
+            for (( i = 0; i < ${#mArgs[@]}; i++ )); do
+                if [ "${mArgs[$i]}" == "-r" ]; then nLvl="${mArgs[ (( i + 1 )) ]}"; nTyp="${mArgs[ (( i + 2 )) ]}"; fi
+                if [ "${mArgs[$i]}" == "-c" ]; then nTyp="${mArgs[ (( i + 1 )) ]}"; fi
+                done;
+            if [ "${mArgs[0]:0:1}"  == "-"  ]; then aDir="."; fi
+            if [ "$nLvl" == "-c" ]; then nLvl=${nTyp}; fi                                   # .(21206.06.5 RAM End)
+
             aNums="123456789"                                                               # .(81007.05.1)
  if [ -z "${aNums##*$aDir*}" ]; then nTyp=${nLvl}; nLvl=${aDir}; aDir="."; fi               # .(81007.05.2)
 
-#   echo "  aCmd: ${aCmd}; aDir: ${aDir}; nLvl: ${nLvl}; nTyp: ${nTyp}"; exit
+#  echo "  aCmd: ${aCmd}; aDir: ${aDir}; nLvl: ${nLvl}; nTyp: ${nTyp}"; exit
 
 #HELP
 #---------------------------------------------------------------
@@ -68,12 +79,13 @@
     if [ "${aDir}" == "help"    ]; then
 
             echo ""
-            echo "  List Directory Files, Dir Counts & Sizes   (${aVer})              (${aVdt})"
-            echo "  ----------------------------------  ------------------------------------------------------------------"
-            echo "    RSS DirList {Dir} {Level} {Typ}   Display NFS Directories, down to level {Level}"
-#           echo "                              {Typ}   1) Names only, 2) Sizes only, 3) Files and Dirs"                               ##.(21203.04.2
-            echo "                              {Typ}   0) Names only, 1) Sizes only, 2) Sizes and Files, 3) Sizes, Files and Dirs"    # .(21203.04.2
-            echo "                                          Default is: dirlist 1 1, or dirlist . 1 1"                                 # .(21203.04.3 RAM was 1 2)
+            echo "  List Directory Files, Dir Counts & Sizes   (${aVer})  (${aVdt})"
+            echo "  --------------------------------------------------  ------------------------------------------------"
+            echo "    RSS DirList {Dir} [-r {Level} ] [ -c {Typ} ]       Display NFS Directories, down to level {Level}"        # .(21206.06.6)
+#           echo "                                         {Typ}         1) Names only, 2) Sizes only, 3) Files and Dirs"       ##.(21203.04.2)
+            echo "                                         {Typ}         0) Names only, 1) Sizes only, "                        # .(21203.04.2)
+            echo "                                                       2) Sizes and Files, 3) Sizes, Files and Dirs"          # .(21203.04.2)
+            echo "                                                       Default is: dirlist 1 1, or dirlist . 1 1"             # .(21203.04.3 RAM was 1 2)
 #           echo ""
             ${aLstSp}; exit
     fi
