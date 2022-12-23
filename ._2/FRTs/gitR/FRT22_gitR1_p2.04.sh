@@ -90,6 +90,7 @@
 # .(21120.02 11/20/22 RAM  1:55p| Fix aOSv and aLstSp
 # .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer 
 # .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits 
+# .(21127.02 11/27/22 RAM  8:20a| Improve Git Pull -hard 
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -161,7 +162,7 @@ function Help( ) {
         echo "         Push                                                    Upload changes to remote"
         echo "         Fetch                                                   Fetch remote changes (Refs only, i.e. no local changes)"
         echo "         Fetch [All]                                             Fetch remote changes for all remotes and branches"
-        echo "         Pull                                                    Merge remote changes (if not merge conflicts)"
+        echo "         Pull  [-Hard]                                           Merge remote changes (if no merge conflicts)"
         echo "         Sparse On | Off | List                                  Turn sparse-checkout on and/or off"              # .(21025.01.2 RAM Added).(21026.01.1)
         echo "         Clone {Project} [-doit] [-all]                          Backup and Clone Repo with sparse-checkout"      # .(21027.01.2 RAM Added)
         echo "         Clone {RepoURL} [-doit] [-all]                          Create config file: gitr_{project}_config.sh"    # .(21101.05.1 RAM Added)
@@ -941,11 +942,14 @@ END{ }
         git diff 
         fi
 
-        sayMsg "GitR1[935]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" # 1
-    if [ "${aOS}" != "windows" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
+        sayMsg "GitR1[935]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" 2 # 1
+
+    if [ "${aOSv/w}" != "${aOSv}" ] && [ "${aProject}" == "FRTools" ]; then                                    # .(21111.02.1 RAM Beg)
+
         git reset --hard | awk '{ print "   " $0 }'
         git pull | awk '/changed|Already/ { print "   "$0 }'
-        chmod -R 755 "${aProjDir}"
+
+        chmod -R 755 "${aProjDir}" *.sh
         echo -e "\n * FRTools script permissions have been reset"
 
       else                                                                                                  # .(21111.02.1 RAM End)
