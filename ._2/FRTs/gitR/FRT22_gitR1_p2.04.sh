@@ -20,6 +20,7 @@
 ##FD   FRT22_gitR1.sh           |  81638| 11/11/22 17:09|  1387| p2.04-21111-1709
 ##FD   FRT22_gitR1.sh           |  83204| 11/17/22 12:00|  1404| p2.04-21117-1200
 ##FD   FRT22_gitR1.sh           |  83707| 11/20/22 13:55|  1402| p2.04-21120.1355
+##FD   FRT22_gitR1.sh           |  90455| 12/23/22 16:03|  1448| p2.04-21223.1603
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Use the commands in this script to run git commands with helpfull
 #            output.
@@ -88,9 +89,12 @@
 # .(21113.05 11/13/22 RAM  5:30p| Display Version and Source in Begin
 # .(21117.01 11/17/22 RAM 12:00p| Improve gitR Helps
 # .(21120.02 11/20/22 RAM  1:55p| Fix aOSv and aLstSp
-# .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer 
-# .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits 
-# .(21127.02 11/27/22 RAM  8:20a| Improve Git Pull -hard 
+# .(21122.03 11/20/22 RAM  1:30p| Swap FormR_U for SCN2_U Proj Folder sniffer
+# .(21122.04 11/22/22 RAM  7:20p| Swap @ for | in list commits
+# .(21127.02 11/27/22 RAM  8:20a| Improve Git Pull -hard
+# .(21223.03 12/23/22 RAM  2:30p| Improve Gitr list commits local/remote
+# .(21223.04 12/23/22 RAM  3:30p| List commits can only take a branch name as an arg
+# .(21223.05 12/23/22 RAM  4:03p| Sort List commits in chronological order
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -98,7 +102,7 @@
 #*/
 #========================================================================================================== #  ===============================  #
 
-        aVdt="Nov 20, 2022  1:55p"; aVtitle="formR gitR Tools"                                               # .(21113.05.6 RAM Add aVtitle for Version in Begin)
+        aVdt="Dec 23, 2022  4:03p"; aVtitle="formR gitR Tools"                                               # .(21113.05.6 RAM Add aVtitle for Version in Begin)
         aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
         LIB="GITR"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                     # .(80923.01.1)
@@ -382,7 +386,7 @@ function setProjVars( ) {
         aStage=""
         aApp=""
 
-# if [ "${aOS}" == "windows" ] || [ "${aOS}" == "GitBash" ]; then                                           ##.(21122.03.4 RAM Added || [ "${aOS}" == "GitBash" ]) 
+# if [ "${aOS}" == "windows" ] || [ "${aOS}" == "GitBash" ]; then                                           ##.(21122.03.4 RAM Added || [ "${aOS}" == "GitBash" ])
   if [ "${aOSv/w}" != "${aOSv}" ]; then                                                                     # .(21122.03.4 RAM What we've been using)
 
           aDir=$( pwd -P );                  aVMs="/C/WEBs/SCN2/Files/VMs"; aWebs="SCN2"
@@ -424,7 +428,7 @@ function setProjVars( ) {
 
         sayMsg "setProjVars[ 5 ]  aVM:   '${aVM}', aWebs: ${aWebs}, aDir: '${aDir}/' match '${aVMs}/(.*)(/webs)?/'" -1 # 2
 
-        aRoot=${aVMs}/${aVM}                     # or "" if linux  
+        aRoot=${aVMs}/${aVM}                     # or "" if linux
   if [ "${aOS}"  == "linux" ]; then aRoot=""; fi
 #       aRoot="";  aDir="/webs/nodeapps/NuSvs/Main-dev04/server1"
 
@@ -489,18 +493,22 @@ function setProjVars( ) {
 #====== =================================================================================================== #  ===========
 
 function  getCurRemote( ) {
-        sayMsg "getCurRemote[ 1 ]  ( '$1' )" # 1
-        aRemote=$( git branch -vv | awk '/\*/ { split( $0, a, /\[/ ); split( a[2], a, /\// ); print a[1] }' )
+#       sayMsg "getCurRemote[ 1 ]  ( '$1' )" 1 # 1
+#       aRemote=$( git branch -vv | awk '/\*/ { split( $0, a, /\[/ ); split( a[2], a, /\// ); print a[1] }' )  ##.(21223.03.1)
+        aRemote=$( git remote show )                                                    # .(21223.03.1)
+#       sayMsg "getCurRemote[ 2 ]  ( '${aRemote}' )" 2                                  ##.(21223.03.1)
         }
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
 #====== =================================================================================================== #  ===========
 
 function  getCurBranch( ) {
-        sayMsg "getBranch[ 1 ]  ( '$1' )" # 1
+#       sayMsg "getBranch[ 1 ]  ( '$1' )" 1
   if [ "$1" == "" ]; then aBranch=$( git branch | awk '/\*/ { print $2 }' ); return; fi
 #       aBranch=$( git branch -vv | awk -v r=$1 '{ split( $0, a, /\[/ ); split( a[2], a, /\// ); print "a[1]: " a[1] ", " a[2]; if ( a[1] == r ) { split( a[2], a, /[:\]]/ ); print a[1]; exit } }' )
-        aBranch=$( git branch -vv | awk -v r=$1 '{ split( $0, a, /\[/ ); split( a[2], a, /\// ); if ( a[1] == r ) { split( a[2], a, /[:\]]/ ); print a[1]; exit } }' )
+#       aBranch=$( git branch -vv | awk -v r=$1 '{ split( $0, a, /\[/ ); split( a[2], a, /\// ); if ( a[1] == r ) { split( a[2], a, /[:\]]/ ); print a[1]; exit } }' ) ##.(21223.03.2)
+        aBranch=$( git status     | awk '{ print substr( $0, 11 ); exit }' )            # .(21223.03.2)
+#       sayMsg "getBranch[ 2 ]  ( '${aBranch}' )" 2                                     ##.(21223.03.2)
         }
 #    -- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -894,9 +902,10 @@ END{ }
 #====== =================================================================================================== #  ===========
 
         chkGitDir                                                                                           # .(20429.07.3 RAM).(20623.13.3 RAM Beg Move to here from above)
-
+#       sayMsg "[897]  aBranch: '${aBranch}', aArg1: '${aArg1}'" 1                                          ##.(21223.03.3)
 #       setBranch $1; if [ "${aBranch}" != "" ]; then shift; fi
         setBranch ${aArg1}
+#       sayMsg "[897]  aBranch: '${aBranch}', aArg1: '${aArg1}', aArg2: '${aArg2}'" 1                       ##.(21223.03.3)
 
 #       sayMsg "GitR1[895]  Begin GitR Commands: aCmd: ${aCmd}" 1                                           # .(20623.13.3 RAM End Move to here from above)
 
@@ -938,8 +947,8 @@ END{ }
         setProjVars
 
         echo ""
-    if [ "${aArg2}" == "-hard" ]; then 
-        git diff 
+    if [ "${aArg2}" == "-hard" ]; then
+        git diff
         fi
 
         sayMsg "GitR1[935]  pull aOS: '${aOS}', aProject: '${aProject}', aProjDir: '${aProjDir}'" 2 # 1
@@ -1111,10 +1120,10 @@ END{ }
 #       setProjVars "${aBranch}"
 
      if [ "${aArg2}" == "" ]; then aArg2=${aArg1}; aArg1=; fi
-                                                                  getCurRemote; # sayMsg "aRemote: ${aRemote}" 2
-        aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=${aRemote};       fi                            # .(10822.01.1)
+                                                                  getCurRemote;                             # sayMsg "aRemote: ${aRemote}" 2
+        aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=${aRemote}; fi                # .(10822.01.1)
 
-                                                                  getCurBranch ${aGit_Remote}; # sayMsg "aBranch: ${aBranch}" 2
+                                                                  getCurBranch ${aGit_Remote};              # sayMsg "aBranch: ${aBranch}" 2
         aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=${aBranch}; fi
 
         sayMsg "Checkout Branch: ${aRemote} ${aBranch}" 2
@@ -1218,7 +1227,7 @@ END{ }
 #====== =================================================================================================== #  ===========
 #       LIST REMOTE COMMITS
 #====== =================================================================================================== #
-        sayMsg "GitR1[1208]  ${aCmd}, nDays: '${nDays}'"                                                                    # .(21122.04.0 nDays Not assigned yet) 
+        sayMsg "GitR1[1222]  ${aCmd}, nDays: '${nDays}'"                                                                    # .(21122.04.0 nDays Not assigned yet)
 
   if [ "${aCmd}" ==  "List All Commits"    ]; then aCmd="List Remote Commits"; fi                                           # .(20623.03.1)
   if [ "${aCmd}" ==  "List Local Commits"  ]; then aCmd="List Remote Commits"; fi                                           # .(20122.04.2)
@@ -1233,7 +1242,7 @@ END{ }
      if [ "${aArg3:0:2}" == $aDO ]; then nDays=$aArg4;                                 aArg3="$aArg5"; aArg4="$aArg6"; aArg5="$aArg7"; fi
      if [ "${aArg4:0:2}" == $aDO ]; then nDays=$aArg5;                                                 aArg4="$aArg6"; aArg5="$aArg7"; fi
      if [ "${aArg5:0:2}" == $aDO ]; then nDays=$aArg6;                                                                 aArg5="$aArg7"; fi
-     if [ "${aArg6:0:2}" == $aDO ]; then nDays=$aArg7;                                                                                 fi 
+     if [ "${aArg6:0:2}" == $aDO ]; then nDays=$aArg7;                                                                                 fi
                                                        fi;                                                                  # .(21122.04.1 RAM End)
      if [ "${nDays}"     == ""   ]; then nDays=14;     fi;                                                                  # .(21122.04.2 Added fi)
         setProjVars                                                                                                         # .(20122.01.1)
@@ -1249,56 +1258,75 @@ END{ }
         sayMsg "    ${mResults}." 3
         exit
         fi
-                                                                  getCurRemote;                 # sayMsg "aRemote: ${aRemote}" 2
-#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=Bruce_FormR-test; fi                             ##.(10821.01.7)
-#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=$( git remote );  fi                             ##.(10821.01.7)
-        aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=${aRemote};       fi                             # .(10822.01.7)
+                                                                  getCurRemote;                #  sayMsg "[1253]  aRemote: ${aRemote}, aArg1: '${aArg1}'" 1
+#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=Bruce_FormR-test; fi                          ##.(10821.01.7)
+#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=$( git remote );  fi                          ##.(10821.01.7)
+#       aGit_Remote=${aArg1}; if [ "${aGit_Remote}" == "" ]; then aGit_Remote=${aRemote};       fi                          ##.(10822.01.7).(21223.04.1)
+                                                                  aGit_Remote=${aRemote}                                    # .(21223.04.1 RAM Arg1 can be a branch name only)
+#       sayMsg "[1258]  aRemote: ${aGit_Remote}" 2
+                                                                  getCurBranch ${aGit_Remote}; # sayMsg "aBranch: ${aBranch}" 2
+#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=${aBranch}; fi                                ##.(10822.01.8).(21223.04.2)
+        aGit_Branch=${aArg1}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=${aBranch}; fi                                # .(21223.04.2)
+#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=$( git branch | awk '/\*/ { print $2 }' ); fi ##.(10821.01.8).(21223.04.2)
+#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=main; fi                                      ##.(10821.01.8)
+#       sayMsg "GitR1[1268]  aGit-Branch: '${aGit_Branch}'; aGit-Remote: '${aGit_Remote}'" 1
 
-                                                                  getCurBranch ${aGit_Remote};  # sayMsg "aBranch: ${aBranch}" 2
-#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=$( git branch | awk '/\*/ { print $2 }' ); fi    ##.(10821.01.8)
-#       aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=main; fi                                         ##.(10821.01.8)
-        aGit_Branch=${aArg2}; if [ "${aGit_Branch}" == "" ]; then aGit_Branch=${aBranch}; fi                                   # .(10822.01.8)
+        aPath=${aGit_Remote}; if [ "${aGit_Branch}" != "" ]; then aPath=${aPath}/${aGit_Branch}; fi;                        # Includes remote/)
+#       sayMsg "GitR1[1271]  aPath: /remotes\/${aPath/\//\\/}/" 1
 
-        aPath=${aGit_Remote}; if [ "${aGit_Branch}" != "" ]; then aPath=${aPath}/${aGit_Branch}; fi; # sayMsg "aPath: ${aPath}" 2
-#       sayMsg "GitR1[1248]  aPath: ${aPath}" 2
+        aPath=$( git branch -va | awk '/remotes\/'${aPath/\//\\/}'/ { sub( /remotes\//, ""); print $1 }' )                  # .(21223.04.3)
+#       sayMsg "GitR1[1272]  aPath: ${aPath}" 2
 
-     if [ "${aGit_Remote}" == "" ] && [ "${bLocal}" == "0" ] ; then bLocal=1;                                               # .(10827.01.1 Beg RAM If no remote)
-           echo ""; echo "  * No Remotes are defined for this Repository."
+#    if [ "${aGit_Remote}" == "" ] && [ "${bLocal}" == "0" ] ; then bLocal=1;                                               ##.(10827.01.1 Beg RAM If no remote).(21223.04.4)
+     if [ "${aPath}"       == "" ] && [ "${bLocal}" == "0" ] ; then bLocal=1;                                               # .(10827.01.1 Beg RAM If no remote).(21223.04.4)
+           echo ""; echo "  * No Remotes are defined for this Branch, '${aGit_Branch}'."                                    # .(21223.04.5 RAM Was Repository)
+           exit                                                                                                             # .(21223.04.6)
            fi                                                                                                               # .(10827.01.1 End)
      if [ "${bLocal}" == "1" ]                              ; then aPath="${aGit_Branch}"; fi                               ##.(10827.01.1)
 #    if [ "${bLocal}" == "1" ] || [ "${aGit_Remote}" == "" ]; then aPath="${aGit_Branch}"; fi                               # .(10827.01.1 RAM If no remote)
 
         aSince=""; if [ "${nDays}" != "0" ]; then aSince="--since=\"${nDays} days ago\" "; fi
   if [ "${aSince}" == "" ]; then
-        sayMsg "Commits for '${aPath}' since day 1" 1;
+        sayMsg sp "Commits for '${aPath}' since day 1" 1;
    else
-        sayMsg "Commits for '${aPath}'   since ${aSince:8}" 1; # echo ""  # 2b0a8aa 2021-06-01 Bruce Troutman Finished Hardening
+        sayMsg sp "Commits for '${aPath}' since ${aSince:8}" 1; # echo ""  # 2b0a8aa 2021-06-01 Bruce Troutman Finished Hardening
      fi
-        echo "    git log '${aPath}' ${aSince}--date=format:'%Y-%m-%d %H:%M' --oneline --format=\"%h %ad %cn %s\" "; echo ""
+        echo "    git log '${aPath}' ${aSince}--date=format:'%Y-%m-%d %H:%M' --oneline --format=\"%h %ad %cn %s\" | sort -k1.9"; echo "" # .(21223.03.4).(21223.04.7 RAM Sort it)
 
 if [ "${bLocal}" == "1" ]; then
-        echo "    Local                    Branch              Date    Time   Commit   Author            Commit Message"
+        echo "    Local Dir                Branch              Date    Time   Commit   Author            Commit Message"
 #       aGit_Remote="${aStage} (local)"                                                                                     ##.(20122.01.3 RAM Was: "")
         aGit_Remote="${aStage}"                                                                                             # .(20122.01.3 RAM Was: "")
-        aLorR=" L"                                                                                                          # .(20122.01.3 RAM Added)
+        aLorR=" L"; aLorR_Name=" Local"                                                                                     # .(20122.01.3 RAM Added).(21223.03.5)
    else
         echo "    Remote Alias Name        Branch              Date    Time   Commit   Author            Commit Message"
 #       aGit_Remote="${aGit_Remote} (remote)"                                                                               ##.(20122.01.4 RAM Added)
-        aLorR=" R"                                                                                                          # .(20122.01.4 RAM Added)
+        aLorR=" R"; aLorR_Name="Remote"                                                                                     # .(20122.01.4 RAM Added).(21223.03.6)
      fi
 #       echo "    -----------------  ---------------  ----------------  -------  ----------------  -----------------------------------"
         echo "    -----------------------  ---------------  ----------------  -------  ----------------  -----------------------------------"   # .(11127.02.8)
+
+        aRemote1=${aGit_Remote}; if [ "${#aRemote1}" -gt 23 ]; then aRemote1="${aRemote1:0:20}..."; fi                      # .(21223.03.7)
+        aBranch1=${aGit_Branch}; if [ "${#aBranch1}" -gt 15 ]; then aBranch1="${aBranch1:0:12}..."; fi                      # .(21223.03.8)
+#       aPath=${aRemote1};       if [ "${aBranch1}"  !=  "" ]; then aPath=${aPath}/${aBranch1}; fi;                         ##.(21223.03.9)
+        aBranch1=${aBranch1};    if [ "${aBranch1}"  ==  "" ]; then aBranch1="??"; fi;                                      # .(21223.03.10)
+#       sayMsg "GitR1[1248]  aPath: ${aPath}" 2
 
 #       aRemote="\"${aGit_Remote}\", \"${aGit_Branch}\", \$1, \$2, \$3, \$4"; sayMsg "aRemote: ${aRemote}" 1
 #       aPrg="{ printf \"    %-18s %-15s %10s  %7s  %-17s %s\n\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4 }"; # sayMsg "aPrg: ${aPrg}" 2
 #       aPrg="{ printf \"    %-18s %-15s %16s  %7s  %-17s %s\n\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2\" \"\$3, \$1, \$4, \$5 }"; # sayMsg "aPrg: ${aPrg}" 2
 #       aPrg="{ printf \"    %-18s %-15s %16s  %7s  %-17s %s\n\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,    \$3, \$1, \$4, \$5 }";   sayMsg "aPrg: ${aPrg}" 1
-#       aPrg="{ printf \"    %-18s %-16s %16s  %7s  %-17s %s\n\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }"; # sayMsg "aPrg: ${aPrg}" 2
-#       aPrg="{ printf \"    %-24s %-16s %16s  %7s  %-17s %s\n\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }"; # sayMsg "aPrg: ${aPrg}" 2   # .(11127.02.9)
-        aPrg="{ printf \" %s %-24s %-16s %16s  %7s  %-17s %s\n\", \"${aLorR}\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }"; # sayMsg "aPrg: ${aPrg}" 2   # .(11127.02.9).(20122.01.6)
+#       aPrg="{ printf \"    %-18s %-16s %16s  %7s  %-17s %s\n\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }";               # sayMsg "aPrg: ${aPrg}" 2
+#       aPrg="{ printf \"    %-24s %-16s %16s  %7s  %-17s %s\n\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }";               # sayMsg "aPrg: ${aPrg}" 2   ##.(11127.02.9)
+#       aPrg="{ printf \" %s %-24s %-16s %16s  %7s  %-17s %s\n\", \"${aLorR}\", \"${aGit_Remote}\", \"${aGit_Branch}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }"; # sayMsg "aPrg: ${aPrg}" 2   ##.(11127.02.9).(20122.01.6).(21223.03.11)
+#       aPrg="{ printf \" %s %-24s %-16s %16s  %7s  %-17s %s\n\", \"${aLorR}\", \"${aRemote1}\", \"${aBranch1}\", \$2,         \$1, \$3, \$4; n++; d=\$2 }";       # sayMsg "aPrg: ${aPrg}" 2   ##.(11127.02.9).(20122.01.6).(21223.03.11).(21223.05.1)
+        aPrg="{ printf \" %s %-24s %-16s %16s  %7s  %-17s %s\n\", \"${aLorR}\", \"${aRemote1}\", \"${aBranch1}\", \$2,         \$1, \$3, \$4; n++; }";             # sayMsg "aPrg: ${aPrg}" 2   # .(11127.02.9).(20122.01.6).(21223.03.11).(21223.05.1 RAM Remove d=)
 
-#       aPrg="${aPrg} END { printf \"%3d Commits for '${aPath}' since '${aSince:8} days ago'\", n }"; # sayMsg "aPrg: ${aPrg}" 2
-        aPrg="${aPrg} END { printf \"%3d Commits for '${aPath}' since %s\", n, d ? d : \"then\"   }"; # sayMsg "aPrg: ${aPrg}" 2
+#       aPrg="${aPrg} END { printf \"%3d Commits for '${aPath}' since '${aSince:8} days ago'\", n }";                           # sayMsg "aPrg: ${aPrg}" 2
+#       aPrg="${aPrg} END { printf \"%3d Commits for '${aPath}' since %s\", n, d ? d : \"then\"   }";                           # sayMsg "aPrg: ${aPrg}" 2   ##.(21223.03.12)
+#       aPrg="${aPrg} END { printf \"   %3d Commits for Branch, '${aBranch1}', since %s\", n, d ? d : \"then\"   }";            # sayMsg "aPrg: ${aPrg}" 2   ##.(21223.03.12)
+        aPrg="${aPrg} END { printf \"         %3d Commits for ${aLorR_Name} Branch, since %s\", n, d ? d : \"sometime ago\" }"; # sayMsg "aPrg: ${aPrg}" 2   # .(21223.03.12 RAM Was then)
+        aPrg="NR == 1 { d=\$2 }; ${aPrg}";                                                                                        # sayMsg "aPrg: ${aPrg}" 2   # .(21223.05.2)
 
 #       git log ${aPath} -n 25                 --oneline --format="%h|%as|%cn|%s" | awk -F'[|]' '{ printf "    %7s  %10s  %-17s %s\n", $1, $2, $3, $4 }'
 #       git log ${aPath} --since="2021-07-25"  --oneline --format="%h|%as|%cn|%s" | awk -F'[|]' '{ printf "    %7s  %10s  %-17s %s\n", $1, $2, $3, $4 }'
@@ -1307,9 +1335,9 @@ if [ "${bLocal}" == "1" ]; then
 #       git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s"
 
   if [ "${aSince}" == "" ]; then
-        git log ${aPath}             --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}"   # .(21122.04.4 RAM Swap ! for |)
+        git log ${aPath}             --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | sort -k1.9 | awk -F'[!]' -e "${aPrg}"  # .(21122.04.4 RAM Swap ! for |).(21223.05.3)
     else
-        git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | awk -F'[!]' -e "${aPrg}"   # .(21122.04.5)
+        git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h!%ad!%cn!%s" | sort -k1.9 | awk -F'[!]' -e "${aPrg}"  # .(21122.04.5).(21223.05.4)
      fi
 
 #       mRecs=$( bash -c "( git log ${aPath} "${aSince}" --date=format:'%Y-%m-%d %H:%M' --oneline --format="%h|%ad|%cn|%s" )" )
