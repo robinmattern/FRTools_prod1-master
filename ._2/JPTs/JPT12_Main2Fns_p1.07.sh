@@ -13,6 +13,7 @@
 ##FD   JPT12_Main2Fns.sh        |  41252| 10/27/22 12:00|   605| u1.06-21027-1200
 ##FD   JPT12_Main2Fns.sh        |  41977| 11/13/22 17:31|   594| p1.07-21113-1731
 ##FD   JPT12_Main2Fns.sh        |  44435| 11/20/22 13:58|   611| p1.07-21120.1358
+##FD   JPT12_Main2Fns.sh        |  46030| 11/27/22 14:33|   624| p1.07-21127.1433
 ##DESC     .--------------------+-------+---------------+------+-----------------+
 #            Common function for JScriptWare Tools
 #
@@ -24,7 +25,7 @@
 #            setOS( )           |
 #            logIt( )           |
 #            askYN( )           |                                                       #.(20503.03.3 RAM Added)
-#             
+#            sayMsg( )          |
 #            setArgs()          |
 #            getOpts()          |
 #            getOpt()           |
@@ -94,7 +95,7 @@
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-#    aVdt_x="Nov 20, 2022  1:58p"; aVtitle_x="JavaScriptware Tools Utility Fns"                 # .(21113.05.4 RAM Add aVtitle for Version in Begin)
+#    aVdt_x="Nov 27, 2022  2:33p"; aVtitle_x="JavaScriptware Tools Utility Fns"                 # .(21113.05.4 RAM Add aVtitle for Version in Begin)
 #    aVer_x="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
 #          if [ "${LIB}" == "" ]; then LIB=JPT; Lib=RSS; fi                                 ##.(80926.01.1)
@@ -383,7 +384,7 @@ function setArgs( ) {                                                           
 #   aArg8="$( echo "${aArg8}" | awk '{ print tolower( $0 ) }' )"                        # .(20429.09.01 End)
 
     aCmd0="$1 $2 $3"; aCmd0="$( echo "${aCmd0}" | awk '{ sub( / +$/, "" ); print }' )"
-    sayMsg sp "JPFns[377]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'" 0
+    sayMsg sp "JPFns[387]  aArg1: '$aArg1', aArg2: '$aArg2', aArg3: '$aArg3', aArg4: '$aArg4', aArg5: '$aArg5', aArg6: '$aArg6', aArg7: '$aArg7', aArg8: '$aArg8', aArg9: '$aArg9'" 0
 
     } # eof setArgs
 #   ------- ------------------  =  ---------------------------------------------------  #  ----------------
@@ -391,13 +392,13 @@ function setArgs( ) {                                                           
 #======= ================================================================================================== #  ===========
 
 function getOpts() { dBug=$2
-    sayMsg    "JPFns[385]  aArg1:'$aArg1', aArg2:'${aArg2}', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " ${dBug} # Called 3 or 4 files
+    sayMsg    "JPFns[395]  aArg1:'$aArg1', aArg2:'${aArg2}', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " ${dBug} # Called 3 or 4 files
 
-    if [ "${1/b/}" != "$1" ]; then if [ "${bDebug}"  != "1" ]; then getOpt "-b" "-de";  export bDebug=${nOpt};  fi; sayMsg "JPFns[387]  bDebug:  '${bDebug}'"  ; fi   # .(20501.01.3)
-    if [ "${1/d/}" != "$1" ]; then if [ "${bDoit}"   != "1" ]; then getOpt "-d" "doit"; export bDoit=${nOpt};   fi; sayMsg "JPFns[388]  bDoit:   '${bDoit}'"   ; fi   # .(20501.01.5)
-    if [ "${1/q/}" != "$1" ]; then if [ "${bQuiet}"  != "1" ]; then getOpt "-q" "qu";   export bQuiet=${nOpt};  fi; sayMsg "JPFns[389]  bQuiet:  '${bQuiet}'"  ; fi   # .(20501.01.4)
-    if [ "${1/g/}" != "$1" ]; then if [ "${bGlobal}" != "1" ]; then getOpt "-g" "glo";  export bGlobal=${nOpt}; fi; sayMsg "JPFns[390]  bGlobal: '${bGlobal}'" ; fi
-#   if [ "${1/l/}" != "$1" ]; then if [ "${bLocal}"  != "1" ]; then getOpt "-l" "loc";  export bLocal=${nOpt};  fi; sayMsg "JPFns[391]  bLocal:  '${bLocal}'"  ; fi
+    if [ "${1/b/}" != "$1" ]; then if [ "${bDebug}"  != "1" ]; then getOpt "-b" "-de";  export bDebug=${nOpt};  fi; sayMsg "JPFns[397]  bDebug:  '${bDebug}'"  ; fi   # .(20501.01.3)
+    if [ "${1/d/}" != "$1" ]; then if [ "${bDoit}"   != "1" ]; then getOpt "-d" "doit"; export bDoit=${nOpt};   fi; sayMsg "JPFns[398]  bDoit:   '${bDoit}'"   ; fi   # .(20501.01.5)
+    if [ "${1/q/}" != "$1" ]; then if [ "${bQuiet}"  != "1" ]; then getOpt "-q" "qu";   export bQuiet=${nOpt};  fi; sayMsg "JPFns[399]  bQuiet:  '${bQuiet}'"  ; fi   # .(20501.01.4)
+    if [ "${1/g/}" != "$1" ]; then if [ "${bGlobal}" != "1" ]; then getOpt "-g" "glo";  export bGlobal=${nOpt}; fi; sayMsg "JPFns[400]  bGlobal: '${bGlobal}'" ; fi
+#   if [ "${1/l/}" != "$1" ]; then if [ "${bLocal}"  != "1" ]; then getOpt "-l" "loc";  export bLocal=${nOpt};  fi; sayMsg "JPFns[401]  bLocal:  '${bLocal}'"  ; fi
 
     } # eof getOpts
 #   ------- ------------------  =  ---------------------------------------------------  #  ----------------
@@ -405,8 +406,8 @@ function getOpts() { dBug=$2
 #======= ================================================================================================== #  ===========
 
 function getOpt( ) { # echo "getObj('$1');"
-#   sayMsg sp "JPFns[399]  aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}', aARG8:'${mARGs[7]}' " 1
-    sayMsg    "JPFns[400]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " ${dBug} # Called 3 or 4 files
+#   sayMsg sp "JPFns[409]  aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}', aARG8:'${mARGs[7]}' " 1
+    sayMsg    "JPFns[410]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " ${dBug} # Called 3 or 4 files
 
                                                    w=${#2};            nOpt=0; mKeep=( 0 1 2 3 4 5 6 7 8 )
     if [ "${aArg1:0:2}" == "$1" ] || [ "${aArg1:0:$w}" == "$2" ]; then nOpt=1; mKeep=(   1 2 3 4 5 6 7 8 ); aArg1="$aArg2"; aArg2="$aArg3"; aArg3="$aArg4"; aArg4="$aArg5"; aArg5="$aArg6"; aArg6="$aArg7"; aArg7="$aArg8"; fi
@@ -418,17 +419,17 @@ function getOpt( ) { # echo "getObj('$1');"
     if [ "${aArg7:0:2}" == "$1" ] || [ "${aArg7:0:$w}" == "$2" ]; then nOpt=1; mKeep=( 0 1 2 3 4 5   7 8 );                                                                                                 aArg7="$aArg8"; fi
     if [ "${aArg8:0:2}" == "$1" ] || [ "${aArg8:0:$w}" == "$2" ]; then nOpt=1; mKeep=( 0 1 2 3 4 5 6   8 );                                                                                                                 fi
 
-#   sayMsg    "JPFns[412]  getOpt( '$1' '$2' ) -> mKeep: '${mKeep[*]}'; mARGs: '${mARGs[*]}'" # 1;
+#   sayMsg    "JPFns[422]  getOpt( '$1' '$2' ) -> mKeep: '${mKeep[*]}'; mARGs: '${mARGs[*]}'" # 1;
 
     mARgs=(); for i in ${mKeep[@]}; do mARgs+=( ${mARGs[$i]} );
     done; mARGs=( ${mARgs[@]} )
 
-    sayMsg    "JPFns[417]  mARGs[$i]:'${mARGs[$i]}', mARgs: '${mARgs[*]}'"
+    sayMsg    "JPFns[427]  mARGs[$i]:'${mARGs[$i]}', mARgs: '${mARgs[*]}'"
 #   done; mARGs=( ${mARgs[@]} )
 
-#   sayMsg sp "JPFns[420]  \$1: '$1', \$2: '$2' -- nOpt:  ${nOpt}" ${bBug} # sp
-#   sayMsg    "JPFns[421]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " 1 # Called 3 or 4 files
-#   sayMsg    "JPFns[422]  aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}', aARG8:'${mARGs[7]}' " 1
+#   sayMsg sp "JPFns[430]  \$1: '$1', \$2: '$2' -- nOpt:  ${nOpt}" ${bBug} # sp
+#   sayMsg    "JPFns[431]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " 1 # Called 3 or 4 files
+#   sayMsg    "JPFns[432]  aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}', aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}', aARG8:'${mARGs[7]}' " 1
 
     } # eof getOpt
 #   ------- ------------------  =  ---------------------------------------------------  #  ----------------
@@ -447,7 +448,7 @@ function setCmds( ) {
     if [ "${aCmd1}" == "he" ] || [ "${aCmd1}" == "" ]; then aCmd0="help"; aCmd="Help"; fi                   # .(20622.03.1 RAM Added aCmd="Help")
 
 #   bSpace=1; bMBug=1    # Don't print space unless sp passed; print sayMsg debug statements
-    sayMsg sp "JPFns[441]  aCmd:   '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bQuiet: ${bQuiet}, dBug: ${dBug}" ${dBug} # 1   # .(20601.04.2)
+    sayMsg sp "JPFns[451]  aCmd:   '${aCmd}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', aCmd0: '${aCmd0}', bQuiet: ${bQuiet}, dBug: ${dBug}" ${dBug} # 1   # .(20601.04.2)
 
     } # eof setCmds
 #   ------- ------------------  =  ---------------------------------------------------  #  ----------------
@@ -455,7 +456,7 @@ function setCmds( ) {
 #======= ================================================================================================== #  ===========
 
 function setLv() {
-    sayMsg    "JPFns[449]  nLv: $1, aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7' " ${dBug}
+    sayMsg    "JPFns[459]  nLv: $1, aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7' " ${dBug}
 
     if [ "$1" == "1" ]; then aArg1="${aArg2}"; aArg2="${aArg3}"; aArg3="${aArg4}"; aArg4="${aArg5}"; aArg5="${aArg6}"; aArg6="${aArg7}"; aArg7="${aArg8}";
                              mARgs=(); mKeep=( 1 2 3 4 5 6 ); for i in ${mKeep[@]}; do mARgs+=( ${mARGs[$i]} ); done;  mARGs=( ${mARgs[@]} )
@@ -469,8 +470,8 @@ function setLv() {
                              mARgs=(); mKeep=(     3 4 5 6 ); for i in ${mKeep[@]}; do mARgs+=( ${mARGs[$i]} ); done; mARGs=( ${mARgs[@]} )
                              fi
 
-    sayMsg    "JPFns[463]  aCmd:  '${aCmd}', nLv: $1, aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7' "
-    sayMsg    "JPFns[464]  aCmd:  '${aCmd}', nLv: $1, aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}',  aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}' " sp ${dBug}
+    sayMsg    "JPFns[473]  aCmd:  '${aCmd}', nLv: $1, aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7' "
+    sayMsg    "JPFns[474]  aCmd:  '${aCmd}', nLv: $1, aARG1:'${mARGs[0]}', aARG2:'${mARGs[1]}', aARG3:'${mARGs[2]}',  aARG4:'${mARGs[3]}', aARG5:'${mARGs[4]}', aARG6:'${mARGs[5]}', aARG7:'${mARGs[6]}' " sp ${dBug}
 
     return
     } # eof setLv
@@ -480,7 +481,7 @@ function setLv() {
 
 function getCmd1( ) {    # dBug=""; # "1"                                               # .(20622.02.1 RAM Beg Added)
 
-#   sayMsg    "JPFns[474]  aArg1: '${aArg1}', \$1: '$1', \$2: '$2', \$3: '$3' " 1
+#   sayMsg    "JPFns[484]  aArg1: '${aArg1}', \$1: '$1', \$2: '$2', \$3: '$3' " 1
 
 #   if [ "${aArg1:0:5}" == "${1:0:5}" ] || [ "${aArg1:0:5}" == "${2:0:5}" ]; then aCmd=$3; fi
 #   if [ "${aArg1:0:4}" == "${1:0:4}" ] || [ "${aArg1:0:4}" == "${2:0:4}" ]; then aCmd=$3; fi
@@ -494,7 +495,7 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
 
     if [ "${aCmd}" != "" ]; then return; fi                                             # .(20502.03.2 RAM Don't continue if already set)
 
-    sayMsg sp "JPFns[488]  aArg1: '${aArg1}', aCmd: '${aCmd}', aCmd1: '${aCmd1}', aCmd2_: '${aCmd2_}', aCmd3_: '${aCmd3_}', \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', dBug: ${dBug} " ${dBug} # -1
+    sayMsg sp "JPFns[498]  aArg1: '${aArg1}', aCmd: '${aCmd}', aCmd1: '${aCmd1}', aCmd2_: '${aCmd2_}', aCmd3_: '${aCmd3_}', \$1: '$1', \$2: '$2', \$3: '$3', \$4: '$4', \$5: '$5', dBug: ${dBug} " ${dBug} # -1
 
                                                                 cmd=$4; dBug1=$5; c1=$1; c2=$2; c3=$3;       # .(20601.04.4).(20625.06.1 RAM Good grief)
  if [ "$4" == ""  ] || [ "$4" == "0" ] || [ "$4" == "1" ]; then cmd=$3; dBug1=$4; c1=$1; c2=$2; c3=""; fi    # .(20508.04.1 RAM).(20601.04.5).(20625.06.2)
@@ -506,7 +507,7 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
  if [ "${dBug1}" == "1" ]; then dBug=1; fi                                              # .(20601.04.7)
  if [ "${dBug}"  == ""  ]; then dBug=0; fi                                              # .(20601.04.7)
 
-    sayMsg    "JPFns[500]  aArg1: '${aArg1}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', \$1: '$c1', \$2: '$c2', \$3: '$c3', dBug: ${dBug}" ${dBug}
+    sayMsg    "JPFns[510]  aArg1: '${aArg1}', aCmd1: '${aCmd1}', aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', \$1: '$c1', \$2: '$c2', \$3: '$c3', dBug: ${dBug}" ${dBug}
 
 #if [ "$3"           == ""   ]; then                                                     ##.(20508.04.3)
 #if [ "${aCmd2:2:1}" == "-"  ]; then                                                     ##.(20508.04.3 RAM if "${aCmd2:2:1}" == "-").(20625.06.4)
@@ -517,15 +518,15 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
        if [ "${bOk1}" == "1" ]; then
 
     nLen=${#1}                                                                                                                      # .(20601.04.5 RAM Added nLen)
-#   sayMsg    "JPFns[511]      Checking aCmd1:  '${aCmd1}'    == '$1',   or aArg1: '${aArg1:0:${nLen}}' == '$1', ${nLen}" ${dBug}   # .(20601.04.6 RAM Added nLen)
-    sayMsg    "JPFns[512]      Checking aCmd1:  '${aCmd1}'    == '$c1'   or aArg1: '${aArg1}' == '$c1'" ${dBug}                     # .(20601.04.6 RAM Added nLen)
+#   sayMsg    "JPFns[521]      Checking aCmd1:  '${aCmd1}'    == '$1',   or aArg1: '${aArg1:0:${nLen}}' == '$1', ${nLen}" ${dBug}   # .(20601.04.6 RAM Added nLen)
+    sayMsg    "JPFns[522]      Checking aCmd1:  '${aCmd1}'    == '$c1'   or aArg1: '${aArg1}' == '$c1'" ${dBug}                     # .(20601.04.6 RAM Added nLen)
 
 # if [ "${aCmd1}"           == "$1"  ]; then aCmd="$cmd"; setLv 1; return; fi
 # if [ "${aArg1:0:${nLen}}" == "$1"  ]; then aCmd="$cmd"; setLv 1; return; fi           ##.(20502.03.1 RAM Special case).(20601.04.4).(20625.06.6)
   if [ "${aArg1}"           == "$c1" ]; then aCmd="$cmd"; setLv 1; return; fi           # .(20502.03.1 RAM Special case).(20601.04.4).(20625.06.6)
 # if [ "${aArg1}"     == "${c1:0:2}" ]; then aCmd="$cmd"; setLv 1; return; fi           # .(20502.03.2 RAM Special case with just 2 chars)
      else
-    sayMsg    "JPFns[519]      No Check aCmd1: '${aCmd1}'    == '$c1'   or '${aArg1:0:2}-' != '${aCmd2}'" ${dBug}                  # .(20601.04.6 RAM Added nLen).(20625.06.7)
+    sayMsg    "JPFns[529]      No Check aCmd1: '${aCmd1}'    == '$c1'   or '${aArg1:0:2}-' != '${aCmd2}'" ${dBug}                  # .(20601.04.6 RAM Added nLen).(20625.06.7)
        fi
 ##                                                                  return              # .(20508.04.4 RAM Don't continue)
     fi  # eif [ "${aCmd2:2:1}" == "-" ]
@@ -535,8 +536,8 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
 #if [ "${aCmd3:5:1}" == "-" ]; then                                                     ##.(20508.04.5).(20625.06.5)
  if [ "$c3"          == ""  ]; then                                                     # .(20508.04.5).(20625.06.5)
 
-#   sayMsg    "JPFns[529]      Checking aCmd2a: '${aCmd2}'    == '$1-$2'    or '$2-$1'"   ${dBug}
-    sayMsg    "JPFns[530]      Checking aCmd2a: '${aCmd2}'    == '$c1-$c2'  or '$c2-$c1'" ${dBug}
+#   sayMsg    "JPFns[539]      Checking aCmd2a: '${aCmd2}'    == '$1-$2'    or '$2-$1'"   ${dBug}
+    sayMsg    "JPFns[540]      Checking aCmd2a: '${aCmd2}'    == '$c1-$c2'  or '$c2-$c1'" ${dBug}
 
     if [ "${aCmd2}" == "$c1-$c2"  ]; then aCmd="$cmd"; setLv 2; return; fi   # aCmd2 <= ${aArg1:0:2}-${aArg2:0:2}, i.e. entered command   # .(20625.06.7)
 #   if [ "${aCmd3}" == "$c1-$c2-" ]; then aCmd="$cmd"; setLv 2; return; fi
@@ -549,8 +550,8 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
 
                                                                 return                  # .(20626.01.1 RAM No need to check the following if $c3 == "")
 
-#   sayMsg    "JPFns[543]      Checking aCmd2b: '${aCmd2}'    == '$1-$3'    or '$2-$3'    or '$3-$1'    or '$3-$2'"   ${dBug}
-    sayMsg    "JPFns[544]      Checking aCmd2b: '${aCmd2}'    == '$c1-$c3'  or '$c2-$c3'  or '$c3-$c1'  or '$c3-$c2'" ${dBug}
+#   sayMsg    "JPFns[553]      Checking aCmd2b: '${aCmd2}'    == '$1-$3'    or '$2-$3'    or '$3-$1'    or '$3-$2'"   ${dBug}
+    sayMsg    "JPFns[554]      Checking aCmd2b: '${aCmd2}'    == '$c1-$c3'  or '$c2-$c3'  or '$c3-$c1'  or '$c3-$c2'" ${dBug}
 
     if [ "${aCmd2}" == "$c1-$c3"  ]; then aCmd="$cmd"; setLv 2; return; fi
     if [ "${aCmd2}" == "$c2-$c3"  ]; then aCmd="$cmd"; setLv 2; return; fi
@@ -561,7 +562,7 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
     fi  # eif [ "$c3" == "" ]
 #   -----------------------------------------------------
 
-    sayMsg    "JPFns[555]      Checking aCmd3:  '${aCmd3}' == '$1-$2-$3' or '$1-$3-$2' or '$2-$3-$1' or '$2-$1-$3'  or '$3-$1-$2' or '$3-$2-$1'" ${dBug}
+    sayMsg    "JPFns[565]      Checking aCmd3:  '${aCmd3}' == '$1-$2-$3' or '$1-$3-$2' or '$2-$3-$1' or '$2-$1-$3'  or '$3-$1-$2' or '$3-$2-$1'" ${dBug}
 
 
 
@@ -581,8 +582,8 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
 #   if [ "${aCmd3}" == "$2-$3-"   ]; then aCmd="$4";   setLv 2; return; fi
 #   if [ "${aCmd3}" == "$3-$2-"   ]; then aCmd="$4";   setLv 2; return; fi
 
-    sayMsg sp "JPFns[575]  aCmd: 'NOT FOUND': '${aCmd1}',  aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', nLv: '${nLv}'"  ${dBug}
-#   sayMsg sp "JPFns[576]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7'' "  ${dBug}
+    sayMsg sp "JPFns[585]  aCmd: 'NOT FOUND': '${aCmd1}',  aCmd2: '${aCmd2}', aCmd3: '${aCmd3}', nLv: '${nLv}'"  ${dBug}
+#   sayMsg sp "JPFns[586]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7'' "  ${dBug}
 
 #   if [ "${mLv}" == "1" ]; then aArg1="${aArg2}"; aArg2="${aArg3}"; aArg3="${aArg4}"; aArg4="${aArg5}"; aArg5="${aArg6}"; aArg6="${aArg7}"; aArg7="${aArg8}"; fi
 #   if [ "${nLv}" == "2" ]; then aArg1="${aArg3}"; aArg2="${aArg4}"; aArg3="${aArg5}"; aArg4="${aArg6}"; aArg5="${aArg7}"; aArg6="${aArg8}"; fi
@@ -596,8 +597,8 @@ function getCmd( ) {    # dBug="1"; # "1"                                       
 #======= ================================================================================================== #  ===========
 
 #                          aArg1="$1";     aArg2="$2";     aArg3="$3";     aArg4="$4";     aArg5="$5";     aArg6="$6";     aArg7="$7";     aArg8="$8";     aArg9="$9";
-#   sayMsg "" "JPFns[590]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " 1
-#   sayMsg    "JPFns[591]    \$1:'$1',       \$2:'$2',       \$3:'$3',       \$4:'$4',       \$5:'$5',       \$6:'$6',       \$7:'$7',       \$8:'$8',       \$9:'$9' " 1
+#   sayMsg "" "JPFns[600]  aArg1:'$aArg1', aArg2:'$aArg2', aArg3:'$aArg3', aArg4:'$aArg4', aArg5:'$aArg5', aArg6:'$aArg6', aArg7:'$aArg7', aArg8:'$aArg8', aArg9:'$aArg9' " 1
+#   sayMsg    "JPFns[601]    \$1:'$1',       \$2:'$2',       \$3:'$3',       \$4:'$4',       \$5:'$5',       \$6:'$6',       \$7:'$7',       \$8:'$8',       \$9:'$9' " 1
 
 #   if [ "${bQuiet}" != "1" ]; then getOpt "qu" "-q";  bQuiet=${nOpt}; fi; sayMsg "JPT12[114]  bQuiet: '${bQuiet}'"
 #   if [ "${bDebug}" != "1" ]; then getOpt "-d" "-de"; bDebug=${nOpt}; fi; sayMsg "JPT12[115]  bDebug: '${bDebug}'"
