@@ -159,7 +159,7 @@
 # if [ "${aPrj/-/}"  != "${aPrj}" ] || [ "${aPrj/:/}" != "${aPrj}" ] || [ "${aPrj/-/}" != "${aPrj}" ]; then bParse=1; else bParse=0; fi
 
          bParse=$( echo "${aPrj}" | awk '/^[a-zA-Z0-9]+_?$/ { print 0; exit }; { print 1 }' );         # .(21101.01.4 RAM 1st work contains _)
-#        echo -e "\n  bParse: ${bParse}"; exit
+ #       echo -e "\n  aPrj: ${aPrj}', bParse: ${bParse}"; exit
  if [ "${bParse}" == "1" ]; then                                                                       # .(21101.01.5 RAM Beg Parse if aPrj = location)
 
 #       {Project}_{stg1}-{ownr}
@@ -179,14 +179,14 @@ BEGIN { bDebug = 0;                               aSSH = "yes" }
        /http/       { sub( /https?:\/\//,   "" ); aSSH = "no"  }
             bDebug  { print "\n  1    $0: " $0 ", aSSH: " aSSH }
 
-       /\.git/      { sub( /\.git/, "" ) }
+       /\.git/      { sub( /\.git/, "" ) } { sub( /:\//, ":" ) }  # .(21207.01.1 RAM Remove :/)
        /github.com/ { sub( /github.com\//, "" ) }
             bDebug  { print "  2    $0: " $0 }
 
 #      /\//         { split( $0"/", m, /\// ); sub( /\/.+/, "" );  aRepo1 = m[2] ? m[2] : m[1]
                     { split( $0"/", m, /\// ); sub( /\/.+/, "" );  aRepo1 = m[2] ? m[2] : m[1];  aRepo = match( aRepo1, /^([a-zA-Z0-9_-]+)$/ ) ? aRepo1 : "{Project}";
         if (bDebug) { print "  3    $0: " $0 ", aRepo1: " aRepo1 }
-                      split( $0":", m, /:/); if ( aSSH == "no" ) { aCert = "n/a"; aAcct = m[1] }
+                      split( $0":", m, /:/ ); if ( aSSH == "no" ) { aCert = "n/a"; aAcct = m[1] }
                                                             else { aCert = m[2] ? m[1] : "n/a";  aAcct = m[2] ? m[2] : "n/a"; aSSH = aCert == "n/a" ? "no" : aSSH } }
             bDebug  { print "  4 aRepo: " aRepo ", aCert: " aCert ", aAcct: " aAcct ", aSSH: " aSSH }
 
@@ -195,13 +195,13 @@ BEGIN { bDebug = 0;                               aSSH = "yes" }
                       split( aStge"-", m, /-/ );                   aOwnr = m[2] ? "-" m[2] : ""; aStge = m[1] ? "_" m[1] : "" }
             bDebug  { print "  6 aProj: " aProj ", aStge: " aStge ", aOwnr: " aOwnr "\n" }
 
-                    { print  aAcct " " aProj " " aStge""aOwnr " " aSSH " " aCert }  # return "${aURL}"
+                    { print  "    " aAcct " " aProj " " aStge""aOwnr " " aSSH " " aCert }  # return "${aURL}"
 
 END   { }'
 #   --- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
     aURL="$( echo "${aPrj}" | awk "${awkPgm}" )";                                   #   echo "${aURL}"; exit
-#   echo -e "   Parsed URL: '${aURL}'"; # exit
+    echo  -e "   Parsed URL: '${aURL}'";  # exit
 
     aGitHub_Acct_arg="$( echo "${aURL}" | awk '{ print $1 }' )"
     aProj_arg="$(        echo "${aURL}" | awk '{ print $2 }' )"
@@ -218,13 +218,26 @@ if [ "${aProj_arg}"        != "{Project}"     ]; then aPrj="${aProj_arg}"; fi
 if [ "${aGitHub_Cert_arg}" != "n/a"           ]; then aGitHub_Cert_var="${aGitHub_Cert_arg}"; fi
 if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHub_Acct_arg}"; fi
                                                       aGitHub_SSH_var="${aGitHub_SSH_arg}";
-    fi  # eif "${bParse}" == "1"                                                                        # .(21101.01.5 RAM End)
+    fi  # eif "${bParse}" == "1"                                                                            # .(21101.01.5 RAM End)
 #   -----------------------------------------------------------
 
-# if [ "${aRepoDir}" == "" ]; then aRepoDir="${aStage_var}"; fi                                         # .(21118.02.2)
+# if [ "${aRepoDir}" == "" ]; then aRepoDir="${aStage_var}"; fi                                             # .(21118.02.2)
 
-    aProj="$( echo "${aPrj}" | tr '[:upper:]' '[:lower:]' )"                                            # .(21101.02.1 RAM End)
-#   echo -e "   aRepo: '${aPrj/_}_${aStage_var}', aCert: '${aGitHub_Cert_var}', aAcct: '${aGitHub_Acct_var}', aSSH: '${aGitHub_SSH_var}'"; #exit
+    aProj="$( echo "${aPrj}" | tr '[:upper:]' '[:lower:]' )"                                                # .(21101.02.1 RAM End)
+if [ "$2" != "" ]; then                                                                                     # .(21207.01.1 RAM Beg Parse aArg2)
+    aPrjN="$( echo "$2" | awk '{ split( $0"/", m, "/" ); print m[1] }' )"; echo "  aPrjN: ${aPrjN}"
+    aStge="$( echo "$2" | awk '{ split( $0"/", m, "/" ); print m[2] }' )"; 
+    if [ "${aStge}" == "" ]; then aStge=${aStage_var}; fi; echo "  aStge: ${aStge}"
+    aRepoDir="${aPrjN}/${aStge}"; 
+    aPrjN=${aPrjN/_}; if [ "${aPrjN}" == "$2" ]; then aRepoDir="${aPrjN}"; fi 
+  else 
+    aPrjN="${aPrj/_}"; 
+    aRepoDir="${aPrjN/}_${aStage_var}"
+    fi                                                                                                      # .(21207.01.1 RAM End)
+    aRepo="${aPrj/_}_${aStage_var}"                                                                         # .(21207.01.2 RAM Set here?) 
+
+#   echo -e "   aRepo: '${aPrj/_}_${aStage_var}', aCert: '${aGitHub_Cert_var}', aAcct: '${aGitHub_Acct_var}', aSSH: '${aGitHub_SSH_var}'";  exit
+    echo -e "   aPrjN: '${aPrjN}', aRepoDir: '${aRepoDir}', aRepo: '${aPrj/_}_${aStage_var}', aCert: '${aGitHub_Cert_var}', aAcct: '${aGitHub_Acct_var}', aSSH: '${aGitHub_SSH_var}'";  # exit
 
 #   --- --- ---------------  =  ------------------------------------------------------  #  ---------------- #
 
@@ -253,12 +266,12 @@ if [ "${aGitHub_Acct_arg}" != "n/a"           ]; then aGitHub_Acct_var="${aGitHu
 
 function askYN() {                                                                                          # .(21202.02.1 RAM Beg Add askYN)
          echo    "  $1"
-         read -p "    Enter Yes or No: [y/n]: " aAnswer
+         read -p "     Enter Yes or No: [y/n]: " aAnswer
 #        aAnswer=$( echo ${aAnswer} | awk '/^[ynYN]+$/' )
          aAnswer=$( echo ${aAnswer} | awk '/^[ynYN](es|o)*$/' )                                             # .(21202.02.11 RAM Allow Yes or No answers)
  if [ "${aAnswer}" == "" ]; then echo "  * Please answer with y or n."; exit; fi
          aAnswer=$( echo ${aAnswer} | awk '/^[yY](es)*$/ { print "y" }' )
-#if [ "${aAnswer}" != "y" ]; then exit; fi
+ if [ "${aAnswer}" != "y" ]; then aAnswer="n"; fi
 
          } # eof askYN                                                                                      # .(21202.02.1 RAM End)
 #   -----------------------------------------
@@ -274,7 +287,8 @@ function askYN() {                                                              
 #if [ -f       "gitr_${aProj}_config.sh" ]; then aConfigFile="gitr_${aProj}_config.sh"; fi;    aCurDir="./"          # .(21029.03.3)
 #if [ -f       "gitr_${aProj}config.sh"  ]; then aConfigFile="gitr_${aProj}config.sh"; fi;     aCurDir="./"          ##.(21127.01.1 RAM End)
 
-                                                 aConfigFile=""; aPrjN="${aPrj}"                                     # .(21127.01.2 RAM Beg Change Config file name).(21205.03.1)
+                                                 aConfigFile="";                                                     # .(21205.03.1).(21207.01.3 RAM Set Above)
+#                                                aConfigFile=""; aPrjN="${aPrj}"                                     # .(21127.01.2 RAM Beg Change Config file name).(21205.03.1)
  if [ -f "../../${aPrjN}_gitR-config.sh" ]; then aConfigFile="../../${aPrjN}_gitR-config.sh";  aCurDir="../../"; fi  # .(21205.03.2 RAM Beg Use Uppercase PrjN)
  if [ -f "../../${aPrjN}_gitR_config.sh" ]; then aConfigFile="../../${aPrjN}_gitR_config.sh";  aCurDir="../../"; fi  # .(21029.03.1 RAM)
  if [ -f    "../${aPrjN}_gitR-config.sh" ]; then aConfigFile="../${aPrjN}_gitR-config.sh";     aCurDir="../"; fi
@@ -300,7 +314,7 @@ function askYN() {                                                              
 #
 #====== =================================================================================================== #  ===========
 
-#   echo "   Setting aWebsDir: '${aWebsDir}', aCurDir: ${aCurDir}, aPrjN: ${aPrjN}"; exit
+    echo "   Setting: aWebsDir: '${aWebsDir}',   aCurDir: ${aCurDir}, aPrjN: ${aPrjN}, aRepoDir: '${aRepoDir}'"; # exit
 
                                                  aConfigFile="${aConfigFile/_-/_}"
  if [ "${aConfigFile}" == "" ]; then                                                        # .(21127.01.3 RAM It wasn't found above)
@@ -313,7 +327,7 @@ function askYN() {                                                              
 #   echo "   Syntax: gitr clone {Project} [-all] [-doit]"
     echo ""
     echo "     ** Config file, '${aConfigFile}', not found."
-#   echo ""
+    echo ""
     fi                                                                                      # .(21101.02.2)
 # ------------------------------------------------------------------------------------
 
@@ -340,14 +354,15 @@ function askYN() {                                                              
     if [ "${bDir}" == "1" ] && [ "${bParse}${c4}" == "1#"  ]; then c2=" "; c1="#"; fi;  # 1 /webs/prj_stg   # 1 gitr_{Project}_config.sh  ##.(21105.05.2 RAM Set c2, if c4 was not set, or just keep it set to c2)
 
     if [ "${aStage_var}" == "{stg1}-{ownr}" ]; then aStage_var="";         c3=" "; c1="#"; c2="#"; c4="#"; fi   # .(21105.01.1 RAM If no ${aStage}).(21105.04.2)
-    if [ "${aRepoDir}"   == ""   ]; then                           c5="#";
-                                else                           c5=" "; c3="#"; c1="#"; c2="#"; c4="#"; fi
+
+    if [ "${aRepoDir}"   == ""              ]; then                        c5="#";
+                                               else                        c5=" "; c3="#"; c1="#"; c2="#"; c4="#"; fi
 
 #   echo "   aPrj: '${aPrj}', aStage_var: '${aStage_var}', aDir: ${aDir}, aPDir: ${aPDir}, bDir: ${bDir}; '${c1}${c2}${c3}${c4}', aConfigFile: '${aConfigFile}'" ; # exit
 
-if [ "${bDir}" == "1" ]; then aWebsDir=$( builtin cd ..; pwd ); fi                                          # .(21105.04.1 RAM Always set to /webs)
+    if [ "${bDir}" == "1" ]; then aWebsDir=$( builtin cd ..; pwd ); fi                                      # .(21105.04.1 RAM Always set to /webs)
 
-              aRepo="${aPrjN/_}_${aStage_var}"                                                              # .(21106.01.6 RAM Beg)
+              aRepo="${aPrj/_}_${aStage_var}"                                                               # .(21106.01.6 RAM Beg).(21207.01.x RAM Set Above)
               aGitHub_URL2="http://gitHub.com/\${GitHub_Acct}"
       if [ "${aGitHub_SSH_var}" == "yes" ]; then
               aGitHub_URL2="${aGitHub_Cert_var}:${aGitHub_Acct_var}"
@@ -369,7 +384,7 @@ if [ "$c5" == "#" ]; then
     echo "$c4   RepoDir=\"\${Project}/\${Stage}\"     # 4 {Project}_gitR-stg-config.sh" >>"${aConfigFile}";
     echo ""; fi
 if [ "$c5" == " " ]; then
-    echo "    RepoDir=\"${aRepoDir}\"               # 5 {Project}_gitR_config.sh"       >>"${aConfigFile}";
+    echo "    RepoDir=\"${aRepoDir}\""                                                  >>"${aConfigFile}";
     fi                                                                                  >>"${aConfigFile}"
     echo ""                                                                             >>"${aConfigFile}"
     echo "    WebsDir=\"${aWebsDir}\""                                                  >>"${aConfigFile}"
@@ -411,13 +426,20 @@ if [ "$c5" == " " ]; then
      cat   "${aConfigFile}" | awk '/# - -/ { exit } { print "  " $0 }'                      # .(21130.01.11 RAM May be on a different line)
     echo "-------------------------------------------------------------------------------"
     echo ""
+    if [ "${aGitHub_SSH_var:0:1}" == "{" ]; then                                            # .(21207.02.4 RAM Beg No Doit option)
+          askYN "Do you want to edit this gitR config file before cloning this Repo: ${aRepo}?";  # .(21202.02.7)
+          if [ "${aAnswer}" == "n" ]; then ${aLstSp}; exit; fi
+          if [ "${aAnswer}" == "y" ]; then aAnswer="e"; fi 
+       else                                                                                 # .(21207.02.4 RAM End)
 #   echo "  Opening nano for you to make edits to: ${aConfigFile},:"                        ##.(21202.02.5)
-    echo "  Would you like to get the clone now or use nano to make edits to: ${aConfigFile}:"           # .(21202.02.5 RAM Beg)
+    echo "  Do you want to get the clone now or use nano to edit '${aConfigFile}':"         # .(21202.02.5 RAM Beg)
 #   read -s -n 1 -p "     Press any key, or CTRC-C to bypass.  "; echo ""
     read         -p "    Please enter Edit, Doit or None: [e/d/n]: " aAnswer                # .(21206.01.1 RAM Beg Three choices)
          aAnswer="$(   echo "${aAnswer}" | awk '/^[ednEDN](dit|oit|one)*$/' | tr '[:upper:]' '[:lower:]' )"
-
  if [ "${aAnswer}" == "" ]; then echo "  * Please answer with e, d or n."; aAnswer="n"; fi
+ 
+      fi # eif                                                                              # .(21207.02.2)
+ 
  if [ "${aAnswer:0:1}" == "n" ]; then
          rm "${aConfigFile}"
          ${aLstSp}; exit
@@ -657,9 +679,9 @@ if [ "${bSSH}" == "0" ]; then
     echo ""
     echo "  -------------------------------------------------------------------------------"
 
-#   echo "-- aArg1: ${aArg1}; aArg2: ${aArg2}, bDoit: ${bDoit}"; exit           # .(21206.
+#   echo "-- aArg1: ${aArg1}; aArg2: ${aArg2}, bDoit: ${bDoit}"; exit          
 
-    askYN "Would you like to edit this gitR config file before cloning this Repo: ${aRepo}?";                           # .(21202.02.7)
+    askYN "Do you want to edit this gitR config file before cloning this Repo: ${aRepo}?";                  # .(21202.02.7)
          if [ "${aAnswer}" == "y" ]; then nano "${aConfigFile}"; fi             # .(21202.02.8)
     echo ""                                                                     # .(21202.02.9)
     echo -e "  To clone ${aCone}"

@@ -88,7 +88,7 @@
 
      aVdt="Dec 1, 2022 11:50a"; aVtitle="formR Tools"                                                      # .(21113.05.8 RAM Add aVtitle for Version in Begin)
      aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"  # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
-
+ 
      LIB="FRT"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER; Lib=${LIB}                                        # .(80923.01.1)
 
 #    aFns="$( dirname "${BASH_SOURCE}"         )/FRT12_Main2Fns_p1.06.sh";     if [ ! -f "${aFns}" ]; then  ##.(21113.05.9 RAM Use FRT12_Main2Fns_p1.06_v21027.sh)
@@ -138,6 +138,7 @@ function Help( ) {
      echo "  ------------------------------------  ---------------------------------"
      echo "     FRT [Help]"                                                             # .(20620.01.1 RAM)
      echo ""                                                                            #
+     echo "     FRT Path Set [-doit] [-user]        Enable formR Tools to run anywhere" # .(21120.03.1 RAM Added).(21126.08.1 RAM Added -user)
      echo "     FRT Path Set [-doit] [-user]        Enable formR Tools to run anywhere" # .(21120.03.1 RAM Added).(21126.08.1 RAM Added -user)
      echo ""                                                                            #
 #    echo "     FRT keyS [ Host ] [ Help ]          Manage SSH Key files"
