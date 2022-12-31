@@ -89,6 +89,7 @@
 # .(21120.02 11/20/22 RAM  1:58p| Fix aOSv and aLstSp
 # .(21126.05 11/26/22 RAM  3:37p| Set aOSv again for GitBash and ComEmu
 # .(21126.07 11/26/22 RAM  5:48p| Remove aVdt.. version vars from this script
+# .(21112.02 11/27/22 RAM  2:33p| Export aOS
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
@@ -189,7 +190,7 @@ function  setOS() {
                   if [ "${aOSv:0:1}" == "m" ]; then aOS="macOS";   fi                   # .(20623.03.5)
                   if [ "${aOSv:0:1}" == "g" ]; then aOS="GitBash"; fi                   # .(20623.03.6)
 
-     export aOS                                                                                                                # .(21112.02.1 RAM Export aOSv)
+     export aOS                                                                                                                 # .(21112.02.1 RAM Export aOS)
 
   if [ "${bQuiet}"   == "0"      ] || [ "1" == "0" ]; then
      aCmd0="${aCmd}                       "; aCmd0="${aCmd0:0:23}";
