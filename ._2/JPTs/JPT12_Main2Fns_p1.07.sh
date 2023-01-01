@@ -126,11 +126,13 @@ function  setOS() {
 
 # if [ "${THE_DRIVES}" == "" ]; then echo ""; echo  "* \$THE_DRIVES is NOT DEFINED; NFS Vol won't be correct";  exit; fi        # .(90321.02.1)
   if [ "${THE_SERVER}" == "" ]; then echo ""; echo  "* THE_SERVER is NOT Defined; The OS, '${aOSv}', may not be correct."
-        THE_SERVER="${HOSTNAME:0:6}-${aOSv}_${aName}-Prod1 (127.0.0.1)";  pause "  Setting it to \"${THE_SERVER}\"."            # .(21112.05.6)
+#       THE_SERVER="${HOSTNAME:0:6}-${aOSv}_${aName}-Prod1 (127.0.0.1)";  pause "  Setting it to \"${THE_SERVER}\"."            ##.(21112.05.6).(21231.04.2)
+        THE_SERVER="${HOSTNAME:0:6}-${aOSv}_${aName}-Prod1_(127.0.0.1)";  pause "  Setting it to \"${THE_SERVER}\"."            # .(21231.04.2 RAM No Spaces)
 #                             echo "./RSS/Info/RSS22-Info.sh vars set THE_SERVER  ${THE_SERVER}"
         export aOSv                                                                                                             # .(21112.05.7 RAM Needed for set vars)
 #       $( dirname "${BASH_SOURCE}"     )/Info/RSS22-Info.sh vars set THE_SERVER  "${THE_SERVER}"                               ##.(21113.01.2)
-        $( dirname "${BASH_SOURCE}" )/RSS/Info/RSS22-Info.sh vars set THE_SERVER  "${THE_SERVER}"                               # .(21113.01.2 RAM it's always JPT)
+#       $( dirname "${BASH_SOURCE}" )/RSS/Info/RSS22-Info.sh vars set THE_SERVER  "${THE_SERVER}"                               ##.(21113.01.2 RAM it's always JPT)
+        $( dirname "${BASH_SOURCE}" )/RSS/Info/RSS22_Info.sh vars set THE_SERVER  "${THE_SERVER}"                               # .(21113.01.3 RAM RSS22_Info.sh, not RSS22-Info.sh)
         exit
         fi
         # exit; fi                                                                                                              # .(21112.04.2)
