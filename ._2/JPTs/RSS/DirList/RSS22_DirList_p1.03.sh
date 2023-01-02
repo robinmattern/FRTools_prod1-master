@@ -5,7 +5,8 @@
 ##RFILE    +====================+=======+===================+======+=============+
 ##FD   RSS22-DirList.sh         |   7556|  3/07/18  5:41|   146| v1.02.90315
 ##FD   RSS22_DirList.sh         |  11987| 12/03/22 13:46|   180| p1.03-21203.1346
-##FD   RSS22_DirList.sh         |  13166| 12/06/22 19:10|   192| p1.03-21206.1910
+##FD   RSS22_DirList.sh         |  13274| 12/06/22 18:45|   190| p1.03-21206.1845
+##FD   RSS22_DirList.sh         |  15269| 12/31/22 11:59|   199| p1.03-21231.1159
 ##DESC     .--------------------+-------+-------------------+------+------------+
 #            List directory counts using du on every subfolder, where
 #
@@ -33,13 +34,14 @@
 # .(21203.02 12/03/22 RAM 11:40p| Put quotes around $1 and aDir
 # .(21203.03 12/03/22 RAM 11:40p| Exclude node_modules and .git
 # .(21203.04 12/03/22 RAM 11:40p| Change Column codes
-# .(21206.06 12/06/22 RAM  7:10p| Add -r and -c to dirlist
+# .(21206.06 12/06/22 RAM  6:45p| Add -r and -c to dirlist
+# .(21206.06 12/31/22 RAM 11:59p| 2nd attempt at -r and -c for dirlist
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
 ##SRCE     +====================+===============================================+
 #*/
-    aVdt="Dec 06, 2022  7:10p"; aVtitle="formR gitR Tools"                                                                      # .(21113.05.6 RAM Add aVtitle for Version in Begin)
+    aVdt="Dec 31, 2022 11:59p"; aVtitle="formR gitR Tools"                                                                      # .(21113.05.6 RAM Add aVtitle for Version in Begin)
     aVer="$( echo $0 | awk '{  match( $0, /_[dpstuv][0-9]+\.[0-9]+/ ); print substr( $0, RSTART+1, RLENGTH-1) }' )"             # .(21031.01.1 RAM Add [d...).(20416.03.8 "_p2.02", or _d1.09)
 
             LIB="RSS"; LIB_LOG=${LIB}_LOG; LIB_USER=${LIB}_USER                             # .(80923.01.1)
@@ -51,24 +53,31 @@
             }
 # +------- +------------------ +----------------------------------------------------------- # ------------+ ------------------- # --------------+
 
-            aDir=$1; if [ "$1" = "" ]; then aDir="."; fi
-            nLvl=$2; if [ "$2" = "" ]; then nLvl=1;   fi
-#           nTyp=$3; if [ "$3" = "" ]; then nTyp=3;   fi   # 1)Names only, 2)Sizes only, 3)Sizes, Files and Dirs
-            nTyp=$3; if [ "$3" = "" ]; then nTyp=1;   fi   # 0)Names only, 1)Sizes only, 2)Sizes, and Files, 3)Sizes, Files and Dirs  # .(21203.04.1 RAM Change nTyp codes)
+            aNums="0123456789";                                                                                                                          # .(21206.06.7 RAM Beg Much different)
+            aDir="."; if [ "${1:0:1}" != "-" ]; then aDir="$1"; fi;
+                      if [ "${aNums##*$aDir*}" != "" ] && [ "${1:0:1}" != "-" ]; then shift; else aDir="."; fi                                           # .(21206.06.8)
+            nLvl="";  if [ "${1:0:1}" != "-" ]; then nLvl=$1; fi                                                                                         # .(21206.06.9 RAM Was: nLvl=$2; if [ "$2" = "" ]; then nLvl=1; fi)
+#           nTyp=$3;  if [ "$3"      == "" ]; then nTyp=3;    fi   # 1)Names only, 2)Sizes only, 3)Sizes, Files and Dirs
+            nTyp="";  if [ "${2:0:1}" != "-" ]; then nTyp=$2; fi   # 0)Names only, 1)Sizes only, 2)Sizes, and Files, 3)Sizes, Files and Dirs             # .(21203.04.1 RAM Change nTyp codes)# .(21206.06.7 RAM End)
 
-            mArgs=( "$@" )                                                                  # .(21206.06.5 RAM Beg)
-#           for aArg in "$[@]"; do echo "aArg: "
-            for (( i = 0; i < ${#mArgs[@]}; i++ )); do
-                if [ "${mArgs[$i]}" == "-r" ]; then nLvl="${mArgs[ (( i + 1 )) ]}"; nTyp="${mArgs[ (( i + 2 )) ]}"; fi
-                if [ "${mArgs[$i]}" == "-c" ]; then nTyp="${mArgs[ (( i + 1 )) ]}"; fi
+            mArgs=( "$@" );                          # echo "-- aDir: ${aDir}, nLvl: ${nLvl}; nTyp: ${nTyp}"                                             # .(21206.06.5 RAM Beg)
+#           for aArg in "$[@]"; do                     echo "aArg: "
+            for (( i = 0; i < ${#mArgs[@]}; i++ )); do aArg="${mArgs[$i]}"; # echo "-- $i: ${mArgs[$i]:1:1} = ${mArgs[ (( i + 1 )) ]}"
+                if [ "${aNums##*$aArg*}" != "" ]    && [ "${aDir}" == "." ]   &&  [ "${aArg:0:1}" != "-" ]; then aDir="${aArg}"; fi                      # .(21206.06.10)
+#               if [ "${mArgs[$i]}" == "-r" ]; then nLvl="${mArgs[ (( i + 1 )) ]}"; if [ "${nTyp}" == "" ]; then nTyp="${mArgs[ (( i + 2 )) ]}"; fi; fi  ##.(21206.06.11)
+ #              if [ "${mArgs[$i]}" == "-c" ]; then nTyp="${mArgs[ (( i + 1 )) ]}"; if [ "${nLvl}" == "" ]; then nLvl="${mArgs[ (( i + 2 )) ]}"; fi; fi  ##.(21206.06.12)
+                if [ "${mArgs[$i]}" == "-r" ]; then nLvl="${mArgs[ (( i + 1 )) ]}"; nTyp="${mArgs[ (( i + 2 )) ]}"; fi                                   # .(21206.06.11)
+                if [ "${mArgs[$i]}" == "-c" ]; then nTyp="${mArgs[ (( i + 1 )) ]}"; if [ "${nLvl}" == "" ]; then nLvl="${mArgs[ (( i + 2 )) ]}"; fi; fi  # .(21206.06.12)
                 done;
-            if [ "${mArgs[0]:0:1}"  == "-"  ]; then aDir="."; fi
-            if [ "$nLvl" == "-c" ]; then nLvl=${nTyp}; fi                                   # .(21206.06.5 RAM End)
+#           if [ "${mArgs[0]:0:1}"  == "-"  ]; then aDir="."; fi
+#           if [ "$nLvl" == "-c"            ]; then nLvl=${nTyp}; fi                                                                                     # .(21206.06.5 RAM End)
 
-            aNums="123456789"                                                               # .(81007.05.1)
- if [ -z "${aNums##*$aDir*}" ]; then nTyp=${nLvl}; nLvl=${aDir}; aDir="."; fi               # .(81007.05.2)
+            aNums="0123456789";                      # echo "-- aDir: ${aDir}, nLvl: ${nLvl}; nTyp: ${nTyp}"                                             ##.(81007.05.1).(21206.06.13)
+#           if [ -z "${aNums##*$aDir*}"       ]     && [ "${aDir}" != "." ]; then nTyp=${nLvl}; nLvl=${aDir}; aDir="."; echo "nums in aDir"; fi          ##.(81007.05.2).(21206.06.14)
+            if [    "${aNums##*$nLvl*}" != "" ] || [ "${nLvl}" == "" ]; then nLvl=1; fi                                                                  # .(21206.06.13)
+            if [    "${aNums##*$nTyp*}" != "" ] || [ "${nTyp}" == "" ]; then nTyp=1; fi                                                                  # .(21206.06.14)
 
-#  echo "  aCmd: ${aCmd}; aDir: ${aDir}; nLvl: ${nLvl}; nTyp: ${nTyp}"; exit
+#   echo "  aCmd: ${aCmd}; aDir: ${aDir}; nLvl: ${nLvl}; nTyp: ${nTyp}"; exit
 
 #HELP
 #---------------------------------------------------------------
