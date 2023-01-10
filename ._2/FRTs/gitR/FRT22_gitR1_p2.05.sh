@@ -127,7 +127,7 @@
 # .(21223.05 12/23/22 RAM  4:03p| Sort List commits in chronological order
 # .(21231.05 12/31/22 RAM 11:58p| Merge back into FRT22_gitR1_p2.04_v21212_temp.sh
 # .(30104.01  1/04/23 RAM  1:50p| Improve Local Dir name in list commits
-# .(30108.01  1/08/23 RAM  9:15p| Add list commits both
+# .(30108.01  1/08/23 RAM  9:15p| Add list commits both  
 
 ##PRGM     +====================+===============================================+
 ##ID 69.600. Main               |
